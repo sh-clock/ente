@@ -1857,7 +1857,6 @@ version = "0.0.0"
 dependencies = [
  "ente-assets",
  "ente-core",
- "ente-frb-lib",
  "ente-frb-log",
  "ente-image",
  "ente-location",
