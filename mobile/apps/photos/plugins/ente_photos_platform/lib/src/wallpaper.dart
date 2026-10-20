@@ -10,7 +10,7 @@ class WallpaperPreview {
 }
 
 class WallpaperClient {
-  static const _channel = MethodChannel('io.ente.photos.platform/wallpaper');
+  static const _channel = MethodChannel('com.shclock.photos.platform/wallpaper');
 
   Future<WallpaperPreview> prepare() async {
     final result = (await _channel.invokeMapMethod<String, dynamic>(

@@ -12,21 +12,16 @@ import "package:photos/db/files_db.dart";
 import 'package:photos/db/ml/base.dart';
 import "package:photos/db/ml/db.dart";
 import "package:photos/events/people_changed_event.dart";
-import 'package:photos/events/subscription_purchased_event.dart';
 import "package:photos/models/file/file.dart";
 import 'package:photos/models/gallery_type.dart';
 import 'package:photos/models/selected_files.dart';
 import "package:photos/service_locator.dart" show isLocalGalleryMode;
-import 'package:photos/services/collections_service.dart';
 import "package:photos/services/machine_learning/face_ml/feedback/cluster_feedback.dart";
 import "package:photos/services/machine_learning/ml_result.dart";
 import "package:photos/theme/ente_theme.dart";
-import 'package:photos/ui/actions/collection/collection_sharing_actions.dart';
 import 'package:photos/ui/components/buttons/button_widget.dart';
-import 'package:photos/ui/sharing/share_person_sheet.dart';
 import "package:photos/ui/viewer/gallery/gallery_app_bar_actions.dart";
 import "package:photos/ui/viewer/gallery/gallery_app_bar_config.dart";
-import 'package:photos/ui/viewer/gallery/state/gallery_files_inherited_widget.dart';
 import "package:photos/ui/viewer/people/cluster_breakup_page.dart";
 import "package:photos/ui/viewer/people/cluster_page.dart";
 import "package:photos/utils/dialog_util.dart";
@@ -89,11 +84,8 @@ enum ClusterPopupAction {
 
 class _AppBarWidgetState extends State<ClusterAppBar> {
   final _logger = Logger("_AppBarWidgetState");
-  late StreamSubscription _userAuthEventSubscription;
   late Function() _selectedFilesListener;
   String? _appBarTitle;
-  late CollectionActions collectionActions;
-  final GlobalKey shareButtonKey = GlobalKey();
   bool isQuickLink = false;
   late GalleryType galleryType;
   late final IMLDataDB mlDataDB = MLDataDB.instance;
@@ -104,20 +96,13 @@ class _AppBarWidgetState extends State<ClusterAppBar> {
     _selectedFilesListener = () {
       setState(() {});
     };
-    collectionActions = CollectionActions(CollectionsService.instance);
     widget.selectedFiles.addListener(_selectedFilesListener);
-    _userAuthEventSubscription = Bus.instance
-        .on<SubscriptionPurchasedEvent>()
-        .listen((event) {
-          setState(() {});
-        });
     _appBarTitle = widget.title;
     galleryType = widget.type;
   }
 
   @override
   void dispose() {
-    _userAuthEventSubscription.cancel();
     widget.selectedFiles.removeListener(_selectedFilesListener);
     super.dispose();
   }
@@ -148,31 +133,6 @@ class _AppBarWidgetState extends State<ClusterAppBar> {
       return actions;
     }
 
-    if (!isLocalGalleryMode && hasAccount) {
-      final currentUserID = Configuration.instance.getUserID();
-      final files = GalleryFilesState.maybeOf(context)?.galleryFilesOrNull
-          ?.where(
-            (file) =>
-                file.uploadedFileID != null && file.ownerID == currentUserID,
-          )
-          .toList();
-      if (files != null && files.isNotEmpty) {
-        actions.add(
-          IconButtonComponent(
-            key: shareButtonKey,
-            icon: const HugeIcon(icon: HugeIcons.strokeRoundedShare08),
-            variant: IconButtonComponentVariant.primary,
-            tooltip: context.strings.share,
-            shouldSurfaceExecutionStates: false,
-            onTap: () => showSharePersonSheet(
-              context,
-              files: files,
-              shareButtonKey: shareButtonKey,
-            ),
-          ),
-        );
-      }
-    }
 
     final List<EntePopupMenuOption<ClusterPopupAction>> items = [
       if (widget.memoryLaneReady && widget.onMemoryLaneTap != null)

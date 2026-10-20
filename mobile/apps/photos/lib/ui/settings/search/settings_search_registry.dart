@@ -8,7 +8,6 @@ import "package:hugeicons/hugeicons.dart";
 import "package:photos/core/configuration.dart";
 import "package:photos/service_locator.dart";
 import "package:photos/ui/settings/about/about_us_page.dart";
-import "package:photos/ui/settings/account/account_settings_page.dart";
 import "package:photos/ui/settings/appearance/appearance_settings_page.dart";
 import "package:photos/ui/settings/backup/backup_settings_page.dart";
 import "package:photos/ui/settings/backup/free_space_options.dart";
@@ -28,75 +27,6 @@ class SettingsSearchRegistry {
     final isLocalGallery = isLocalGalleryMode;
     final showThemeControls = Platform.isAndroid || kDebugMode;
     final items = <SettingsSearchItem>[];
-
-    if (hasLoggedIn && !isLocalGallery) {
-      items.add(
-        SettingsSearchItem(
-          title: l10n.account,
-          sectionPath: l10n.account,
-          icon: HugeIcons.strokeRoundedUser,
-          routeBuilder: (_) => const AccountSettingsPage(),
-          keywords: ["email", "password", "delete", "subscription"],
-        ),
-      );
-
-      items.addAll([
-        SettingsSearchItem(
-          title: l10n.manageSubscription,
-          subtitle: l10n.account,
-          sectionPath: l10n.account,
-          icon: HugeIcons.strokeRoundedCreditCard,
-          routeBuilder: (_) => const AccountSettingsPage(),
-          isSubPage: true,
-          keywords: ["subscription", "plan", "billing", "payment"],
-        ),
-        SettingsSearchItem(
-          title: l10n.changeEmail,
-          subtitle: l10n.account,
-          sectionPath: l10n.account,
-          icon: HugeIcons.strokeRoundedMail01,
-          routeBuilder: (_) => const AccountSettingsPage(),
-          isSubPage: true,
-          keywords: ["email", "mail", "address"],
-        ),
-        SettingsSearchItem(
-          title: l10n.changePassword,
-          subtitle: l10n.account,
-          sectionPath: l10n.account,
-          icon: HugeIcons.strokeRoundedLockPassword,
-          routeBuilder: (_) => const AccountSettingsPage(),
-          isSubPage: true,
-          keywords: ["password", "passphrase", "credentials"],
-        ),
-        SettingsSearchItem(
-          title: l10n.recoveryKey,
-          subtitle: l10n.account,
-          sectionPath: l10n.account,
-          icon: HugeIcons.strokeRoundedKey01,
-          routeBuilder: (_) => const AccountSettingsPage(),
-          isSubPage: true,
-          keywords: ["recovery", "key", "backup key"],
-        ),
-        SettingsSearchItem(
-          title: l10n.exportYourData,
-          subtitle: l10n.account,
-          sectionPath: l10n.account,
-          icon: HugeIcons.strokeRoundedDownload04,
-          routeBuilder: (_) => const AccountSettingsPage(),
-          isSubPage: true,
-          keywords: ["export", "download", "data"],
-        ),
-        SettingsSearchItem(
-          title: l10n.deleteAccount,
-          subtitle: l10n.account,
-          sectionPath: l10n.account,
-          icon: HugeIcons.strokeRoundedDelete02,
-          routeBuilder: (_) => const AccountSettingsPage(),
-          isSubPage: true,
-          keywords: ["delete", "remove", "close account", "close"],
-        ),
-      ]);
-    }
 
     if (hasLoggedIn && !isLocalGallery) {
       items.add(
@@ -199,45 +129,6 @@ class SettingsSearchRegistry {
     );
 
     items.addAll([
-      if (Configuration.instance.hasConfiguredAccount() && !isLocalGallery)
-        SettingsSearchItem(
-          title: l10n.twofactor,
-          subtitle: l10n.security,
-          sectionPath: l10n.security,
-          icon: HugeIcons.strokeRoundedSmartPhone01,
-          routeBuilder: (_) => const SecuritySettingsPage(),
-          isSubPage: true,
-          keywords: ["2fa", "two factor", "authenticator", "otp"],
-        ),
-      if (Configuration.instance.hasConfiguredAccount() && !isLocalGallery)
-        SettingsSearchItem(
-          title: l10n.emailVerificationToggle,
-          subtitle: l10n.security,
-          sectionPath: l10n.security,
-          icon: HugeIcons.strokeRoundedMailSecure01,
-          routeBuilder: (_) => const SecuritySettingsPage(),
-          isSubPage: true,
-          keywords: ["email", "verification", "mfa"],
-        ),
-      if (Configuration.instance.hasConfiguredAccount() && !isLocalGallery)
-        SettingsSearchItem(
-          title: context.strings.passkey,
-          subtitle: l10n.security,
-          sectionPath: l10n.security,
-          icon: HugeIcons.strokeRoundedFingerAccess,
-          routeBuilder: (_) => const SecuritySettingsPage(),
-          isSubPage: true,
-          keywords: ["passkey", "webauthn", "biometric"],
-        ),
-      SettingsSearchItem(
-        title: l10n.crashReporting,
-        subtitle: l10n.security,
-        sectionPath: l10n.security,
-        icon: HugeIcons.strokeRoundedBug02,
-        routeBuilder: (_) => const SecuritySettingsPage(),
-        isSubPage: true,
-        keywords: ["crash", "reporting", "diagnostics"],
-      ),
       SettingsSearchItem(
         title: l10n.appLock,
         subtitle: l10n.security,
@@ -247,16 +138,6 @@ class SettingsSearchRegistry {
         isSubPage: true,
         keywords: ["lock", "pin", "biometric", "face id", "fingerprint"],
       ),
-      if (Configuration.instance.hasConfiguredAccount() && !isLocalGallery)
-        SettingsSearchItem(
-          title: l10n.activeSessions,
-          subtitle: l10n.security,
-          sectionPath: l10n.security,
-          icon: HugeIcons.strokeRoundedComputerPhoneSync,
-          routeBuilder: (_) => const SecuritySettingsPage(),
-          isSubPage: true,
-          keywords: ["sessions", "devices", "logins"],
-        ),
     ]);
 
     items.add(

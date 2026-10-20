@@ -216,9 +216,9 @@ class DeviceHealthClient implements DeviceHealthSource {
       _eventChannel = eventChannel ?? const EventChannel(_eventChannelName);
 
   static final instance = DeviceHealthClient();
-  static const _methodChannelName = 'io.ente.photos.platform/device_health';
+  static const _methodChannelName = 'com.shclock.photos.platform/device_health';
   static const _eventChannelName =
-      'io.ente.photos.platform/device_health_events';
+      'com.shclock.photos.platform/device_health_events';
 
   final MethodChannel _methodChannel;
   final EventChannel _eventChannel;

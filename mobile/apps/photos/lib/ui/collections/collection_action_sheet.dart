@@ -16,7 +16,6 @@ import 'package:photos/models/selected_files.dart';
 import "package:photos/service_locator.dart";
 import 'package:photos/services/collections_service.dart';
 import "package:photos/ui/actions/collection/collection_file_actions.dart";
-import "package:photos/ui/actions/collection/collection_sharing_actions.dart";
 import 'package:photos/ui/collections/album/vertical_list.dart';
 import "package:photos/ui/common/progress_dialog.dart";
 import "package:photos/utils/dialog_util.dart";

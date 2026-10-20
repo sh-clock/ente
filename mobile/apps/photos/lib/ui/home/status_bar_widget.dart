@@ -20,7 +20,6 @@ import "package:photos/service_locator.dart";
 import "package:photos/services/sync/large_backup_session_tracker.dart";
 import 'package:photos/services/sync/sync_service.dart';
 import "package:photos/theme/ente_theme.dart";
-import 'package:photos/ui/account/verify_recovery_page.dart';
 import 'package:photos/ui/components/home_header_widget.dart';
 import 'package:photos/ui/home/christmas/christmas_lights_banner.dart';
 import 'package:photos/ui/home/christmas/christmas_utils.dart';
@@ -151,7 +150,6 @@ class _StatusBarWidgetState extends State<StatusBarWidget> {
         if (_showErrorBanner) HeaderErrorWidget(error: _syncError),
         if (_shouldShowLargeBackupBanner) _largeBackupBanner(context),
         if (_showMlBanner && !_showErrorBanner) const _MachineLearningBanner(),
-        if (_showVerificationBanner()) const _RecoveryKeyBanner(),
       ],
     );
   }
@@ -177,15 +175,6 @@ class _StatusBarWidgetState extends State<StatusBarWidget> {
     );
   }
 
-  bool _showVerificationBanner() {
-    if (_showErrorBanner ||
-        _showErrorBanner ||
-        flagService.recoveryKeyVerified) {
-      return false;
-    }
-    final DateTime installTime = localSettings.getInstallDateTime();
-    return DateTime.now().difference(installTime).inDays >= 3;
-  }
 }
 
 class _MachineLearningBanner extends StatelessWidget {
@@ -207,29 +196,6 @@ class _MachineLearningBanner extends StatelessWidget {
               TabChangedEvent(searchTabIndex, TabChangedEventSource.mlConsent),
             );
           }
-        },
-      ),
-    );
-  }
-}
-
-class _RecoveryKeyBanner extends StatelessWidget {
-  const _RecoveryKeyBanner();
-
-  @override
-  Widget build(BuildContext context) {
-    return _bannerPadding(
-      BannerComponent(
-        leadingIcon: HugeIcons.strokeRoundedAlertCircle,
-        title: context.strings.confirmYourRecoveryKey,
-        state: BannerComponentState.warning,
-        trailingWidget: const Icon(Icons.arrow_forward),
-        onTap: () async {
-          await routeToPage(
-            context,
-            const VerifyRecoveryPage(),
-            forceCustomPageRoute: true,
-          );
         },
       ),
     );

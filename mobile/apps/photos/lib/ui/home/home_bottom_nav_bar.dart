@@ -22,14 +22,12 @@ class HomeBottomNavigationBar extends StatefulWidget {
     this.selectedFiles,
     this.selectedAlbums, {
     required this.selectedTabIndex,
-    required this.showFeed,
     super.key,
   });
 
   final SelectedFiles selectedFiles;
   final SelectedAlbums selectedAlbums;
   final int selectedTabIndex;
-  final bool showFeed;
 
   @override
   State<HomeBottomNavigationBar> createState() =>
@@ -136,7 +134,6 @@ class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
                   children: [
                     _HomeNavBar(
                       selectedIndex: currentTabIndex,
-                      showFeed: widget.showFeed,
                       onTabChange: (index) {
                         _onTabChange(index, mode: "OnPressed");
                       },
@@ -155,7 +152,6 @@ class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
 class _HomeNavBar extends StatelessWidget {
   const _HomeNavBar({
     required this.selectedIndex,
-    required this.showFeed,
     required this.onTabChange,
   });
 
@@ -173,12 +169,6 @@ class _HomeNavBar extends StatelessWidget {
       filledAsset: 'assets/icons/nav_bar/albums_filled.svg',
     ),
     _HomeNavTab(
-      semanticLabel: 'Feed',
-      semanticIdentifier: 'ente.photos.tab.feed',
-      outlineAsset: 'assets/icons/nav_bar/feed_outline.svg',
-      filledAsset: 'assets/icons/nav_bar/feed_filled.svg',
-    ),
-    _HomeNavTab(
       semanticLabel: 'Search',
       semanticIdentifier: 'ente.photos.tab.search',
       outlineAsset: 'assets/icons/nav_bar/search_outline.svg',
@@ -187,13 +177,12 @@ class _HomeNavBar extends StatelessWidget {
   ];
 
   final int selectedIndex;
-  final bool showFeed;
   final ValueChanged<int> onTabChange;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.componentColors;
-    final tabIndices = homeTabIndices(showFeed: showFeed);
+    const tabIndices = homeTabIndices;
     return GNav(
       curve: Curves.easeOutExpo,
       backgroundColor: colors.fillLight,

@@ -10,7 +10,6 @@ import "package:flutter/foundation.dart" show ValueListenable;
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:hugeicons/hugeicons.dart";
-import "package:photos/core/configuration.dart";
 import "package:photos/core/event_bus.dart";
 import "package:photos/events/details_sheet_event.dart";
 import "package:photos/events/file_caption_updated_event.dart";
@@ -26,22 +25,18 @@ import "package:photos/models/selected_files.dart";
 import "package:photos/module/download/file.dart";
 import "package:photos/module/download/thumbnail.dart";
 import "package:photos/service_locator.dart";
-import "package:photos/services/memory_share_service.dart";
 import "package:photos/services/smart_memories_service.dart";
 import "package:photos/ui/actions/file/file_actions.dart";
 import "package:photos/ui/collections/collection_action_sheet.dart";
 import "package:photos/ui/home/memories/custom_listener.dart";
 import "package:photos/ui/home/memories/memory_music_session.dart";
 import "package:photos/ui/home/memories/memory_progress_indicator.dart";
-import "package:photos/ui/home/memories/memory_share_sheet.dart";
 import "package:photos/ui/home/memories/memory_video_prefetcher.dart";
 import "package:photos/ui/home/memories/memory_viewer_constants.dart";
-import "package:photos/ui/social/widgets/file_social_overlay.dart";
 import "package:photos/ui/viewer/file/file_widget.dart";
 import "package:photos/ui/viewer/file/thumbnail_widget.dart";
 import "package:photos/ui/viewer/file_details/favorite_widget.dart";
 import "package:photos/ui/viewer/gallery/jump_to_date_gallery.dart";
-import "package:photos/utils/dialog_util.dart";
 import "package:photos/utils/share_util.dart";
 
 const _memoryCaptionHorizontalInset = 16.0;
@@ -871,29 +866,6 @@ class _FullScreenMemoryState extends State<FullScreenMemory> {
                   },
                 ),
               ),
-            ValueListenableBuilder<int>(
-              valueListenable: inheritedData.indexNotifier,
-              builder: (context, index, _) {
-                final safeIndex = _clampedMemoryIndex(
-                  index,
-                  inheritedData.memories.length,
-                );
-                if (safeIndex == null) return const SizedBox.shrink();
-                final padding = MediaQuery.paddingOf(context);
-                return Positioned(
-                  right: padding.right + kMemoryOverlayHorizontalInset,
-                  bottom: padding.bottom + kMemoryOverlayBottomInset,
-                  child: FileSocialOverlay(
-                    file: inheritedData.memories[safeIndex].file,
-                    currentUserID: Configuration.instance.getUserID(),
-                    openingCollectionID: null,
-                    onInteractionStart: _pauseViewer,
-                    onInteractionEnd: _resumeViewer,
-                    onVisibilityChanged: _setSocialControlsVisible,
-                  ),
-                );
-              },
-            ),
             const BottomIcons(),
             _MemoryTopOverlay(
               title: widget.title,
@@ -931,10 +903,6 @@ class BottomIcons extends StatelessWidget {
     }
     final fullScreenState = context
         .findAncestorStateOfType<_FullScreenMemoryState>();
-    final memoryTitle =
-        context.findAncestorWidgetOfExactType<FullScreenMemory>()?.title ??
-        context.strings.memories;
-
     return Positioned(
       left: 0,
       right: 0,
@@ -976,7 +944,7 @@ class BottomIcons extends StatelessWidget {
               ),
               onPressed: () async {
                 await fullScreenState._runWithViewerPaused(
-                  () => _shareMemory(context, inheritedData, memoryTitle),
+                  () => share(context, [currentFile]),
                 );
               },
             ),
@@ -1534,77 +1502,3 @@ class _MemoriesZoomWidgetState extends State<MemoriesZoomWidget>
   }
 }
 
-Future<void> _shareMemory(
-  BuildContext context,
-  FullScreenMemoryData inheritedData,
-  String memoryTitle,
-) async {
-  if (inheritedData.memories.isEmpty) return;
-  final currentIndex = _clampedMemoryIndex(
-    inheritedData.indexNotifier.value,
-    inheritedData.memories.length,
-  );
-  if (currentIndex == null) return;
-  final canShowMemoryShareLinkOption =
-      flagService.enableMemoryShareLink &&
-      !(isLocalGalleryMode && !Configuration.instance.hasConfiguredAccount());
-  final result = await showMemoryShareSelectionSheet(
-    context,
-    memories: inheritedData.memories,
-    initialIndex: currentIndex,
-    canShareMemoryLink: canShowMemoryShareLinkOption,
-  );
-  if (!context.mounted || result == null) {
-    return;
-  }
-
-  switch (result.action) {
-    case MemoryShareSheetAction.shareMemory:
-      final shareLinkData = await _getOrCreateMemoryLink(
-        context,
-        result.selectedMemories,
-        memoryTitle,
-      );
-      if (!context.mounted || shareLinkData == null) {
-        return;
-      }
-      final title = memoryTitle.trim();
-      await shareText(
-        formatMemoryShareText(
-          title.isNotEmpty ? title : context.strings.memories,
-          shareLinkData.$1,
-        ),
-        context: context,
-      );
-      return;
-    case MemoryShareSheetAction.shareItems:
-      await share(context, Memory.filesFromMemories(result.selectedMemories));
-  }
-}
-
-Future<(String, int)?> _getOrCreateMemoryLink(
-  BuildContext context,
-  List<Memory> memories,
-  String memoryTitle,
-) async {
-  if (memories.isEmpty) return null;
-  final l10n = context.strings;
-  final dialog = createProgressDialog(context, l10n.creatingLink);
-  await dialog.show();
-  try {
-    final normalizedTitle = memoryTitle.trim();
-    final shareLinkData = await MemoryShareService.instance
-        .getOrCreateMemoryLink(
-          memories: memories,
-          title: normalizedTitle.isNotEmpty ? normalizedTitle : l10n.memories,
-        );
-    await dialog.hide();
-    return shareLinkData;
-  } catch (e) {
-    await dialog.hide();
-    if (context.mounted) {
-      await showGenericErrorBottomSheet(context: context, error: e);
-    }
-    return null;
-  }
-}

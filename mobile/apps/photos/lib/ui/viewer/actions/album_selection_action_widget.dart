@@ -1,4 +1,3 @@
-import "dart:io";
 
 import "package:ente_strings/ente_strings.dart";
 import "package:flutter/material.dart";
@@ -13,14 +12,13 @@ import "package:photos/models/metadata/common_keys.dart";
 import "package:photos/models/selected_albums.dart";
 import "package:photos/service_locator.dart";
 import "package:photos/services/collections_service.dart";
-import "package:photos/ui/actions/collection/collection_sharing_actions.dart";
+import "package:photos/ui/actions/collection/collection_file_actions.dart";
 import "package:photos/ui/collections/collection_list_page.dart";
 import "package:photos/ui/components/action_sheet_widget.dart";
 import "package:photos/ui/components/bottom_action_bar/selection_action_sheet.dart";
 import "package:photos/ui/components/buttons/button_widget.dart";
 import "package:photos/ui/components/models/button_type.dart";
 import "package:photos/ui/notification/toast.dart";
-import "package:photos/ui/sharing/add_people_sheet.dart";
 import "package:photos/ui/viewer/album_slideshow/album_slideshow.dart";
 import "package:photos/utils/dialog_util.dart";
 import "package:photos/utils/magic_util.dart";
@@ -93,18 +91,6 @@ class _AlbumSelectionActionWidgetState
         isHomeSection && receivesAllSelectedAlbums;
     final showMixedEnteActions =
         isHomeSection && !ownsAllSelectedAlbums && !receivesAllSelectedAlbums;
-
-    if (showOwnerActions) {
-      items.add(
-        SelectionSheetAction(
-          labelText: context.strings.share,
-          hugeIcon: Platform.isIOS
-              ? HugeIcons.strokeRoundedShare03
-              : HugeIcons.strokeRoundedShare08,
-          onTap: _shareCollection,
-        ),
-      );
-    }
 
     items.add(
       SelectionSheetAction(
@@ -254,11 +240,6 @@ class _AlbumSelectionActionWidgetState
       backgroundColor: widget.backgroundColor,
       backgroundScrollController: widget.backgroundScrollController,
     );
-  }
-
-  Future<void> _shareCollection() async {
-    await showAddPeopleSheet(context, widget.selectedAlbums.albums.toList());
-    widget.selectedAlbums.clearAll();
   }
 
   Future<void> _startAlbumSlideshow() async {
@@ -411,14 +392,6 @@ class _AlbumSelectionActionWidgetState
     }
 
     final isUnhiding = collections.first.isHidden();
-    if (!await prepareSharedAlbumsForHiding(
-      context,
-      collections.where(
-        (collection) => collection.isOwner(userID) && !collection.isHidden(),
-      ),
-    )) {
-      return;
-    }
     if (!mounted) return;
     final dialog = createProgressDialog(
       context,
@@ -445,7 +418,6 @@ class _AlbumSelectionActionWidgetState
           prevVisibility: prevVisiblity,
           isOwner: isOwner,
           showProgressDialog: false,
-          skipSharedAlbumWarning: true,
         );
       }
       if (!mounted) return;

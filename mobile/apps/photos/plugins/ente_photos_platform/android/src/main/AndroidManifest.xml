@@ -2,7 +2,7 @@
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <application android:supportsRtl="true">
         <activity
-            android:name="io.ente.photos.WallpaperActivity"
+            android:name="com.shclock.photos.WallpaperActivity"
             android:exported="false"
             android:enableOnBackInvokedCallback="true"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

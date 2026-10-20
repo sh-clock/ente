@@ -25,7 +25,6 @@ import "package:photos/module/metadata/video.dart";
 import "package:photos/service_locator.dart";
 import "package:photos/services/file_magic_service.dart";
 import 'package:photos/ui/viewer/file/file_caption_widget.dart';
-import "package:photos/ui/viewer/file_details/added_by_widget.dart";
 import "package:photos/ui/viewer/file_details/albums_item_widget.dart";
 import "package:photos/ui/viewer/file_details/creation_time_item_widget.dart";
 import 'package:photos/ui/viewer/file_details/exif_item_widgets.dart';
@@ -308,7 +307,6 @@ class _FileDetailsWidgetState extends State<FileDetailsWidget> {
                 ],
               ),
               const SliverToBoxAdapter(child: SizedBox(height: Spacing.lg)),
-              SliverToBoxAdapter(child: AddedByWidget(widget.file)),
               SliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
                   return fileDetailsTiles[index];

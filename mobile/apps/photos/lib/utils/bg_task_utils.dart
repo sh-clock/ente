@@ -109,7 +109,6 @@ void callbackDispatcher() {
         }
       },
       prefix: "[bg]",
-      sentryInitTimeout: const Duration(seconds: 5),
     ).onError((_, _) {
       failure = "Didn't finished correctly!";
       return;

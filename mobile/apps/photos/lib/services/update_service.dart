@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:photos/core/constants.dart';
-import 'package:photos/core/network/network.dart';
 import "package:photos/services/language_service.dart";
 import 'package:photos/services/notification_service.dart';
 import 'package:photos/ui/notification/update/change_log_strings.dart';
@@ -67,18 +66,9 @@ class UpdateService {
   }
 
   Future<bool> shouldUpdate() async {
+    // Standalone offline build: there is no release-info endpoint to consult.
     _latestVersion = null;
-    if (!isIndependent()) {
-      return false;
-    }
-    try {
-      _latestVersion = await _getLatestVersionInfo();
-      final currentVersionCode = int.parse(_packageInfo.buildNumber);
-      return currentVersionCode < _latestVersion!.code;
-    } catch (e) {
-      _logger.severe(e);
-      return false;
-    }
+    return false;
   }
 
   bool shouldForceUpdate(LatestVersionInfo info) {
@@ -149,13 +139,6 @@ class UpdateService {
     );
   }
 
-  Future<LatestVersionInfo> _getLatestVersionInfo() async {
-    final response = await NetworkClient.instance.getDio().get(
-      "https://ente.com/release-info/independent.json",
-    );
-    return LatestVersionInfo.fromMap(response.data["latestVersion"]);
-  }
-
   bool isIndependent() {
     if (Platform.isIOS) {
       return false;
@@ -167,18 +150,18 @@ class UpdateService {
     return true;
   }
 
-  bool isIndependentFlavor() {
-    if (Platform.isIOS) {
-      return false;
-    }
-    return _packageInfo.packageName.startsWith("io.ente.photos.independent");
-  }
-
   bool isFDroidFlavor() {
     if (Platform.isIOS) {
       return false;
     }
     return _packageInfo.packageName.startsWith("io.ente.photos.fdroid");
+  }
+
+  bool isIndependentFlavor() {
+    if (Platform.isIOS) {
+      return false;
+    }
+    return _packageInfo.packageName.startsWith("io.ente.photos.independent");
   }
 
   bool isPlayStoreFlavor() {

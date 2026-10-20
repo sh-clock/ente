@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:ente_crypto/ente_crypto.dart';
-import 'package:ente_strings/ente_strings.dart';
-import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:photos/core/configuration.dart';
 import 'package:photos/db/files_db.dart';
@@ -11,108 +9,10 @@ import 'package:photos/models/file/extensions/file_props.dart';
 import 'package:photos/models/file/file.dart';
 import "package:photos/models/metadata/file_magic.dart";
 import "package:photos/service_locator.dart";
-import "package:photos/services/collections_service.dart";
-import "package:photos/utils/dialog_util.dart";
 import "package:photos/utils/file_key.dart";
 
 class DiffFetcher {
   final _logger = Logger("DiffFetcher");
-
-  Future<List<EnteFile>> getPublicFiles(
-    BuildContext context,
-    int collectionID,
-    bool sortAsc,
-  ) async {
-    try {
-      bool hasMore = false;
-      final sharedFiles = <EnteFile>[];
-      final headers = CollectionsService.instance.publicCollectionHeaders(
-        collectionID,
-      );
-      final collectionKey = CollectionsService.instance.getPublicCollectionKey(
-        collectionID,
-      );
-      int sinceTime = 0;
-
-      do {
-        final responseData = await collectionShareGateway.getPublicDiff(
-          headers: headers,
-          sinceTime: sinceTime,
-        );
-
-        final diff = responseData["diff"] as List;
-        hasMore = responseData["hasMore"] as bool;
-
-        for (final item in diff) {
-          final file = EnteFile();
-          if (item["isDeleted"]) {
-            continue;
-          }
-          file.uploadedFileID = item["id"];
-          file.collectionID = item["collectionID"];
-          file.ownerID = item["ownerID"];
-          file.encryptedKey = item["encryptedKey"];
-          file.keyDecryptionNonce = item["keyDecryptionNonce"];
-          final collectionAddedAt = item["collectionAddedAt"];
-          if (collectionAddedAt != null) {
-            file.addedTime = collectionAddedAt as int;
-          }
-          file.fileDecryptionHeader = item["file"]["decryptionHeader"];
-          file.thumbnailDecryptionHeader =
-              item["thumbnail"]["decryptionHeader"];
-          file.metadataDecryptionHeader = item["metadata"]["decryptionHeader"];
-          if (item["info"] != null) {
-            file.fileSize = item["info"]["fileSize"];
-          }
-          final fileKey = getFileKeyWithCollectionKey(file, collectionKey);
-          final encodedMetadata = await CryptoUtil.decryptChaCha(
-            CryptoUtil.base642bin(item["metadata"]["encryptedData"]),
-            fileKey,
-            CryptoUtil.base642bin(file.metadataDecryptionHeader!),
-          );
-          final Map<String, dynamic> metadata = jsonDecode(
-            utf8.decode(encodedMetadata),
-          );
-          file.applyMetadata(metadata);
-          if (item['pubMagicMetadata'] != null) {
-            final utfEncodedMmd = await CryptoUtil.decryptChaCha(
-              CryptoUtil.base642bin(item['pubMagicMetadata']['data']),
-              fileKey,
-              CryptoUtil.base642bin(item['pubMagicMetadata']['header']),
-            );
-            file.pubMmdEncodedJson = utf8.decode(utfEncodedMmd);
-            file.pubMmdVersion = item['pubMagicMetadata']['version'];
-            file.pubMagicMetadata = PubMagicMetadata.fromEncodedJson(
-              file.pubMmdEncodedJson!,
-            );
-          }
-
-          // Do not use local media for public collection files.
-          file.localID = null;
-
-          sharedFiles.add(file);
-        }
-
-        if (diff.isNotEmpty) {
-          sinceTime = diff.last["updationTime"];
-        }
-      } while (hasMore);
-      if (sortAsc) {
-        sharedFiles.sort((a, b) => a.creationTime!.compareTo(b.creationTime!));
-      }
-      return sharedFiles;
-    } catch (e, s) {
-      _logger.severe("Failed to decrypt collection ", e, s);
-      if (context.mounted) {
-        await showErrorDialog(
-          context,
-          context.strings.somethingWentWrong,
-          e.toString(),
-        );
-      }
-      rethrow;
-    }
-  }
 
   Future<Diff> getEncryptedFilesDiff(int collectionID, int sinceTime) async {
     try {

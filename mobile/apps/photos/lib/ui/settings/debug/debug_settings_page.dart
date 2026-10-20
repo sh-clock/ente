@@ -10,7 +10,6 @@ import "package:photos/ui/components/toggle_switch_widget.dart";
 import "package:photos/ui/home/christmas/christmas_utils.dart";
 import "package:photos/ui/notification/toast.dart";
 import "package:photos/ui/notification/update/change_log_page.dart";
-import "package:photos/ui/settings/debug/social_debug_screen.dart";
 import "package:photos/utils/background_tasks.dart";
 
 class DebugSettingsPage extends StatefulWidget {
@@ -197,23 +196,6 @@ class _DebugSettingsPageState extends State<DebugSettingsPage> {
                             trailingIconIsMuted: true,
                             onTap: () async {
                               await showChangeLogSheet(context);
-                            },
-                          ),
-                          MenuItemWidgetNew(
-                            title: "Social settings",
-                            leadingIconWidget: _buildIconWidget(
-                              context,
-                              HugeIcons.strokeRoundedShare01,
-                            ),
-                            trailingIcon: Icons.chevron_right_outlined,
-                            trailingIconIsMuted: true,
-                            onTap: () async {
-                              await Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const SocialDebugScreen(),
-                                ),
-                              );
                             },
                           ),
                         ],

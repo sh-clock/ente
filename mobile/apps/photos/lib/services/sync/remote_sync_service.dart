@@ -35,8 +35,6 @@ import 'package:photos/services/hidden_service.dart';
 import 'package:photos/services/ignored_files_service.dart';
 import 'package:photos/services/language_service.dart';
 import 'package:photos/services/notification_service.dart';
-import 'package:photos/services/social_notification_coordinator.dart';
-import 'package:photos/services/social_sync_service.dart';
 import 'package:photos/services/sync/diff_fetcher.dart';
 import 'package:photos/services/sync/local_sync_service.dart';
 import 'package:photos/services/sync/sync_service.dart';
@@ -140,12 +138,6 @@ class RemoteSyncService {
       await _pullDiff();
       await trashSyncService.syncTrash();
       await _collectionsService.movePendingRemovalActionsToUncategorized();
-
-      if (AppLifecycleService.instance.isForeground) {
-        _socialSync().ignore();
-      } else {
-        await _socialSync();
-      }
 
       if (!hasSyncedBefore) {
         await _prefs.setBool(_isFirstRemoteSyncDone, true);
@@ -1128,18 +1120,6 @@ class RemoteSyncService {
       );
     } catch (e, stackTrace) {
       _logger.severe("Failed to show notification ($context)", e, stackTrace);
-    }
-  }
-
-  Future<void> _socialSync() async {
-    try {
-      _logger.info("Starting social sync");
-      await SocialSyncService.instance.syncAllSharedCollections();
-      await SocialNotificationCoordinator.instance.notifyAfterSocialSync(
-        trigger: SocialNotificationTrigger.remoteSync,
-      );
-    } catch (e) {
-      _logger.severe("Social sync failed, continuing", e);
     }
   }
 }

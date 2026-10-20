@@ -422,7 +422,7 @@ class MediaExtensionPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             .putExtra("mimeType", mimeType)
             .setDataAndType(getShareableUri(activity!!.applicationContext, uri), mimeType)
         val wallpaperIntent = Intent(intent)
-            .setComponent(ComponentName(context, "io.ente.photos.WallpaperActivity"))
+            .setComponent(ComponentName(context, "com.shclock.photos.WallpaperActivity"))
         val started = safeStartActivityChooser(title, intent, arrayOf(wallpaperIntent))
         result.success(started)
     }

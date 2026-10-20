@@ -9,7 +9,6 @@ import "package:photos/models/ml/face/person.dart";
 import "package:photos/models/selected_files.dart";
 import "package:photos/services/machine_learning/face_ml/person/person_service.dart";
 import "package:photos/services/search_service.dart";
-import "package:photos/ui/notification/toast.dart";
 import "package:photos/ui/viewer/gallery/gallery.dart";
 import "package:photos/ui/viewer/gallery/state/gallery_files_inherited_widget.dart";
 
@@ -111,12 +110,6 @@ class _PickPersonCoverPhotoWidgetState
                         ),
                       );
                       if (!context.mounted) return;
-                      if (result.contactPictureUpdateFailed) {
-                        showShortToast(
-                          context,
-                          "Failed to update contact picture",
-                        );
-                      }
                       Navigator.pop(context, result.person);
                     }
                   : null,

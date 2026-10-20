@@ -16,7 +16,6 @@ import "package:photos/theme/colors.dart";
 import "package:photos/theme/ente_theme.dart";
 import "package:photos/theme/text_style.dart";
 import "package:photos/ui/actions/collection/collection_file_actions.dart";
-import "package:photos/ui/actions/collection/collection_sharing_actions.dart";
 import "package:photos/ui/notification/toast.dart";
 import "package:photos/ui/rituals/all_rituals_screen.dart";
 import "package:receive_sharing_intent/receive_sharing_intent.dart";

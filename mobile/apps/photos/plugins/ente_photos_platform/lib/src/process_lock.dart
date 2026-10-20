@@ -36,7 +36,7 @@ class ProcessLockClient {
     : _methodChannel = methodChannel ?? const MethodChannel(_methodChannelName);
 
   static final instance = ProcessLockClient();
-  static const _methodChannelName = 'io.ente.photos.platform/process_lock';
+  static const _methodChannelName = 'com.shclock.photos.platform/process_lock';
 
   final MethodChannel _methodChannel;
 

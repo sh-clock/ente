@@ -132,8 +132,6 @@ Future<ShareResult> shareText(
   }
 }
 
-String formatMemoryShareText(String title, String shareUrl) =>
-    '$title: $shareUrl';
 
 String formatAlbumShareText(
   String albumName,

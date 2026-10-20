@@ -960,7 +960,6 @@ class _AlbumThumbnail extends StatelessWidget {
               return ThumbnailWidget(
                 snapshot.data!,
                 showFavForAlbumOnly: true,
-                shouldShowOwnerAvatar: false,
               );
             }
             return Container(

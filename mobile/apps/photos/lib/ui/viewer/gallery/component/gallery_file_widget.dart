@@ -15,9 +15,7 @@ import "package:photos/models/gallery_type.dart";
 import "package:photos/models/selected_files.dart";
 import "package:photos/module/share/picker_result_uri.dart";
 import "package:photos/services/app_lifecycle_service.dart";
-import "package:photos/services/collections_service.dart";
 import "package:photos/ui/common/touch_cross_detector.dart";
-import "package:photos/ui/sharing/user_avator_widget.dart";
 import "package:photos/ui/viewer/actions/select_all_status_icon.dart";
 import "package:photos/ui/viewer/file/detail_page.dart";
 import "package:photos/ui/viewer/file/gallery_photo_page_route.dart";
@@ -35,15 +33,8 @@ Color galleryFileSelectionColor(
   EnteFile file,
   int? currentUserID,
 ) {
-  if (file.isUploaded &&
-      file.ownerID != null &&
-      file.ownerID != currentUserID) {
-    final owner = CollectionsService.instance.resolveUserIdentity(
-      file.ownerID!,
-      file.collectionID,
-    );
-    return getUserAvatarColor(context, owner);
-  }
+  // Offline build: all files are locally owned, the selection tint is a
+  // plain white (the previous code tinted by remote owner avatar color).
   return Colors.white;
 }
 
@@ -168,10 +159,6 @@ class _GalleryFileWidgetState extends State<GalleryFileWidget> {
       thumbnailSize: effectiveThumbnailSize,
       useRequestedThumbnailSizeForLocalCache: widget.thumbnailSize != null,
       gaplessPlayback: isPhoto,
-      shouldShowOwnerAvatar: !_isFileSelected,
-      ownerAvatarType: widget.photoGridSize < photoGridSizeMax
-          ? AvatarType.small
-          : AvatarType.xs,
       shouldShowVideoDuration: true,
     );
     final thumbnail = ClipRRect(

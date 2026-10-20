@@ -10,7 +10,7 @@ import "package:photos/models/collection/smart_album_config.dart";
 import "package:photos/models/selected_people.dart";
 import "package:photos/service_locator.dart";
 import "package:photos/services/collections_service.dart";
-import "package:photos/ui/actions/collection/collection_sharing_actions.dart";
+import "package:photos/ui/actions/collection/collection_file_actions.dart";
 import "package:photos/ui/components/action_sheet_widget.dart";
 import "package:photos/ui/components/buttons/button_widget.dart";
 import "package:photos/ui/components/models/button_type.dart";

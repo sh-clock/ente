@@ -327,7 +327,6 @@ class BackgroundTasks {
         ]);
       },
       prefix: "[bg]",
-      sentryInitTimeout: const Duration(seconds: 5),
     );
     return result;
   }

@@ -1,14 +1,7 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
-    package="io.ente.photos">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Strips MainActivity's launcher entry; see independent/AndroidManifest.xml. -->
     <application>
-        <meta-data android:name="io.sentry.dsn" tools:node="remove"/>
-        <meta-data
-            android:name="io.sentry.auto-init"
-            android:value="false"
-            tools:replace="android:value"/>
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -16,6 +9,4 @@
             </intent-filter>
         </activity>
     </application>
-
-    <uses-permission android:name="com.android.vending.BILLING"  tools:node="remove"/>
 </manifest>

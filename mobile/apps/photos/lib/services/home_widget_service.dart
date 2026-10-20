@@ -83,7 +83,7 @@ class HomeWidgetService {
     return await hw.HomeWidget.updateWidget(
       name: androidClass,
       androidName: androidClass,
-      qualifiedAndroidName: 'io.ente.photos.$androidClass',
+      qualifiedAndroidName: 'com.shclock.photos.$androidClass',
       iOSName: iOSClass,
     );
   }

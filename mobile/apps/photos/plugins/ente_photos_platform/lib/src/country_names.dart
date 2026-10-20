@@ -29,7 +29,7 @@ class CountryNames {
 
 class CountryNamesClient {
   static const _channel = MethodChannel(
-    'io.ente.photos.platform/country_names',
+    'com.shclock.photos.platform/country_names',
   );
 
   static Future<CountryNames> get(

@@ -14,7 +14,6 @@ import "package:photos/models/selected_files.dart";
 import "package:photos/services/collections_service.dart";
 import "package:photos/services/favorites_service.dart";
 import "package:photos/ui/actions/collection/collection_file_actions.dart";
-import "package:photos/ui/actions/collection/collection_sharing_actions.dart";
 import "package:photos/ui/collections/collection_action_sheet.dart";
 import "package:photos/ui/notification/toast.dart";
 import "package:photos/ui/viewer/gallery/collection_page.dart";

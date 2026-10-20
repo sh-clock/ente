@@ -274,7 +274,7 @@ extension SectionTypeExtensions on SectionType {
         return Future.value(const <SearchResult>[]);
 
       case SectionType.contacts:
-        return SearchService.instance.getAllContactsSearchResults(limit);
+        return Future.value(const <SearchResult>[]);
 
       case SectionType.album:
         return SearchService.instance.getAllCollectionSearchResults(limit);

@@ -1,5 +1,6 @@
 import "package:dio/dio.dart";
 import "package:ente_feature_flag/ente_feature_flag.dart";
+import "package:ente_install_source/ente_install_source.dart";
 import "package:package_info_plus/package_info_plus.dart";
 import "package:photos/core/configuration.dart";
 import "package:photos/core/event_bus.dart";

@@ -9,21 +9,16 @@ import 'package:logging/logging.dart';
 import 'package:photos/core/configuration.dart';
 import 'package:photos/core/event_bus.dart';
 import "package:photos/events/people_changed_event.dart";
-import 'package:photos/events/subscription_purchased_event.dart';
 import 'package:photos/models/gallery_type.dart';
 import "package:photos/models/ml/face/person.dart";
 import 'package:photos/models/selected_files.dart';
-import 'package:photos/services/collections_service.dart';
 import "package:photos/services/machine_learning/face_ml/person/person_service.dart";
 import "package:photos/theme/ente_theme.dart";
-import 'package:photos/ui/actions/collection/collection_sharing_actions.dart';
 import "package:photos/ui/components/buttons/button_widget.dart";
 import "package:photos/ui/notification/toast.dart";
-import 'package:photos/ui/sharing/share_person_sheet.dart';
 import "package:photos/ui/viewer/gallery/gallery_app_bar_actions.dart";
 import "package:photos/ui/viewer/gallery/gallery_app_bar_config.dart";
 import "package:photos/ui/viewer/gallery/hooks/pick_person_avatar.dart";
-import 'package:photos/ui/viewer/gallery/state/gallery_files_inherited_widget.dart';
 import "package:photos/ui/viewer/gallery/state/inherited_search_filter_data.dart";
 import "package:photos/ui/viewer/hierarchicial_search/app_bar_filter_chips.dart";
 import "package:photos/ui/viewer/people/person_cluster_suggestion.dart";
@@ -113,11 +108,8 @@ enum PeoplePopupAction {
 
 class _AppBarWidgetState extends State<PeopleAppBar> {
   final _logger = Logger("_AppBarWidgetState");
-  late StreamSubscription _userAuthEventSubscription;
   late Function() _selectedFilesListener;
   String? _appBarTitle;
-  late CollectionActions collectionActions;
-  final GlobalKey shareButtonKey = GlobalKey();
   bool isQuickLink = false;
   late GalleryType galleryType;
   late PersonEntity person;
@@ -144,17 +136,11 @@ class _AppBarWidgetState extends State<PeopleAppBar> {
     super.initState();
     person = widget.person;
     galleryType = widget.type;
-    collectionActions = CollectionActions(CollectionsService.instance);
     _selectedFilesListener = () {
       setState(() {});
     };
 
     widget.selectedFiles.addListener(_selectedFilesListener);
-    _userAuthEventSubscription = Bus.instance
-        .on<SubscriptionPurchasedEvent>()
-        .listen((event) {
-          setState(() {});
-        });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
@@ -201,7 +187,6 @@ class _AppBarWidgetState extends State<PeopleAppBar> {
 
   @override
   void dispose() {
-    _userAuthEventSubscription.cancel();
     widget.selectedFiles.removeListener(_selectedFilesListener);
     _peopleChangedEventSubscription.cancel();
     super.dispose();
@@ -279,34 +264,6 @@ class _AppBarWidgetState extends State<PeopleAppBar> {
     if (widget.selectedFiles.files.isNotEmpty ||
         !Configuration.instance.hasConfiguredAccount()) {
       return actions;
-    }
-
-    final currentUserID = Configuration.instance.getUserID();
-    final files = GalleryFilesState.maybeOf(context)?.galleryFilesOrNull
-        ?.where(
-          (file) =>
-              file.uploadedFileID != null && file.ownerID == currentUserID,
-        )
-        .toList();
-    if (!isIgnored &&
-        person.data.name.trim().isNotEmpty &&
-        files != null &&
-        files.isNotEmpty) {
-      actions.add(
-        IconButtonComponent(
-          key: shareButtonKey,
-          icon: const HugeIcon(icon: HugeIcons.strokeRoundedShare08),
-          variant: IconButtonComponentVariant.primary,
-          tooltip: context.strings.share,
-          shouldSurfaceExecutionStates: false,
-          onTap: () => showSharePersonSheet(
-            context,
-            person: person,
-            files: files,
-            shareButtonKey: shareButtonKey,
-          ),
-        ),
-      );
     }
 
     final List<EntePopupMenuOption<PeoplePopupAction>> items = [];

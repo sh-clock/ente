@@ -3,11 +3,11 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
-group 'io.ente.photos.platform'
+group 'com.shclock.photos.platform'
 version '1.0'
 
 android {
-    namespace 'io.ente.photos.platform'
+    namespace 'com.shclock.photos.platform'
 
     defaultConfig {
         minSdkVersion 23

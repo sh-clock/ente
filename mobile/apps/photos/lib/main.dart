@@ -33,6 +33,7 @@ import 'package:photos/db/files_db.dart';
 import "package:photos/db/ml/db.dart";
 import 'package:photos/ente_theme_data.dart';
 import "package:photos/locale.dart";
+import 'package:photos/models/typedefs.dart';
 import 'package:photos/module/upload/service/file_uploader.dart';
 import 'package:photos/module/upload/service/local_file_update_service.dart';
 import "package:photos/service_locator.dart";
@@ -86,7 +87,6 @@ const kBGProcessingTaskMLSelfStopAndroid = Duration(minutes: 8);
 bool isProcessBg = true;
 bool isIOSBackgroundRefresh = false;
 bool _stopHearBeat = false;
-bool _isSyncInitialized = false;
 bool _isRustInitialized = false;
 Future<void>? _rustInitFuture;
 late final photos_rust_log.LogSinkGuard _photosRustLogSinkGuard;
@@ -338,7 +338,6 @@ Future<void> _runMinimally(
     await LocalSyncService.instance.init(prefs);
     RemoteSyncService.instance.init(prefs);
     await SyncService.instance.init(prefs);
-    _isSyncInitialized = true;
 
     await UserService.instance.init();
     await NotificationService.instance.initializeForBackground();
@@ -539,7 +538,6 @@ Future<void> _init(
     PersonService.init(entityService, MLDataDB.instance, preferences);
     _logger.info("SyncService init $tlog");
     await SyncService.instance.init(preferences);
-    _isSyncInitialized = true;
     _logger.info("SyncService init done $tlog");
 
     _logger.info("RitualsService init $tlog");
@@ -656,7 +654,7 @@ Future<void> _sync(String caller) async {
   }
 }
 
-Future runWithLogs(Function function, {String prefix = ""}) async {
+Future runWithLogs(FutureOrVoidCallback function, {String prefix = ""}) async {
   await SuperLogging.main(
     LogConfig(
       body: function,

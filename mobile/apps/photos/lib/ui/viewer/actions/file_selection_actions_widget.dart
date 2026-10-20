@@ -3,7 +3,6 @@ import "dart:async";
 import "package:ente_pure_utils/ente_pure_utils.dart";
 import "package:ente_strings/ente_strings.dart";
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import "package:hugeicons/hugeicons.dart";
 import "package:local_auth/local_auth.dart";
 import "package:logging/logging.dart";
@@ -36,7 +35,6 @@ import "package:photos/services/machine_learning/face_ml/person/person_service.d
 import "package:photos/theme/colors.dart";
 import "package:photos/theme/ente_theme.dart";
 import 'package:photos/ui/actions/collection/collection_file_actions.dart';
-import 'package:photos/ui/actions/collection/collection_sharing_actions.dart';
 import 'package:photos/ui/collections/collection_action_sheet.dart';
 import "package:photos/ui/common/photo_library_add_permission.dart";
 import 'package:photos/ui/components/action_sheet_widget.dart';
@@ -89,10 +87,7 @@ class _FileSelectionActionsWidgetState
   late FilesSplit split;
   late CollectionActions collectionActions;
   late bool isCollectionOwner;
-  // Reuse the link while the selection is unchanged.
-  Collection? _cachedCollectionForSharedLink;
   final GlobalKey shareButtonKey = GlobalKey();
-  final GlobalKey sendLinkButtonKey = GlobalKey();
   final StreamController<double> _progressController =
       StreamController<double>();
 
@@ -123,9 +118,6 @@ class _FileSelectionActionsWidgetState
   }
 
   void _selectFileChangeListener() {
-    if (_cachedCollectionForSharedLink != null) {
-      _cachedCollectionForSharedLink = null;
-    }
     split = FilesSplit.split(widget.selectedFiles.files, currentUserID);
     if (mounted) {
       setState(() => {});
@@ -225,30 +217,6 @@ class _FileSelectionActionsWidgetState
             onTap: _shareSelectedFiles,
           ),
         );
-      }
-
-      if (widget.type.showCreateLink()) {
-        if (_cachedCollectionForSharedLink != null && anyUploadedFiles) {
-          items.add(
-            SelectionSheetAction(
-              hugeIcon: HugeIcons.strokeRoundedCopy01,
-              labelText: context.strings.copyLink,
-              gridOrder: 1,
-              onTap: anyUploadedFiles ? _sendLink : null,
-            ),
-          );
-        } else {
-          items.add(
-            SelectionSheetAction(
-              hugeIcon: HugeIcons.strokeRoundedLink02,
-              labelText: context.strings.sendLink,
-              gridOrder: 1,
-              onTap: anyUploadedFiles ? _onSendLinkTapped : null,
-              shouldShow: ownedFilesCount > 0,
-              key: sendLinkButtonKey,
-            ),
-          );
-        }
       }
 
       final showUploadIcon =
@@ -917,43 +885,6 @@ class _FileSelectionActionsWidgetState
     }
   }
 
-  Future<void> _onSendLinkTapped() async {
-    if (split.ownedByCurrentUser.isEmpty) {
-      showShortToast(
-        context,
-        context.strings.canOnlyCreateLinkForFilesOwnedByYou,
-      );
-      return;
-    }
-    final dialog = createProgressDialog(
-      context,
-      context.strings.creatingLink,
-      isDismissible: true,
-    );
-    await dialog.show();
-    if (!mounted) {
-      await dialog.hide();
-      return;
-    }
-    _cachedCollectionForSharedLink ??= await collectionActions
-        .createSharedCollectionLink(context, split.ownedByCurrentUser);
-
-    if (!mounted) {
-      await dialog.hide();
-      return;
-    }
-    if (_cachedCollectionForSharedLink == null) {
-      await dialog.hide();
-      return;
-    }
-    await dialog.hide();
-    if (!mounted) return;
-    await _sendLink();
-    if (!mounted) return;
-    widget.selectedFiles.clearAll();
-    setState(() => {});
-  }
-
   Future<void> _setPersonCover() async {
     final EnteFile file = widget.selectedFiles.files.first;
     final result = await PersonService.instance.updateAvatar(
@@ -964,9 +895,6 @@ class _FileSelectionActionsWidgetState
     widget.selectedFiles.clearAll();
     if (mounted) {
       setState(() => {});
-      if (result.contactPictureUpdateFailed) {
-        showShortToast(context, "Failed to update contact picture");
-      }
     }
     Bus.instance.fire(
       PeopleChangedEvent(
@@ -1060,20 +988,6 @@ class _FileSelectionActionsWidgetState
     widget.selectedFiles.clearAll();
     if (mounted) {
       setState(() => {});
-    }
-  }
-
-  Future<void> _sendLink() async {
-    if (_cachedCollectionForSharedLink != null) {
-      final String url = CollectionsService.instance.getPublicUrl(
-        _cachedCollectionForSharedLink!,
-      );
-      unawaited(Clipboard.setData(ClipboardData(text: url)));
-      await shareLinkWithDescription(
-        url,
-        context: context,
-        key: sendLinkButtonKey,
-      );
     }
   }
 

@@ -31,7 +31,6 @@ import "package:photos/theme/ente_theme.dart";
 import "package:photos/ui/actions/file/file_actions.dart";
 import "package:photos/ui/common/fast_scroll_physics.dart";
 import 'package:photos/ui/notification/toast.dart';
-import "package:photos/ui/social/widgets/file_social_overlay.dart";
 import "package:photos/ui/tools/editor/image_editor/image_editor_page.dart";
 import "package:photos/ui/tools/editor/video_editor_page.dart";
 import "package:photos/ui/viewer/file/file_app_bar.dart";
@@ -49,8 +48,6 @@ import "package:photos/ui/viewer/file/video_stream_change.dart";
 import 'package:photos/ui/viewer/gallery/gallery.dart';
 import 'package:photos/utils/dialog_util.dart';
 
-const _socialRightInset = 24.0;
-const _socialBottomBarClearance = 98.0;
 const _galleryBottomBarHeight = 60.0;
 const _galleryCaptionGap = 12.0;
 const _galleryCaptionLineHeight = 16.0;
@@ -421,18 +418,6 @@ class _BodyState extends State<_Body> {
                   );
                 },
                 valueListenable: _selectedIndexNotifier,
-              ),
-              ValueListenableBuilder(
-                valueListenable: _selectedIndexNotifier,
-                builder: (BuildContext context, int selectedIndex, _) {
-                  return _GallerySocialOverlay(
-                    file: _files![selectedIndex],
-                    mode: widget.config.mode,
-                    isGuestView: isGuestView,
-                    hasFilmstrip: _shouldShowFilmstrip,
-                    filmstripLayout: _filmstripLayout,
-                  );
-                },
               ),
               if (_qrHelper != null)
                 ValueListenableBuilder(
@@ -1078,54 +1063,3 @@ class _GalleryFileViewerBottomOverlay extends StatelessWidget {
 }
 
 // This widget returns Positioned, so its parent must be a Stack.
-class _GallerySocialOverlay extends StatelessWidget {
-  final EnteFile file;
-  final DetailPageMode mode;
-  final bool isGuestView;
-  final bool hasFilmstrip;
-  final GalleryFileViewerFilmstripLayout filmstripLayout;
-
-  const _GallerySocialOverlay({
-    required this.file,
-    required this.mode,
-    required this.isGuestView,
-    required this.hasFilmstrip,
-    required this.filmstripLayout,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    if (mode == DetailPageMode.minimalistic || isGuestView || file.isTrash) {
-      return const SizedBox.shrink();
-    }
-
-    final padding = MediaQuery.paddingOf(context);
-    final fullScreenNotifier = InheritedDetailPageState.of(
-      context,
-    ).enableFullScreenNotifier;
-    return Positioned(
-      right: padding.right + _socialRightInset,
-      bottom:
-          padding.bottom +
-          _socialBottomBarClearance +
-          (hasFilmstrip ? filmstripLayout.additionalBottomInset : 0),
-      child: ValueListenableBuilder<bool>(
-        valueListenable: fullScreenNotifier,
-        builder: (context, isFullScreen, child) => IgnorePointer(
-          ignoring: isFullScreen,
-          child: AnimatedOpacity(
-            opacity: isFullScreen ? 0 : 1,
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.easeInOut,
-            child: child,
-          ),
-        ),
-        child: FileSocialOverlay(
-          file: file,
-          currentUserID: Configuration.instance.getUserID(),
-          openingCollectionID: file.collectionID,
-        ),
-      ),
-    );
-  }
-}

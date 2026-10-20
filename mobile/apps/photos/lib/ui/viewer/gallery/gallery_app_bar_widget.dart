@@ -31,8 +31,7 @@ import "package:photos/services/files_service.dart";
 import "package:photos/services/review_service.dart";
 import "package:photos/states/location_screen_state.dart";
 import "package:photos/theme/ente_theme.dart";
-import 'package:photos/ui/actions/collection/collection_sharing_actions.dart';
-import "package:photos/ui/cast/cast.dart";
+import 'package:photos/ui/actions/collection/collection_file_actions.dart';
 import "package:photos/ui/collections/album/smart_album_people.dart";
 import "package:photos/ui/common/photo_library_add_permission.dart";
 import "package:photos/ui/common/web_page.dart";
@@ -41,9 +40,6 @@ import 'package:photos/ui/components/buttons/button_widget.dart';
 import 'package:photos/ui/components/models/button_type.dart';
 import "package:photos/ui/map/map_screen.dart";
 import 'package:photos/ui/notification/toast.dart';
-import 'package:photos/ui/sharing/album_participants_page.dart';
-import "package:photos/ui/sharing/manage_links_widget.dart";
-import 'package:photos/ui/sharing/share_collection_page.dart';
 import 'package:photos/ui/tools/free_space_page.dart';
 import "package:photos/ui/viewer/album_slideshow/album_slideshow.dart";
 import "package:photos/ui/viewer/file/detail_page.dart";
@@ -212,7 +208,6 @@ enum AlbumPopupAction {
   sharedArchive,
   ownedHide,
   sharedHide,
-  castAlbum,
   albumSlideshow,
   autoAddPhotos,
   sort,
@@ -222,7 +217,6 @@ enum AlbumPopupAction {
   addPhotos,
   pinAlbum,
   shareePinAlbum,
-  removeLink,
   cleanUncategorized,
   downloadAlbum,
   sortByMostRecent,
@@ -239,7 +233,6 @@ class _GalleryAppBarWidgetState extends State<GalleryAppBarWidget> {
   late Function() _selectedFilesListener;
   late String _appBarTitle;
   late CollectionActions collectionActions;
-  bool isQuickLink = false;
   late GalleryType galleryType;
 
   bool _isICloudSharedAlbum = false;
@@ -464,8 +457,7 @@ class _GalleryAppBarWidgetState extends State<GalleryAppBarWidget> {
         if (mounted) {
           _appBarTitle = name;
           galleryType = GalleryType.ownedCollection;
-          isQuickLink = false;
-          setState(() {});
+            setState(() {});
         }
       },
     );
@@ -635,7 +627,6 @@ class _GalleryAppBarWidgetState extends State<GalleryAppBarWidget> {
     }
 
     final int userId = Configuration.instance.getUserID()!;
-    isQuickLink = widget.collection?.isQuickLinkCollection() ?? false;
     if (galleryType.canAddFiles(widget.collection, userId)) {
       actions.add(
         IconButtonComponent(
@@ -650,27 +641,6 @@ class _GalleryAppBarWidgetState extends State<GalleryAppBarWidget> {
           shouldSurfaceExecutionStates: false,
           onTap: () async {
             await _showAddPhotoDialog(context);
-          },
-        ),
-      );
-    }
-
-    if (galleryType.isSharable()) {
-      actions.add(
-        IconButtonComponent(
-          tooltip: strings.share,
-          icon: HugeIcon(
-            icon: isQuickLink && (widget.collection!.hasLink)
-                ? HugeIcons.strokeRoundedLink02
-                : HugeIcons.strokeRoundedShare08,
-            color: foregroundColor,
-          ),
-          variant: iconButtonVariant,
-          size: onCover ? kMinInteractiveDimension : 36,
-          iconSize: onCover ? IconSizes.medium : IconSizes.small,
-          shouldSurfaceExecutionStates: false,
-          onTap: () async {
-            await _showShareCollectionDialog();
           },
         ),
       );
@@ -726,12 +696,8 @@ class _GalleryAppBarWidgetState extends State<GalleryAppBarWidget> {
             await hideOrUnhide();
           } else if (value == AlbumPopupAction.delete) {
             await _trashCollection();
-          } else if (value == AlbumPopupAction.removeLink) {
-            await _removeQuickLink();
           } else if (value == AlbumPopupAction.leave) {
             await _leaveAlbum(context);
-          } else if (value == AlbumPopupAction.castAlbum) {
-            await showCastSheet(context, widget.collection!);
           } else if (value == AlbumPopupAction.albumSlideshow) {
             await _startAlbumSlideshow();
           } else if (value == AlbumPopupAction.autoAddPhotos) {
@@ -1012,21 +978,6 @@ class _GalleryAppBarWidgetState extends State<GalleryAppBarWidget> {
             size: IconSizes.small,
           ),
         ),
-      if (widget.collection != null && castService.isSupported)
-        _menuOption(
-          AlbumPopupAction.castAlbum,
-          strings.castAlbum,
-          HugeIcon(
-            icon:
-                !flagService.enableMultiCast &&
-                    castService.getActiveSessions().isNotEmpty
-                ? HugeIcons.strokeRoundedTvSmart
-                : (onCover
-                      ? HugeIcons.strokeRoundedAirplayLine
-                      : HugeIcons.strokeRoundedTv02),
-            size: IconSizes.small,
-          ),
-        ),
       if (_isAlbumSlideshowAvailable && !onCover) _slideshowMenuOption(strings),
       if (canAutoAdd)
         _menuOption(
@@ -1039,12 +990,10 @@ class _GalleryAppBarWidgetState extends State<GalleryAppBarWidget> {
         ),
       if (galleryType.canDelete())
         _menuOption(
-          isQuickLink ? AlbumPopupAction.removeLink : AlbumPopupAction.delete,
-          isQuickLink ? strings.removeLink : strings.delete,
+          AlbumPopupAction.delete,
+          strings.delete,
           HugeIcon(
-            icon: isQuickLink
-                ? HugeIcons.strokeRoundedLinkBackward
-                : HugeIcons.strokeRoundedDelete01,
+            icon: HugeIcons.strokeRoundedDelete01,
             size: IconSizes.small,
             color: warningColor,
           ),
@@ -1366,52 +1315,6 @@ class _GalleryAppBarWidgetState extends State<GalleryAppBarWidget> {
     }
   }
 
-  Future<void> _removeQuickLink() async {
-    try {
-      final bool result = await CollectionActions(
-        CollectionsService.instance,
-      ).disableUrl(context, widget.collection!);
-      if (result && mounted) {
-        Navigator.of(context).pop();
-      }
-    } catch (e, s) {
-      _logger.severe("failed to trash collection", e, s);
-      if (!mounted) return;
-      await showGenericErrorDialog(context: context, error: e);
-    }
-  }
-
-  Future<void> _showShareCollectionDialog() async {
-    final collection = widget.collection;
-    try {
-      if (collection == null ||
-          (galleryType != GalleryType.ownedCollection &&
-              galleryType != GalleryType.sharedCollection &&
-              galleryType != GalleryType.hiddenOwnedCollection &&
-              galleryType != GalleryType.favorite &&
-              !isQuickLink)) {
-        throw Exception("Cannot share collection of type $galleryType");
-      }
-      final int? userID = Configuration.instance.getUserID();
-      final bool isOwner = userID == collection.owner.id;
-      if (isOwner) {
-        final bool shouldOpenManageLink = isQuickLink && collection.hasLink;
-        unawaited(
-          routeToPage(
-            context,
-            shouldOpenManageLink
-                ? ManageSharedLinkWidget(collection: collection)
-                : ShareCollectionPage(collection),
-          ),
-        );
-      } else {
-        unawaited(routeToPage(context, AlbumParticipantsPage(collection)));
-      }
-    } catch (e, s) {
-      _logger.severe("Failed to open share collection dialog", e, s);
-      await showGenericErrorDialog(context: context, error: e);
-    }
-  }
 
   Future<void> _showAddPhotoDialog(BuildContext bContext) async {
     final collection = widget.collection;
