@@ -148,7 +148,7 @@ test("counts and groups album shortcuts alongside collections", () => {
     const album = option("collection");
     const settings = [
         sidebarOption("utility.preferences"),
-        sidebarOption("account.subscription"),
+        sidebarOption("utility.export"),
         sidebarOption("preferences.theme"),
         sidebarOption("help.support"),
         sidebarOption("freeUpSpace.largeFiles"),

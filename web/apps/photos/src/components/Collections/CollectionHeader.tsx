@@ -1,19 +1,13 @@
 import type { RemotePullOpts } from "@/components/gallery";
-import { downloadAndSaveCollectionFiles } from "@/services/save";
 import {
-    CleanIcon,
-    Delete02Icon,
-    ModernTvIcon,
-    RemoveCircleIcon,
-    StarIcon,
-} from "@hugeicons/core-free-icons";
+    downloadAndSaveCollectionFiles,
+} from "@/services/save";
+import { Delete02Icon, CleanIcon, StarIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import CheckIcon from "@mui/icons-material/Check";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/Edit";
-import LinkIcon from "@mui/icons-material/Link";
-import LogoutIcon from "@mui/icons-material/Logout";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import PublicIcon from "@mui/icons-material/Public";
@@ -21,7 +15,6 @@ import PushPinIcon from "@mui/icons-material/PushPin";
 import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
 import SlideshowIcon from "@mui/icons-material/Slideshow";
 import SortIcon from "@mui/icons-material/Sort";
-import TvIcon from "@mui/icons-material/Tv";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
@@ -38,7 +31,6 @@ import type { AddSaveGroup } from "ente-gallery/components/utils/save-groups";
 import { uniqueFilesByID } from "ente-gallery/utils/file";
 import {
     CollectionOrder,
-    CollectionSubType,
     type Collection,
 } from "ente-media/collection";
 import type { CollectionSortBy } from "ente-media/collection-sort";
@@ -51,14 +43,11 @@ import {
     cleanUncategorized,
     defaultHiddenCollectionUserFacingName,
     deleteCollection,
-    deleteShareURL,
     findDefaultHiddenCollectionIDs,
     isHiddenCollection,
-    leaveSharedCollection,
     updateCollectionOrder,
     updateCollectionSortOrder,
     updateCollectionVisibility,
-    updateShareeCollectionOrder,
 } from "ente-new/photos/services/collection";
 import {
     PseudoCollectionID,
@@ -81,9 +70,6 @@ export interface CollectionHeaderProps {
     setActiveCollectionID: (collectionID: number) => void;
     isActiveCollectionDownloadInProgress: () => boolean;
     onRemotePull: (opts?: RemotePullOpts) => Promise<void>;
-    onCollectionShare: () => void;
-    onCollectionManageLink: () => void;
-    onCollectionCast: () => void;
     onCollectionSlideshow: () => void;
     onEditAlbumDetails: () => void;
     hasActiveFileSelection: boolean;
@@ -102,13 +88,6 @@ export const CollectionHeader: React.FC<CollectionHeaderProps> = (props) => {
 
     const EndIcon = () => {
         if (attributes.has("archived")) return <ArchiveOutlinedIcon />;
-        if (attributes.has("sharedOnlyViaLink")) return <LinkIcon />;
-        if (attributes.has("shared"))
-            return (
-                <Box sx={{ mt: "-1px" }}>
-                    <SmallShareIcon />
-                </Box>
-            );
         if (attributes.has("userFavorites"))
             return (
                 <HugeiconsIcon
@@ -148,9 +127,6 @@ const CollectionHeaderOptions: React.FC<CollectionHeaderProps> = ({
     collectionSummary,
     setActiveCollectionID,
     onRemotePull,
-    onCollectionShare,
-    onCollectionManageLink,
-    onCollectionCast,
     onCollectionSlideshow,
     onEditAlbumDetails,
     hasActiveFileSelection,
@@ -167,9 +143,6 @@ const CollectionHeaderOptions: React.FC<CollectionHeaderProps> = ({
         useModalVisibility();
 
     const { type: collectionSummaryType, fileCount } = collectionSummary;
-    const isQuickLinkAlbum =
-        activeCollection?.magicMetadata?.data.subType ==
-        CollectionSubType.quicklink;
 
     const wrap = useCallback(
         (f: () => Promise<void>) => {
@@ -348,23 +321,6 @@ const CollectionHeaderOptions: React.FC<CollectionHeaderProps> = ({
         );
     });
 
-    const confirmLeaveSharedAlbum = () =>
-        showMiniDialog({
-            title: t("leave_shared_album_title"),
-            message: t("leave_shared_album_message"),
-            continue: {
-                text: t("leave_shared_album"),
-                color: "critical",
-                action: leaveSharedAlbum,
-            },
-        });
-
-    const leaveSharedAlbum = wrap(async () => {
-        if (!activeCollection) return;
-        await leaveSharedCollection(activeCollection.id);
-        setActiveCollectionID(PseudoCollectionID.all);
-    });
-
     const pinAlbum = wrap(async () => {
         if (!activeCollection) return;
         await updateCollectionOrder(activeCollection, CollectionOrder.pinned);
@@ -373,22 +329,6 @@ const CollectionHeaderOptions: React.FC<CollectionHeaderProps> = ({
     const unpinAlbum = wrap(async () => {
         if (!activeCollection) return;
         await updateCollectionOrder(activeCollection, CollectionOrder.default);
-    });
-
-    const pinSharedAlbum = wrap(async () => {
-        if (!activeCollection) return;
-        await updateShareeCollectionOrder(
-            activeCollection,
-            CollectionOrder.pinned,
-        );
-    });
-
-    const unpinSharedAlbum = wrap(async () => {
-        if (!activeCollection) return;
-        await updateShareeCollectionOrder(
-            activeCollection,
-            CollectionOrder.default,
-        );
     });
 
     const hideAlbum = wrap(async () => {
@@ -407,18 +347,6 @@ const CollectionHeaderOptions: React.FC<CollectionHeaderProps> = ({
             ItemVisibility.visible,
         );
         setActiveCollectionID(PseudoCollectionID.hiddenItems);
-    });
-
-    const removeQuickLink = wrap(async () => {
-        if (!activeCollection) return;
-
-        if (isQuickLinkAlbum && activeCollection.sharees.length === 0) {
-            await deleteCollection(activeCollection.id, { keepFiles: true });
-            setActiveCollectionID(PseudoCollectionID.all);
-            return;
-        }
-
-        await deleteShareURL(activeCollection.id);
     });
 
     const changeSortOrder = (sortBy: CollectionSortBy, asc: boolean) => {
@@ -445,129 +373,9 @@ const CollectionHeaderOptions: React.FC<CollectionHeaderProps> = ({
             break;
 
         case "sharedIncoming":
-            menuOptions = [
-                shouldShowMapOption(collectionSummary) && (
-                    <OverflowMenuOption
-                        key="map"
-                        onClick={onShowMap}
-                        startIcon={<MapOutlinedIcon />}
-                    >
-                        {t("map")}
-                    </OverflowMenuOption>
-                ),
-                collectionSummary.attributes.has("shareePinned") ? (
-                    <OverflowMenuOption
-                        key="unpin"
-                        onClick={unpinSharedAlbum}
-                        startIcon={<PushPinOutlinedIcon />}
-                    >
-                        {t("unpin_album")}
-                    </OverflowMenuOption>
-                ) : (
-                    <OverflowMenuOption
-                        key="pin"
-                        onClick={pinSharedAlbum}
-                        startIcon={<PushPinIcon />}
-                    >
-                        {t("pin_album")}
-                    </OverflowMenuOption>
-                ),
-                collectionSummary.attributes.has("archived") ? (
-                    <OverflowMenuOption
-                        key="unarchive"
-                        onClick={unarchiveAlbum}
-                        startIcon={<UnarchiveIcon />}
-                    >
-                        {t("unarchive_album")}
-                    </OverflowMenuOption>
-                ) : (
-                    <OverflowMenuOption
-                        key="archive"
-                        onClick={archiveAlbum}
-                        startIcon={<ArchiveOutlinedIcon />}
-                    >
-                        {t("archive_album")}
-                    </OverflowMenuOption>
-                ),
-
-                activeCollection ? (
-                    isHiddenCollection(activeCollection) ? (
-                        <OverflowMenuOption
-                            key="unhide"
-                            onClick={unhideAlbum}
-                            startIcon={<VisibilityOutlinedIcon />}
-                        >
-                            {t("unhide_collection")}
-                        </OverflowMenuOption>
-                    ) : (
-                        <OverflowMenuOption
-                            key="hide"
-                            onClick={hideAlbum}
-                            startIcon={<VisibilityOffOutlinedIcon />}
-                        >
-                            {t("hide_collection")}
-                        </OverflowMenuOption>
-                    )
-                ) : undefined,
-                <OverflowMenuOption
-                    key="leave"
-                    startIcon={<LogoutIcon />}
-                    onClick={confirmLeaveSharedAlbum}
-                >
-                    {t("leave_album")}
-                </OverflowMenuOption>,
-                <OverflowMenuOption
-                    key="cast"
-                    startIcon={<TvIcon />}
-                    onClick={onCollectionCast}
-                >
-                    {t("cast_album_to_tv")}
-                </OverflowMenuOption>,
-            ];
             break;
 
         default:
-            if (isQuickLinkAlbum) {
-                menuOptions = [
-                    shouldShowMapOption(collectionSummary) && (
-                        <OverflowMenuOption
-                            key="map"
-                            onClick={onShowMap}
-                            startIcon={<MapOutlinedIcon />}
-                        >
-                            {t("map")}
-                        </OverflowMenuOption>
-                    ),
-                    <OverflowMenuOption
-                        key="sort"
-                        onClick={showSortOrderMenu}
-                        startIcon={<SortIcon />}
-                    >
-                        {t("sort_by")}
-                    </OverflowMenuOption>,
-                    <OverflowMenuOption
-                        key="cast"
-                        startIcon={<TvIcon />}
-                        onClick={onCollectionCast}
-                    >
-                        {t("cast_album_to_tv")}
-                    </OverflowMenuOption>,
-                    <OverflowMenuOption
-                        key="remove-link"
-                        onClick={removeQuickLink}
-                        startIcon={
-                            <HugeiconsIcon
-                                icon={RemoveCircleIcon}
-                                size={20}
-                                strokeWidth={1.5}
-                            />
-                        }
-                    >
-                        {t("remove_link")}
-                    </OverflowMenuOption>,
-                ];
-                break;
-            }
             menuOptions = [
                 activeCollection && (
                     <OverflowMenuOption
@@ -656,20 +464,6 @@ const CollectionHeaderOptions: React.FC<CollectionHeaderProps> = ({
                 >
                     {t("delete_album")}
                 </OverflowMenuOption>,
-                <OverflowMenuOption
-                    key="share"
-                    onClick={onCollectionShare}
-                    startIcon={<ShareIcon />}
-                >
-                    {t("share_album")}
-                </OverflowMenuOption>,
-                <OverflowMenuOption
-                    key="cast"
-                    startIcon={<TvIcon />}
-                    onClick={onCollectionCast}
-                >
-                    {t("cast_album_to_tv")}
-                </OverflowMenuOption>,
             ];
             break;
     }
@@ -690,18 +484,11 @@ const CollectionHeaderOptions: React.FC<CollectionHeaderProps> = ({
         <Box sx={{ display: "inline-flex", gap: "16px" }}>
             <QuickOptions
                 collectionSummary={collectionSummary}
-                isQuickLinkAlbum={isQuickLinkAlbum}
                 hasActiveFileSelection={hasActiveFileSelection}
                 isDownloadInProgress={isActiveCollectionDownloadInProgress}
                 onMapClick={onShowMap}
                 onEmptyTrashClick={confirmEmptyTrash}
                 onDownloadClick={downloadCollection}
-                onShareClick={
-                    isQuickLinkAlbum
-                        ? onCollectionManageLink
-                        : onCollectionShare
-                }
-                onCastClick={onCollectionCast}
                 onCleanUncategorizedClick={confirmCleanUncategorized}
             />
             {validMenuOptions.length > 0 && (
@@ -737,14 +524,11 @@ interface OptionProps {
 
 interface QuickOptionsProps {
     collectionSummary: CollectionSummary;
-    isQuickLinkAlbum: boolean;
     hasActiveFileSelection: boolean;
     isDownloadInProgress: () => boolean;
     onMapClick: () => void;
     onEmptyTrashClick: () => void;
     onDownloadClick: () => void;
-    onShareClick: () => void;
-    onCastClick: () => void;
     onCleanUncategorizedClick: () => void;
 }
 
@@ -752,11 +536,8 @@ const QuickOptions: React.FC<QuickOptionsProps> = ({
     onMapClick,
     onEmptyTrashClick,
     onDownloadClick,
-    onShareClick,
-    onCastClick,
     onCleanUncategorizedClick,
     collectionSummary,
-    isQuickLinkAlbum,
     hasActiveFileSelection,
     isDownloadInProgress,
 }) => (
@@ -785,16 +566,6 @@ const QuickOptions: React.FC<QuickOptionsProps> = ({
         )}
         {showMapQuickOption(collectionSummary) && (
             <MapQuickOption onClick={onMapClick} />
-        )}
-        {showShareQuickOption(collectionSummary) && (
-            <ShareQuickOption
-                collectionSummary={collectionSummary}
-                isQuickLinkAlbum={isQuickLinkAlbum}
-                onClick={onShareClick}
-            />
-        )}
-        {showCastQuickOption(collectionSummary) && (
-            <CastQuickOption onClick={onCastClick} />
         )}
     </Stack>
 );
@@ -921,108 +692,6 @@ const DownloadQuickOption: React.FC<DownloadQuickOptionProps> = ({
                 </Box>
             </IconButton>
         </span>
-    </Tooltip>
-);
-
-const showShareQuickOption = ({ type, attributes }: CollectionSummary) =>
-    type == "album" ||
-    type == "folder" ||
-    attributes.has("favorites") ||
-    attributes.has("shared");
-
-const showCastQuickOption = ({ type }: CollectionSummary) =>
-    type == "userFavorites";
-
-interface ShareQuickOptionProps {
-    collectionSummary: CollectionSummary;
-    isQuickLinkAlbum: boolean;
-    onClick: () => void;
-}
-
-const ShareIcon: React.FC = () => (
-    <svg
-        width="21"
-        height="19"
-        viewBox="0 0 22 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-    >
-        <path
-            d="M13.875 8C13.3918 8 13 8.39175 13 8.875C13 9.35825 13.3918 9.75 13.875 9.75V8.875V8ZM13.875 0C13.3918 0 13 0.391751 13 0.875C13 1.35825 13.3918 1.75 13.875 1.75V0.875V0ZM15.875 11C15.3918 11 15 11.3918 15 11.875C15 12.3582 15.3918 12.75 15.875 12.75V11.875V11ZM17.375 18C16.8918 18 16.5 18.3918 16.5 18.875C16.5 19.3582 16.8918 19.75 17.375 19.75V18.875V18ZM11.875 4.875H11C11 6.60089 9.60086 8 7.875 8V8.875V9.75C10.5673 9.75 12.75 7.56739 12.75 4.875H11.875ZM7.875 8.875V8C6.14911 8 4.75 6.60089 4.75 4.875H3.875H3C3 7.56739 5.18261 9.75 7.875 9.75V8.875ZM3.875 4.875H4.75C4.75 3.14911 6.14911 1.75 7.875 1.75V0.875V0C5.18261 0 3 2.18261 3 4.875H3.875ZM7.875 0.875V1.75C9.60086 1.75 11 3.14911 11 4.875H11.875H12.75C12.75 2.18261 10.5673 0 7.875 0V0.875ZM13.875 8.875V9.75C16.5673 9.75 18.75 7.56739 18.75 4.875H17.875H17C17 6.60089 15.6009 8 13.875 8V8.875ZM17.875 4.875H18.75C18.75 2.18261 16.5673 0 13.875 0V0.875V1.75C15.6009 1.75 17 3.14911 17 4.875H17.875ZM9.875 11.875V11H5.875V11.875V12.75H9.875V11.875ZM5.875 11.875V11C2.63033 11 0 13.6304 0 16.875H0.875H1.75C1.75 14.5968 3.59683 12.75 5.875 12.75V11.875ZM0.875 16.875H0C0 18.4629 1.28719 19.75 2.875 19.75V18.875V18C2.25367 18 1.75 17.4963 1.75 16.875H0.875ZM2.875 18.875V19.75H12.875V18.875V18H2.875V18.875ZM12.875 18.875V19.75C14.4628 19.75 15.75 18.4628 15.75 16.875H14.875H14C14 17.4964 13.4964 18 12.875 18V18.875ZM14.875 16.875H15.75C15.75 13.6304 13.1196 11 9.875 11V11.875V12.75C12.1532 12.75 14 14.5968 14 16.875H14.875ZM15.875 11.875V12.75C18.1532 12.75 20 14.5968 20 16.875H20.875H21.75C21.75 13.6304 19.1196 11 15.875 11V11.875ZM20.875 16.875H20C20 17.4964 19.4964 18 18.875 18V18.875V19.75C20.4628 19.75 21.75 18.4628 21.75 16.875H20.875ZM18.875 18.875V18H17.375V18.875V19.75H18.875V18.875Z"
-            fill="currentColor"
-        />
-    </svg>
-);
-
-const SmallShareIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-    <svg
-        width="15"
-        height="14"
-        viewBox="0 0 22 20"
-        {...props}
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-    >
-        <path
-            d="M13.875 8C13.3918 8 13 8.39175 13 8.875C13 9.35825 13.3918 9.75 13.875 9.75V8.875V8ZM13.875 0C13.3918 0 13 0.391751 13 0.875C13 1.35825 13.3918 1.75 13.875 1.75V0.875V0ZM15.875 11C15.3918 11 15 11.3918 15 11.875C15 12.3582 15.3918 12.75 15.875 12.75V11.875V11ZM17.375 18C16.8918 18 16.5 18.3918 16.5 18.875C16.5 19.3582 16.8918 19.75 17.375 19.75V18.875V18ZM11.875 4.875H11C11 6.60089 9.60086 8 7.875 8V8.875V9.75C10.5673 9.75 12.75 7.56739 12.75 4.875H11.875ZM7.875 8.875V8C6.14911 8 4.75 6.60089 4.75 4.875H3.875H3C3 7.56739 5.18261 9.75 7.875 9.75V8.875ZM3.875 4.875H4.75C4.75 3.14911 6.14911 1.75 7.875 1.75V0.875V0C5.18261 0 3 2.18261 3 4.875H3.875ZM7.875 0.875V1.75C9.60086 1.75 11 3.14911 11 4.875H11.875H12.75C12.75 2.18261 10.5673 0 7.875 0V0.875ZM13.875 8.875V9.75C16.5673 9.75 18.75 7.56739 18.75 4.875H17.875H17C17 6.60089 15.6009 8 13.875 8V8.875ZM17.875 4.875H18.75C18.75 2.18261 16.5673 0 13.875 0V0.875V1.75C15.6009 1.75 17 3.14911 17 4.875H17.875ZM9.875 11.875V11H5.875V11.875V12.75H9.875V11.875ZM5.875 11.875V11C2.63033 11 0 13.6304 0 16.875H0.875H1.75C1.75 14.5968 3.59683 12.75 5.875 12.75V11.875ZM0.875 16.875H0C0 18.4629 1.28719 19.75 2.875 19.75V18.875V18C2.25367 18 1.75 17.4963 1.75 16.875H0.875ZM2.875 18.875V19.75H12.875V18.875V18H2.875V18.875ZM12.875 18.875V19.75C14.4628 19.75 15.75 18.4628 15.75 16.875H14.875H14C14 17.4964 13.4964 18 12.875 18V18.875ZM14.875 16.875H15.75C15.75 13.6304 13.1196 11 9.875 11V11.875V12.75C12.1532 12.75 14 14.5968 14 16.875H14.875ZM15.875 11.875V12.75C18.1532 12.75 20 14.5968 20 16.875H20.875H21.75C21.75 13.6304 19.1196 11 15.875 11V11.875ZM20.875 16.875H20C20 17.4964 19.4964 18 18.875 18V18.875V19.75C20.4628 19.75 21.75 18.4628 21.75 16.875H20.875ZM18.875 18.875V18H17.375V18.875V19.75H18.875V18.875Z"
-            fill="currentColor"
-        />
-    </svg>
-);
-
-const ShareQuickOption: React.FC<ShareQuickOptionProps> = ({
-    collectionSummary: { attributes },
-    isQuickLinkAlbum,
-    onClick,
-}) => (
-    <Tooltip
-        title={
-            isQuickLinkAlbum
-                ? t("manage_link")
-                : attributes.has("userFavorites")
-                  ? t("share_favorites")
-                  : attributes.has("sharedIncoming")
-                    ? t("sharing_details")
-                    : attributes.has("shared")
-                      ? t("modify_sharing")
-                      : t("share_album")
-        }
-    >
-        <IconButton onClick={onClick}>
-            <Box
-                sx={{
-                    width: 24,
-                    height: 24,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                }}
-            >
-                {isQuickLinkAlbum ? <LinkIcon /> : <ShareIcon />}
-            </Box>
-        </IconButton>
-    </Tooltip>
-);
-
-const CastQuickOption: React.FC<OptionProps> = ({ onClick }) => (
-    <Tooltip title={t("cast_to_tv")}>
-        <IconButton onClick={onClick}>
-            <Box
-                sx={{
-                    width: 24,
-                    height: 24,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                }}
-            >
-                <HugeiconsIcon
-                    icon={ModernTvIcon}
-                    size={22}
-                    strokeWidth={1.8}
-                />
-            </Box>
-        </IconButton>
     </Tooltip>
 );
 

@@ -4,7 +4,6 @@ import {
     logoutClearStateAgain,
 } from "ente-accounts/services/logout";
 import log from "ente-base/log";
-import { logoutContacts } from "ente-contacts";
 import { resetSaveGroups } from "ente-gallery/components/utils/save-groups";
 import { logoutFileViewerDataSource } from "ente-gallery/components/viewer/data-source";
 import { downloadManager } from "ente-gallery/services/download";
@@ -66,12 +65,6 @@ export const photosLogout = async () => {
         logoutSettings();
     } catch (e) {
         ignoreError("Settings", e);
-    }
-
-    try {
-        logoutContacts();
-    } catch (e) {
-        ignoreError("Contacts", e);
     }
 
     try {

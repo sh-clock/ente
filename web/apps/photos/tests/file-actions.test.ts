@@ -15,7 +15,6 @@ describe("getAvailableFileActions", () => {
                 showEditLocation: false,
             }),
         ).toEqual([
-            "sendLink",
             "download",
             "addToAlbum",
             "moveToAlbum",

@@ -1,6 +1,6 @@
 import type { FSWatcher } from "chokidar";
 import type { BrowserWindow, IpcMainEvent, IpcMainInvokeEvent } from "electron";
-import { ipcMain, nativeTheme, safeStorage } from "electron/main";
+import { app, ipcMain, nativeTheme, safeStorage } from "electron/main";
 import type {
     CollectionMapping,
     FFmpegCommand,
@@ -11,12 +11,8 @@ import type {
     ZipItem,
 } from "../types/ipc";
 import log, { logToDisk } from "./log";
-import {
-    appVersion,
-    skipAppUpdate,
-    updateAndRestart,
-    updateOnNextRestart,
-} from "./services/app-update";
+
+const appVersion = () => app.getVersion();
 import autoLauncher from "./services/auto-launcher";
 import {
     getNativeDeviceLockCapability,
@@ -182,13 +178,8 @@ export const attachIPCHandlers = () => {
 
     handle("promptDeviceLock", (_, reason: string) => promptDeviceLock(reason));
 
-    on("updateAndRestart", () => updateAndRestart());
 
-    on("updateOnNextRestart", (_, version: string) =>
-        updateOnNextRestart(version),
-    );
 
-    on("skipAppUpdate", (_, version: string) => skipAppUpdate(version));
 
     handle("fsExists", (_, path: string) => fsExists(path));
 

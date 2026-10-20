@@ -9,7 +9,6 @@ import { contextBridge, ipcRenderer, webUtils } from "electron/renderer";
 
 import type { IpcRendererEvent } from "electron";
 import type {
-    AppUpdate,
     CollectionMapping,
     FFmpegCommand,
     FolderWatch,
@@ -114,25 +113,10 @@ const onOpenAppURL = (cb: ((url: string) => void) | undefined) => {
     if (cb) ipcRenderer.on("openAppURL", (_, url: string) => cb(url));
 };
 
-const onAppUpdateAvailable = (
-    cb: ((update: AppUpdate) => void) | undefined,
-) => {
-    ipcRenderer.removeAllListeners("appUpdateAvailable");
-    if (cb) {
-        ipcRenderer.on("appUpdateAvailable", (_, update: AppUpdate) =>
-            cb(update),
-        );
-    }
-};
-
 const updateAndRestart = () => ipcRenderer.send("updateAndRestart");
 
 const updateOnNextRestart = (version: string) =>
     ipcRenderer.send("updateOnNextRestart", version);
-
-const skipAppUpdate = (version: string) => {
-    ipcRenderer.send("skipAppUpdate", version);
-};
 
 const fsExists = (path: string) => ipcRenderer.invoke("fsExists", path);
 
@@ -300,10 +284,8 @@ contextBridge.exposeInMainWorld("electron", {
     setTitleBarOverlay,
     onOpenAppURL,
 
-    onAppUpdateAvailable,
     updateAndRestart,
     updateOnNextRestart,
-    skipAppUpdate,
 
     fs: {
         exists: fsExists,

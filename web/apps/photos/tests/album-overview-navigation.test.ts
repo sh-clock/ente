@@ -11,7 +11,6 @@ const mounted = () =>
     galleryReducer(initialGalleryState, {
         type: "mount",
         user: { id: 1 } as LocalUser,
-        familyData: undefined,
         collections: [],
         collectionFiles: [],
         trashItems: [],

@@ -3,19 +3,15 @@ import {
     BrowserWindow,
     Menu,
     MenuItemConstructorOptions,
-    shell,
 } from "electron";
 import { allowWindowClose } from "../main";
-import { forceCheckForAppUpdates } from "./services/app-update";
 import { setShouldHideDockIcon, shouldHideDockIcon } from "./services/store";
 
-export const createApplicationMenu = (mainWindow: BrowserWindow) => {
+export const createApplicationMenu = () => {
     let hideDockIcon = shouldHideDockIcon();
 
     const macOSOnly = (options: MenuItemConstructorOptions[]) =>
         process.platform == "darwin" ? options : [];
-
-    const handleCheckForUpdates = () => forceCheckForAppUpdates(mainWindow);
 
     const toggleHideDockIcon = () => {
         setShouldHideDockIcon(!hideDockIcon);
@@ -27,8 +23,6 @@ export const createApplicationMenu = (mainWindow: BrowserWindow) => {
             label: "Photos",
             submenu: [
                 ...macOSOnly([{ label: "About Photos", role: "about" }]),
-                { type: "separator" },
-                { label: "Check for Updates...", click: handleCheckForUpdates },
                 { type: "separator" },
 
                 ...macOSOnly([

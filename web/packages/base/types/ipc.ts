@@ -53,12 +53,8 @@ export interface Electron {
     getNativeDeviceLockCapability: () => Promise<NativeDeviceLockCapability>;
     promptDeviceLock: (reason: string) => Promise<boolean>;
 
-    onAppUpdateAvailable: (
-        cb: ((update: AppUpdate) => void) | undefined,
-    ) => void;
     updateAndRestart: () => void;
     updateOnNextRestart: (version: string) => void;
-    skipAppUpdate: (version: string) => void;
 
     fs: {
         exists: (path: string) => Promise<boolean>;
@@ -175,11 +171,6 @@ export interface MLWorkerAnalyzeImageResult {
     petBodies?: unknown;
     usedCoreml: boolean;
     usedWebgpu: boolean;
-}
-
-export interface AppUpdate {
-    autoUpdatable: boolean;
-    version: string;
 }
 
 export interface FolderWatch {

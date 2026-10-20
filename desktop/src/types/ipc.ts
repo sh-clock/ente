@@ -3,11 +3,6 @@ export type UtilityProcessType = "ml";
 
 export type ThemeMode = "light" | "dark" | "system";
 
-export interface AppUpdate {
-    autoUpdatable: boolean;
-    version: string;
-}
-
 export type NativeDeviceLockProvider = "touchid" | "none";
 
 export type NativeDeviceLockUnavailableReason =

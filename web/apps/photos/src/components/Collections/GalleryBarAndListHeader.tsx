@@ -1,9 +1,4 @@
 // TODO: Audit this file
-import {
-    CollectionShare,
-    type CollectionShareIntent,
-    type CollectionShareProps,
-} from "@/components/Collections/CollectionShare";
 import type { FileListHeaderOrFooter } from "@/components/FileList";
 import {
     GalleryBarImpl,
@@ -36,7 +31,6 @@ import {
 } from "ente-new/photos/services/collection-summary";
 import { includes } from "ente-utils/type-guards";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { AlbumCastDialog } from "./AlbumCastDialog";
 import {
     CollectionHeader,
     type CollectionHeaderProps,
@@ -70,10 +64,6 @@ export type GalleryBarAndListHeaderProps = Omit<
         | "onEditAlbumDetails"
         | "onShowMap"
         | "onCollectionSlideshow"
-    > &
-    Pick<
-        CollectionShareProps,
-        "user" | "emailByUserID" | "shareSuggestionEmails" | "setBlockingLoad"
     >;
 
 // TODO: Move this back into the gallery once its responsibilities are split.
@@ -82,7 +72,6 @@ export const GalleryBarAndListHeader: React.FC<
 > = ({
     shouldHide,
     mode,
-    user,
     barCollectionSummaries: toShowCollectionSummaries,
     normalCollectionSummaries,
     uncategorizedCollectionSummaryID,
@@ -90,7 +79,6 @@ export const GalleryBarAndListHeader: React.FC<
     activeCollection,
     activeCollectionID,
     setActiveCollectionID,
-    setBlockingLoad,
     people,
     peopleSortBy,
     onChangePeopleSortBy,
@@ -104,8 +92,6 @@ export const GalleryBarAndListHeader: React.FC<
     saveGroups,
     hasActiveFileSelection,
     activePerson,
-    emailByUserID,
-    shareSuggestionEmails,
     onRemotePull,
     onEditAlbumDetails,
     onAddSaveGroup,
@@ -122,28 +108,6 @@ export const GalleryBarAndListHeader: React.FC<
         setCreateInHiddenSection(mode == "hidden-albums");
         showAlbumNameInput();
     };
-
-    const { show: showCollectionShare, props: collectionShareVisibilityProps } =
-        useModalVisibility();
-    const { show: showCollectionCast, props: collectionCastVisibilityProps } =
-        useModalVisibility();
-    const [collectionShareIntent, setCollectionShareIntent] =
-        useState<CollectionShareIntent>();
-
-    const openCollectionShare = useCallback(() => {
-        setCollectionShareIntent(undefined);
-        showCollectionShare();
-    }, [showCollectionShare]);
-
-    const openCollectionManageLink = useCallback(() => {
-        setCollectionShareIntent("manage-link");
-        showCollectionShare();
-    }, [showCollectionShare]);
-
-    const closeCollectionShare = useCallback(() => {
-        setCollectionShareIntent(undefined);
-        collectionShareVisibilityProps.onClose();
-    }, [collectionShareVisibilityProps]);
 
     const [collectionsSortBy, setCollectionsSortBy] =
         useCollectionsSortByLocalState("updation-time-desc");
@@ -251,7 +215,7 @@ export const GalleryBarAndListHeader: React.FC<
     );
 
     useEffect(() => {
-        if (shouldHide || mode == "links") return;
+        if (shouldHide) return;
 
         const collectionSummary = toShowCollectionSummaries.get(
             activeCollectionID!,
@@ -276,9 +240,6 @@ export const GalleryBarAndListHeader: React.FC<
                         onCollectionSlideshow,
                     }}
                     collectionSummary={collectionSummary}
-                    onCollectionShare={openCollectionShare}
-                    onCollectionManageLink={openCollectionManageLink}
-                    onCollectionCast={showCollectionCast}
                     onEditAlbumDetails={onEditAlbumDetails}
                     hasActiveFileSelection={hasActiveFileSelection}
                     onDescriptionHeightChange={setDescriptionHeight}
@@ -309,10 +270,6 @@ export const GalleryBarAndListHeader: React.FC<
         activeCollectionID,
         isActiveCollectionDownloadInProgress,
         activePerson,
-        showCollectionShare,
-        openCollectionShare,
-        openCollectionManageLink,
-        showCollectionCast,
         hasActiveFileSelection,
         onRemotePull,
         onAddSaveGroup,
@@ -370,30 +327,6 @@ export const GalleryBarAndListHeader: React.FC<
                 onRemotePull={onRemotePull}
                 onSelectCollectionID={selectCollection}
             />
-            {activeCollection && (
-                <>
-                    <CollectionShare
-                        {...collectionShareVisibilityProps}
-                        onClose={closeCollectionShare}
-                        collectionSummary={toShowCollectionSummaries.get(
-                            activeCollectionID!,
-                        )!}
-                        collection={activeCollection}
-                        intent={collectionShareIntent}
-                        {...{
-                            user,
-                            emailByUserID,
-                            shareSuggestionEmails,
-                            setBlockingLoad,
-                            onRemotePull,
-                        }}
-                    />
-                    <AlbumCastDialog
-                        {...collectionCastVisibilityProps}
-                        collection={activeCollection}
-                    />
-                </>
-            )}
         </>
     );
 };

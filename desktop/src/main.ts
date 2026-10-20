@@ -4,7 +4,6 @@ import {
     Menu,
     Tray,
     app,
-    dialog,
     nativeTheme,
     protocol,
     type WebContents,
@@ -21,7 +20,6 @@ import {
 } from "./main/ipc";
 import log, { initLogging } from "./main/log";
 import { createApplicationMenu, createTrayContextMenu } from "./main/menu";
-import { setupAutoUpdater } from "./main/services/app-update";
 import autoLauncher from "./main/services/auto-launcher";
 import { shouldHideDockIcon } from "./main/services/store";
 import { createWatcher } from "./main/services/watch";
@@ -94,15 +92,13 @@ const main = () => {
             const webContents = mainWindow.webContents;
             setDownloadPath(webContents);
             allowExternalLinks(webContents);
-            handleBackOnStripeCheckout(mainWindow);
             allowAllCORSOrigins(webContents);
             allowOpenStreetMapRequestIdentification(webContents);
 
             void mainWindow.loadURL(rendererURL);
 
-            Menu.setApplicationMenu(createApplicationMenu(mainWindow));
+            Menu.setApplicationMenu(createApplicationMenu());
             setupTrayItem(mainWindow);
-            setupAutoUpdater(mainWindow);
         })();
     });
 
@@ -299,26 +295,32 @@ const allowExternalLinks = (webContents: WebContents) =>
 
 // Electron hides Stripe's beforeunload dialog, leaving an invisible modal that
 // wedges navigation and quit. Recreate the browser prompt ourselves.
-const handleBackOnStripeCheckout = (window: BrowserWindow) =>
-    window.webContents.on("will-prevent-unload", (event) => {
-        const url = new URL(window.webContents.getURL());
-
-        if (url.host != "checkout.stripe.com") return;
-
-        const choice = dialog.showMessageBoxSync(window, {
-            type: "question",
-            buttons: ["Leave", "Stay"],
-            title: "Leave site?",
-            message: "Changes that you made may not be saved.",
-            defaultId: 0,
-            cancelId: 1,
+const setupTrayItem = (mainWindow: BrowserWindow) => {
+    const iconName =
+        process.platform == "darwin"
+            ? "taskbar-icon-Template.png"
+            : "taskbar-icon.png";
+    const trayImgPath = path.join(
+        isDev ? "build" : process.resourcesPath,
+        iconName,
+    );
+    const trayIcon = nativeImage.createFromPath(trayImgPath);
+    const tray = new Tray(trayIcon);
+    tray.setToolTip("Photos");
+    tray.setContextMenu(createTrayContextMenu(mainWindow));
+    if (process.platform === "linux") {
+        tray.on("click", () => {
+            if (mainWindow.isFocused()) {
+                mainWindow.hide();
+            } else {
+                mainWindow.show();
+            }
         });
-        const leave = choice === 0;
-        if (leave) event.preventDefault();
-    });
+    }
+};
 
-// B2 answers ente://app uploads with Access-Control-Allow-Origin: null. Rewrite
-// missing/null values only; wildcards break Stripe hCaptcha's credentialed calls.
+main();
+
 const allowAllCORSOrigins = (webContents: WebContents) =>
     webContents.session.webRequest.onHeadersReceived(
         ({ responseHeaders }, callback) => {
@@ -367,29 +369,3 @@ const openStreetMapUserAgent = (existingUserAgent: string | undefined) => {
         ? `${appIdentifier} ${existingUserAgent}`
         : appIdentifier;
 };
-
-const setupTrayItem = (mainWindow: BrowserWindow) => {
-    const iconName =
-        process.platform == "darwin"
-            ? "taskbar-icon-Template.png"
-            : "taskbar-icon.png";
-    const trayImgPath = path.join(
-        isDev ? "build" : process.resourcesPath,
-        iconName,
-    );
-    const trayIcon = nativeImage.createFromPath(trayImgPath);
-    const tray = new Tray(trayIcon);
-    tray.setToolTip("Photos");
-    tray.setContextMenu(createTrayContextMenu(mainWindow));
-    if (process.platform === "linux") {
-        tray.on("click", () => {
-            if (mainWindow.isFocused()) {
-                mainWindow.hide();
-            } else {
-                mainWindow.show();
-            }
-        });
-    }
-};
-
-main();

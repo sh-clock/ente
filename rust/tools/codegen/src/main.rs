@@ -7,25 +7,11 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use camino::Utf8PathBuf;
 use lib_flutter_rust_bridge_codegen::codegen::{
     self as frb_codegen, Config as FrbConfig, MetaConfig as FrbMetaConfig,
 };
-use uniffi_bindgen::bindings::{self, GenerateOptions, TargetLanguage};
 
 type DynError = Box<dyn Error>;
-
-struct UniffiCrate<'a> {
-    crate_name: &'a str,
-    crate_dir: PathBuf,
-}
-
-#[derive(Clone, Copy)]
-enum NativeTarget {
-    All,
-    Ensu,
-    Cast,
-}
 
 #[derive(Clone, Copy)]
 enum FrbTarget {
@@ -44,18 +30,6 @@ fn main() {
 fn run() -> Result<(), DynError> {
     let mut args = env::args().skip(1);
     match args.next().as_deref() {
-        Some("native") => {
-            let target = match args.next().as_deref() {
-                None => NativeTarget::All,
-                Some("ensu") => NativeTarget::Ensu,
-                Some("cast") => NativeTarget::Cast,
-                _ => return Err(usage_error()),
-            };
-            if args.next().is_some() {
-                return Err(usage_error());
-            }
-            generate_native(target)
-        }
         Some("frb") => {
             let target = match args.next().as_deref() {
                 None => FrbTarget::All,
@@ -79,77 +53,7 @@ fn run() -> Result<(), DynError> {
 }
 
 fn usage_error() -> DynError {
-    "usage: cargo codegen <native [ensu|cast]|frb [photos|locker]|napi>".into()
-}
-
-fn generate_native(target: NativeTarget) -> Result<(), DynError> {
-    let rust_root = rust_root()?;
-
-    if matches!(target, NativeTarget::All | NativeTarget::Ensu) {
-        let ensu = UniffiCrate {
-            crate_name: "ensu",
-            crate_dir: rust_root.join("bindings/uniffi/ensu"),
-        };
-        generate_swift(&ensu, "apple/apps/ensu/Ensu/Generated")?;
-        generate_kotlin(
-            &ensu,
-            "android/apps/ensu/rust/src/main/kotlin",
-            "io/ente/ensu/bindings/ensu.kt",
-        )?;
-    }
-
-    if matches!(target, NativeTarget::All | NativeTarget::Cast) {
-        let cast = UniffiCrate {
-            crate_name: "cast",
-            crate_dir: rust_root.join("bindings/uniffi/cast"),
-        };
-        generate_swift(&cast, "apple/apps/cast/Cast/Generated")?;
-        // TODO: Android cast bindings scaffold
-        // generate_kotlin(
-        //     &cast,
-        //     "android/apps/cast/app/src/main/kotlin",
-        //     "io/ente/cast/bindings/cast.kt",
-        // )?;
-    }
-
-    Ok(())
-}
-
-fn generate_swift(uniffi_crate: &UniffiCrate<'_>, generated_rel: &str) -> Result<(), DynError> {
-    let generated_dir = repo_root()?.join(generated_rel);
-    write_generated_gitignore(&generated_dir)?;
-
-    build_host_library(&uniffi_crate.crate_dir)?;
-    remove_paths(&swift_generated_paths(
-        &generated_dir,
-        uniffi_crate.crate_name,
-    ))?;
-    generate_bindings(TargetLanguage::Swift, &generated_dir, uniffi_crate)?;
-
-    sanitize_generated_swift_bindings(
-        &generated_dir.join(format!("{}.swift", uniffi_crate.crate_name)),
-        uniffi_crate.crate_name,
-    )?;
-
-    Ok(())
-}
-
-fn generate_kotlin(
-    uniffi_crate: &UniffiCrate<'_>,
-    out_rel: &str,
-    generated_rel: &str,
-) -> Result<(), DynError> {
-    let rust_out_dir = repo_root()?.join(out_rel);
-    let generated_path = rust_out_dir.join(generated_rel);
-    if let Some(bindings_dir) = generated_path.parent() {
-        write_generated_gitignore(bindings_dir)?;
-    }
-
-    build_host_library(&uniffi_crate.crate_dir)?;
-    remove_path(&generated_path)?;
-    generate_bindings(TargetLanguage::Kotlin, &rust_out_dir, uniffi_crate)?;
-
-    Ok(())
+    "usage: cargo codegen <frb [photos|locker]|napi>".into()
 }
 
 fn write_generated_gitignore(dir: &Path) -> Result<(), DynError> {
@@ -397,27 +301,6 @@ fn target_dir() -> Result<PathBuf, DynError> {
     Ok(rust_root()?.join("target"))
 }
 
-fn build_host_library(crate_dir: &Path) -> Result<(), DynError> {
-    let target_dir = target_dir()?;
-    run_command(
-        Command::new("cargo")
-            .arg("build")
-            .arg("--locked")
-            .arg("--target-dir")
-            .arg(target_dir)
-            .current_dir(crate_dir),
-        format!("failed to build {}", crate_dir.display()),
-    )
-}
-
-fn swift_generated_paths(generated_dir: &Path, crate_name: &str) -> [PathBuf; 3] {
-    [
-        generated_dir.join(format!("{crate_name}.swift")),
-        generated_dir.join(format!("{crate_name}FFI.h")),
-        generated_dir.join(format!("{crate_name}FFI.modulemap")),
-    ]
-}
-
 fn remove_path(path: &Path) -> Result<(), DynError> {
     match fs::remove_file(path) {
         Ok(()) => {}
@@ -436,91 +319,6 @@ fn remove_paths(paths: &[PathBuf]) -> Result<(), DynError> {
     }
 
     Ok(())
-}
-
-fn generate_bindings(
-    language: TargetLanguage,
-    out_dir: &Path,
-    uniffi_crate: &UniffiCrate<'_>,
-) -> Result<(), DynError> {
-    let source = target_dir()?.join("debug").join(format!(
-        "{}{}{}",
-        env::consts::DLL_PREFIX,
-        uniffi_crate.crate_name,
-        env::consts::DLL_SUFFIX
-    ));
-    let source = utf8_path(&source)?;
-    let out_dir = utf8_path(out_dir)?;
-    let previous_dir = env::current_dir().map_err(|error| {
-        format!(
-            "failed to capture current directory before generating {} bindings: {error}",
-            uniffi_crate.crate_name
-        )
-    })?;
-
-    env::set_current_dir(&uniffi_crate.crate_dir).map_err(|error| {
-        format!(
-            "failed to enter {} before generating bindings: {error}",
-            uniffi_crate.crate_dir.display()
-        )
-    })?;
-
-    let result = bindings::generate(GenerateOptions {
-        languages: vec![language],
-        source,
-        out_dir,
-        config_override: None,
-        format: false,
-        crate_filter: Some(uniffi_crate.crate_name.to_owned()),
-        metadata_no_deps: false,
-    });
-
-    env::set_current_dir(&previous_dir).map_err(|error| {
-        format!(
-            "failed to restore current directory to {}: {error}",
-            previous_dir.display()
-        )
-    })?;
-
-    result?;
-
-    Ok(())
-}
-
-fn sanitize_generated_swift_bindings(swift_file: &Path, crate_name: &str) -> Result<(), DynError> {
-    let original = fs::read_to_string(swift_file)
-        .map_err(|error| format!("failed to read {}: {error}", swift_file.display()))?;
-    let free_call_prefix = format!("try! rustCall {{ uniffi_{crate_name}_fn_free_");
-
-    let mut rewritten = String::from("// swift-format-ignore-file\n");
-
-    for segment in original.split_inclusive('\n') {
-        let line = segment.strip_suffix('\n').unwrap_or(segment);
-        let trimmed = line.trim_start();
-
-        if trimmed.starts_with(&free_call_prefix) && trimmed.ends_with("(handle, $0) }") {
-            let indent = &line[..line.len() - trimmed.len()];
-            rewritten.push_str(indent);
-            rewritten.push_str("// Avoid aborting the host app if Rust-side teardown fails during process shutdown.\n");
-            rewritten.push_str(indent);
-            rewritten.push_str(&line.replacen("try!", "try?", 1));
-            if segment.ends_with('\n') {
-                rewritten.push('\n');
-            }
-        } else {
-            rewritten.push_str(segment);
-        }
-    }
-
-    fs::write(swift_file, rewritten)
-        .map_err(|error| format!("failed to write {}: {error}", swift_file.display()))?;
-
-    Ok(())
-}
-
-fn utf8_path(path: &Path) -> Result<Utf8PathBuf, DynError> {
-    Utf8PathBuf::from_path_buf(path.to_path_buf())
-        .map_err(|path| format!("path is not valid UTF-8: {}", path.display()).into())
 }
 
 fn run_command(command: &mut Command, error_context: String) -> Result<(), DynError> {

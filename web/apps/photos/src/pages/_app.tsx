@@ -1,10 +1,5 @@
-import { authPageConfig } from "@/auth-page-config";
 import { AppLockReauthenticationDialog } from "@/components/app-lock/AppLockReauthenticationDialog";
 import { AppLockSetupError } from "@/components/app-lock/LockScreenContents";
-import {
-    updateAvailableForDownloadDialogAttributes,
-    updateReadyToInstallDialogAttributes,
-} from "@/components/utils/download";
 import {
     useAutoLockWhenBackgrounded,
     useSetupAppLock,
@@ -15,10 +10,8 @@ import { photosLogout } from "@/services/logout";
 import { runMigrations } from "@/services/migration";
 import "@fontsource-variable/inter";
 import "@fontsource-variable/outfit";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { CssBaseline, Typography } from "@mui/material";
 import { styled, ThemeProvider, useColorScheme } from "@mui/material/styles";
-import { AuthPageProvider } from "ente-accounts/components/auth/AuthPageProvider";
 import {
     isLocalStorageAndIndexedDBMismatch,
     savedLocalUser,
@@ -45,7 +38,6 @@ import { useLoadingBar } from "ente-base/components/utils/use-loading-bar";
 import { BaseContext, deriveBaseContext } from "ente-base/context";
 import log from "ente-base/log";
 import { logStartupBanner } from "ente-base/log-web";
-import type { AppUpdate } from "ente-base/types/ipc";
 import {
     initVideoProcessing,
     isHLSGenerationSupported,
@@ -108,26 +100,10 @@ const App: React.FC<PhotosAppProps> = ({ Component, pageProps }) => {
         if (!electron) return undefined;
 
         const handleOpenAppURL = (url: string) => {
-            if (url.startsWith("ente://app")) {
+            if (url.startsWith("photos://app")) {
                 void router.push(url);
             } else {
                 log.info(`Ignoring unhandled open request for URL ${url}`);
-            }
-        };
-
-        const showUpdateDialog = (update: AppUpdate) => {
-            if (update.autoUpdatable) {
-                showMiniDialog(updateReadyToInstallDialogAttributes(update));
-            } else {
-                showNotification({
-                    color: "secondary",
-                    title: t("update_available"),
-                    endIcon: <ArrowForwardIcon />,
-                    onClick: () =>
-                        showMiniDialog(
-                            updateAvailableForDownloadDialogAttributes(update),
-                        ),
-                });
             }
         };
 
@@ -135,11 +111,9 @@ const App: React.FC<PhotosAppProps> = ({ Component, pageProps }) => {
         if (isHLSGenerationSupported) void initVideoProcessing();
 
         electron.onOpenAppURL(handleOpenAppURL);
-        electron.onAppUpdateAvailable(showUpdateDialog);
 
         return () => {
             electron.onOpenAppURL(undefined);
-            electron.onAppUpdateAvailable(undefined);
         };
     }, [router, showMiniDialog, showNotification]);
 
@@ -188,7 +162,7 @@ const App: React.FC<PhotosAppProps> = ({ Component, pageProps }) => {
             )}
             <BaseContext value={baseContext}>
                 <PhotosAppContext value={appContext}>
-                    <AuthPageProvider value={authPageConfig}>
+                    <>
                         {!isI18nReady ? (
                             <LoadingIndicator />
                         ) : isDesktop ? (
@@ -204,7 +178,7 @@ const App: React.FC<PhotosAppProps> = ({ Component, pageProps }) => {
                                 isChangingRoute={isChangingRoute}
                             />
                         )}
-                    </AuthPageProvider>
+                    </>
                 </PhotosAppContext>
             </BaseContext>
         </ThemeProvider>

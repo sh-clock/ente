@@ -1,45 +1,13 @@
-import { ImageAdd02Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
-import FileDownloadIcon from "@mui/icons-material/FileDownloadOutlined";
 import { Paper, Stack, styled, Typography } from "@mui/material";
 import { EnteLogo } from "ente-base/components/EnteLogo";
-import { FocusVisibleButton } from "ente-base/components/mui/FocusVisibleButton";
-import { apiURL, customAPIOrigin } from "ente-base/origins";
-import type { UploadTypeSelectorIntent } from "ente-gallery/components/Upload";
 import { t } from "i18next";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Trans } from "react-i18next";
-
-interface GalleryEmptyStateProps {
-    isUploadInProgress: boolean;
-    onUpload: (intent: UploadTypeSelectorIntent) => void;
-}
 
 const galleryEmptyStateShelfTiles = Array.from({ length: 20 }, (_, i) => i);
 const galleryEmptyStateGridTiles = Array.from({ length: 56 }, (_, i) => i);
-const memoriesPreservedCountRefreshInterval = 15_000;
 
-const parseMemoriesPreservedCount = (response: unknown) =>
-    typeof response == "object" &&
-    response != null &&
-    "count" in response &&
-    typeof response.count == "number" &&
-    Number.isFinite(response.count)
-        ? Math.trunc(response.count)
-        : undefined;
-
-const memoriesPreservedSince = (
-    initialCount: number | undefined,
-    nextCount: number,
-) => Math.max(0, nextCount - (initialCount ?? nextCount));
-
-export function GalleryEmptyState({
-    isUploadInProgress,
-    onUpload,
-}: GalleryEmptyStateProps): React.JSX.Element {
-    const handleImport = () => onUpload("import");
-    const handleUpload = () => onUpload("upload");
-
+export function GalleryEmptyState(): React.JSX.Element {
     return (
         <Stack
             sx={{
@@ -136,99 +104,8 @@ export function GalleryEmptyState({
                         {t("gallery_empty_state_subtitle")}
                     </Typography>
                 </Stack>
-
-                <Stack
-                    sx={{ mt: "40px", width: 334, maxWidth: "100%", gap: 1 }}
-                >
-                    <GalleryEmptyStateButton
-                        color="accent"
-                        onClick={handleImport}
-                        disabled={isUploadInProgress}
-                        startIcon={<FileDownloadIcon />}
-                    >
-                        {t("upload_existing_library")}
-                    </GalleryEmptyStateButton>
-                    <GalleryEmptyStateButton
-                        color="secondary"
-                        onClick={handleUpload}
-                        disabled={isUploadInProgress}
-                        startIcon={
-                            <HugeiconsIcon
-                                icon={ImageAdd02Icon}
-                                size={20}
-                                strokeWidth={2}
-                            />
-                        }
-                    >
-                        {t("upload_first_photo")}
-                    </GalleryEmptyStateButton>
-                </Stack>
-                <MemoriesPreservedCount />
             </Paper>
         </Stack>
-    );
-}
-
-function MemoriesPreservedCount(): React.JSX.Element | null {
-    const [count, setCount] = useState<number>();
-
-    useEffect(() => {
-        const abortController = new AbortController();
-        let initialCount: number | undefined;
-
-        const refreshCount = () => {
-            void apiURL("/files/count")
-                .then((url) => fetch(url, { signal: abortController.signal }))
-                .then((response) => (response.ok ? response.json() : undefined))
-                .then((response: unknown) => {
-                    const nextCount = parseMemoriesPreservedCount(response);
-                    if (nextCount == undefined) return;
-
-                    initialCount ??= nextCount;
-                    const sinceCount = memoriesPreservedSince(
-                        initialCount,
-                        nextCount,
-                    );
-                    setCount((count) => Math.max(count ?? 0, sinceCount));
-                })
-                .catch(() => undefined);
-        };
-
-        // Custom API origins cannot use this production-wide count.
-        let intervalID: number | undefined;
-        void customAPIOrigin().then((origin) => {
-            if (origin || abortController.signal.aborted) return;
-
-            refreshCount();
-            intervalID = window.setInterval(() => {
-                if (!document.hidden) refreshCount();
-            }, memoriesPreservedCountRefreshInterval);
-        });
-
-        return () => {
-            abortController.abort();
-            if (intervalID != undefined) window.clearInterval(intervalID);
-        };
-    }, []);
-
-    return !count ? null : (
-        <Typography
-            sx={{
-                mt: "32px",
-                width: "100%",
-                color: "text.faint",
-                fontFamily: "'Outfit Variable', sans-serif",
-                fontSize: "13px",
-                fontWeight: 500,
-                fontVariantNumeric: "tabular-nums",
-                lineHeight: "18px",
-                opacity: 0.65,
-                textAlign: "center",
-                userSelect: "none",
-            }}
-        >
-            {t("memories_secured_since_arrival", { count })}
-        </Typography>
     );
 }
 
@@ -347,21 +224,6 @@ const GalleryEmptyStateSkeletonOverlay = styled("div")(({ theme }) => ({
     pointerEvents: "none",
     opacity: 0.6,
     background: theme.vars.palette.background.default,
-}));
-
-const GalleryEmptyStateButton = styled(FocusVisibleButton)(({ theme }) => ({
-    height: 52,
-    borderRadius: 20,
-    paddingBlock: 14,
-    paddingInline: 24,
-    fontSize: theme.typography.small.fontSize,
-    lineHeight: "20px",
-    fontWeight: 500,
-    "&.MuiButton-containedAccent:not(.Mui-disabled)": {
-        backgroundColor: "#08C225",
-        "&:hover": { backgroundColor: "#08C225" },
-    },
-    "& .MuiButton-startIcon": { marginRight: 14, "& > svg": { fontSize: 20 } },
 }));
 
 // Draggable images trigger the upload overlay.

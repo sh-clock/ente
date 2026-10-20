@@ -7,7 +7,6 @@ import { useColorScheme, useTheme } from "@mui/material/styles";
 import type { AddSaveGroup } from "ente-gallery/components/utils/save-groups";
 import {
     FileViewer,
-    type FileViewerInitialSidebar,
     type FileViewerProps,
 } from "ente-gallery/components/viewer/FileViewer";
 import type { Collection } from "ente-media/collection";
@@ -36,8 +35,6 @@ export type FileListWithViewerProps = {
     onRemotePull: (opts?: RemotePullOpts) => Promise<void>;
     activeCollectionSummary?: CollectionSummary;
     pendingFileIndex?: number;
-    pendingFileSidebar?: FileViewerInitialSidebar;
-    pendingHighlightCommentID?: string;
     onPendingNavigationConsumed?: () => void;
     onAddSaveGroup: AddSaveGroup;
 
@@ -76,7 +73,6 @@ export type FileListWithViewerProps = {
         | "fileNormalCollectionIDs"
         | "fileCollectionIDs"
         | "hiddenCollectionIDs"
-        | "collectionSummaries"
         | "collectionNameByID"
         | "pendingFavoriteUpdates"
         | "pendingVisibilityUpdates"
@@ -84,7 +80,6 @@ export type FileListWithViewerProps = {
         | "onVisualFeedback"
         | "onToggleFavorite"
         | "onFileVisibilityUpdate"
-        | "onSendLink"
         | "onSelectCollection"
         | "onSelectPerson"
     >;
@@ -118,7 +113,6 @@ export const FileListWithViewer: React.FC<FileListWithViewerProps> = ({
     fileNormalCollectionIDs,
     fileCollectionIDs,
     hiddenCollectionIDs,
-    collectionSummaries,
     collectionNameByID,
     pendingFavoriteUpdates,
     pendingVisibilityUpdates,
@@ -129,7 +123,6 @@ export const FileListWithViewer: React.FC<FileListWithViewerProps> = ({
     onAddSaveGroup,
     onToggleFavorite,
     onFileVisibilityUpdate,
-    onSendLink,
     onMarkTempDeleted,
     onSelectCollection,
     onSelectPerson,
@@ -137,19 +130,11 @@ export const FileListWithViewer: React.FC<FileListWithViewerProps> = ({
     onScroll,
     onVisibleDateChange,
     pendingFileIndex,
-    pendingFileSidebar,
-    pendingHighlightCommentID,
     onPendingNavigationConsumed,
     onShowMap,
 }) => {
     const [openFileViewer, setOpenFileViewer] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [initialSidebar, setInitialSidebar] = useState<
-        FileViewerInitialSidebar | undefined
-    >(undefined);
-    const [highlightCommentID, setHighlightCommentID] = useState<
-        string | undefined
-    >(undefined);
     const { showNotification, setIsFileViewerOpen } = usePhotosAppContext();
     const { mode: colorSchemeMode, systemMode } = useColorScheme();
     const theme = useTheme();
@@ -173,22 +158,16 @@ export const FileListWithViewer: React.FC<FileListWithViewerProps> = ({
     useEffect(() => {
         if (pendingFileIndex !== undefined) {
             setCurrentIndex(pendingFileIndex);
-            setInitialSidebar(pendingFileSidebar);
-            setHighlightCommentID(pendingHighlightCommentID);
             updateOpenFileViewer(true);
             onPendingNavigationConsumed?.();
         }
     }, [
         pendingFileIndex,
-        pendingFileSidebar,
-        pendingHighlightCommentID,
         updateOpenFileViewer,
         onPendingNavigationConsumed,
     ]);
 
     const handleCloseFileViewerInternal = useCallback(() => {
-        setInitialSidebar(undefined);
-        setHighlightCommentID(undefined);
         updateOpenFileViewer(false);
     }, [updateOpenFileViewer]);
 
@@ -319,8 +298,6 @@ export const FileListWithViewer: React.FC<FileListWithViewerProps> = ({
                 open={openFileViewer}
                 onClose={handleCloseFileViewerInternal}
                 initialIndex={currentIndex}
-                initialSidebar={initialSidebar}
-                highlightCommentID={highlightCommentID}
                 disableDownload={!enableDownload}
                 isInTrashSection={
                     activeCollectionID == PseudoCollectionID.trash
@@ -334,7 +311,6 @@ export const FileListWithViewer: React.FC<FileListWithViewerProps> = ({
                     fileNormalCollectionIDs,
                     fileCollectionIDs,
                     hiddenCollectionIDs,
-                    collectionSummaries,
                     collectionNameByID,
                     pendingFavoriteUpdates,
                     pendingVisibilityUpdates,
@@ -342,11 +318,9 @@ export const FileListWithViewer: React.FC<FileListWithViewerProps> = ({
                     onVisualFeedback,
                     onToggleFavorite,
                     onFileVisibilityUpdate,
-                    onSendLink,
                     onSelectCollection,
                     onSelectPerson,
                 }}
-                isCommentsFeatureEnabled
                 onTriggerRemotePull={handleTriggerRemotePull}
                 onDownload={handleDownload}
                 onDelete={handleDelete}

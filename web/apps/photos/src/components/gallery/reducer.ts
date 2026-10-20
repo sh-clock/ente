@@ -6,7 +6,6 @@ import {
 } from "ente-gallery/utils/file";
 import {
     CollectionOrder,
-    CollectionSubType,
     collectionTypes,
     findUserUncategorizedCollection,
     type Collection,
@@ -36,23 +35,17 @@ import {
 import type { PeopleState, Person } from "ente-new/photos/services/ml/people";
 import type { SearchSuggestion } from "ente-new/photos/services/search/types";
 import { sortTrashItems, type TrashItem } from "ente-new/photos/services/trash";
-import type {
-    FamilyData,
-    UserDetails,
-} from "ente-new/photos/services/user-details";
 import { splitByPredicate } from "ente-utils/array";
 import { includes } from "ente-utils/type-guards";
 import { t } from "i18next";
 import React, { useReducer } from "react";
-import { visibleQuickLinks } from "../../utils/quick-links";
 
 // TODO: Deprecated(?). Use GalleryView instead. Deprecated if it can be used in
 // all cases where the bar mode was in use.
 export type GalleryBarMode =
-    "albums" | "hidden-albums" | "archive-albums" | "people" | "links";
+    "albums" | "hidden-albums" | "archive-albums" | "people";
 
 type GalleryView =
-    | { type: "links"; selectedLinkID: number | undefined }
     | { type: "album-overview"; albumFilter: AlbumFilter }
     | {
           type: "albums" | "hidden-albums" | "archive-albums";
@@ -69,7 +62,6 @@ type GalleryView =
 
 interface GalleryState {
     user: LocalUser | undefined;
-    familyData: FamilyData | undefined;
 
     collections: Collection[];
     lastSyncedCollectionFiles: EnteFile[];
@@ -88,7 +80,6 @@ interface GalleryState {
     collectionNameByID: Map<number, string>;
     fileNormalCollectionIDs: Map<number, number[]>;
     emailByUserID: Map<number, string>;
-    shareSuggestionEmails: string[];
 
     normalCollectionSummaries: Map<number, CollectionSummary>;
     hiddenCollectionSummaries: Map<number, CollectionSummary>;
@@ -128,12 +119,10 @@ type GalleryAction =
     | {
           type: "mount";
           user: LocalUser;
-          familyData: FamilyData | undefined;
           collections: Collection[];
           collectionFiles: EnteFile[];
           trashItems: TrashItem[];
       }
-    | { type: "setUserDetails"; userDetails: UserDetails }
     | { type: "setCollections"; collections: Collection[] }
     | { type: "setCollectionFiles"; collectionFiles: EnteFile[] }
     | { type: "uploadFile"; file: EnteFile }
@@ -157,8 +146,6 @@ type GalleryAction =
     | { type: "showAll" }
     | { type: "showHidden" }
     | { type: "showAlbumOverview"; albumFilter: AlbumFilter }
-    | { type: "showLinks"; collectionID?: number }
-    | { type: "selectLink"; collectionID: number }
     | { type: "showAlbums" }
     | { type: "showCollectionSummary"; collectionSummaryID: number | undefined }
     | { type: "showPeople" }
@@ -171,7 +158,6 @@ type GalleryAction =
 
 export const initialGalleryState: GalleryState = {
     user: undefined,
-    familyData: undefined,
     collections: [],
     lastSyncedCollectionFiles: [],
     trashItems: [],
@@ -186,7 +172,6 @@ export const initialGalleryState: GalleryState = {
     collectionNameByID: new Map(),
     fileNormalCollectionIDs: new Map(),
     emailByUserID: new Map(),
-    shareSuggestionEmails: [],
     normalCollectionSummaries: new Map(),
     hiddenCollectionSummaries: new Map(),
     archivedCollectionSummaries: new Map(),
@@ -217,7 +202,7 @@ export const galleryReducer: React.Reducer<GalleryState, GalleryAction> = (
 ) => {
     switch (action.type) {
         case "mount": {
-            const { user, familyData } = action;
+            const { user } = action;
 
             const lastSyncedCollectionFiles = sortFiles(action.collectionFiles);
             const trashItems = sortTrashItems(action.trashItems);
@@ -274,7 +259,6 @@ export const galleryReducer: React.Reducer<GalleryState, GalleryAction> = (
             return stateByUpdatingFilteredFiles({
                 ...state,
                 user,
-                familyData,
                 collections,
                 lastSyncedCollectionFiles,
                 trashItems,
@@ -299,11 +283,6 @@ export const galleryReducer: React.Reducer<GalleryState, GalleryAction> = (
                     hiddenCollectionIDs,
                 ),
                 emailByUserID: constructUserIDToEmailMap(user, collections),
-                shareSuggestionEmails: createShareSuggestionEmails(
-                    user,
-                    familyData,
-                    collections,
-                ),
                 normalCollectionSummaries,
                 hiddenCollectionSummaries,
                 archivedCollectionSummaries,
@@ -314,25 +293,6 @@ export const galleryReducer: React.Reducer<GalleryState, GalleryAction> = (
                     ),
                 view,
             });
-        }
-
-        case "setUserDetails": {
-            let user = state.user!;
-            const { email, familyData } = action.userDetails;
-            if (email != user.email) {
-                user = { ...user, email };
-            }
-
-            return {
-                ...state,
-                user,
-                familyData,
-                shareSuggestionEmails: createShareSuggestionEmails(
-                    user,
-                    familyData,
-                    state.collections,
-                ),
-            };
         }
 
         case "setCollections": {
@@ -427,11 +387,6 @@ export const galleryReducer: React.Reducer<GalleryState, GalleryAction> = (
                 ),
                 emailByUserID: constructUserIDToEmailMap(
                     state.user!,
-                    collections,
-                ),
-                shareSuggestionEmails: createShareSuggestionEmails(
-                    state.user!,
-                    state.familyData,
                     collections,
                 ),
                 normalCollectionSummaries,
@@ -723,19 +678,6 @@ export const galleryReducer: React.Reducer<GalleryState, GalleryAction> = (
                 isInSearchMode: false,
             });
 
-        case "showLinks":
-        case "selectLink":
-            return stateByUpdatingFilteredFiles({
-                ...state,
-                selectedCollectionSummaryID: undefined,
-                extraVisiblePerson: undefined,
-                searchSuggestion: undefined,
-                searchResults: undefined,
-                isRecomputingSearchResults: false,
-                pendingSearchSuggestions: [],
-                isInSearchMode: false,
-                view: { type: "links", selectedLinkID: action.collectionID },
-            });
 
         case "showAlbumOverview":
             return stateByUpdatingFilteredFiles({
@@ -1357,14 +1299,6 @@ const createCollectionSummaries = (
         attributes.add(type);
         attributes.add(collectionType);
 
-        if (
-            collection.magicMetadata?.data.subType ==
-                CollectionSubType.quicklink &&
-            !collection.sharees.length
-        ) {
-            attributes.add("quickLink");
-        }
-
         if (collection.owner.id == user.id && collection.sharees.length) {
             attributes.add("shared");
             attributes.add("sharedOutgoing");
@@ -1671,18 +1605,6 @@ const stateForUpdatedCollectionFiles = (
 };
 
 const stateByUpdatingFilteredFiles = (state: GalleryState) => {
-    if (state.view?.type == "links") {
-        const links = visibleQuickLinks(
-            state.collections,
-            state.user!.id,
-            state.hiddenCollectionIDs,
-        );
-        const previousLinkID = state.view.selectedLinkID;
-        const selectedLinkID = links.some(({ id }) => id == previousLinkID)
-            ? state.view.selectedLinkID
-            : links[0]?.id;
-        state = { ...state, view: { type: "links", selectedLinkID } };
-    }
     if (state.isInSearchMode) {
         const searchFiles = state.searchResults ?? state.filteredFiles;
         const visibleSearchFiles = suppressSharedFilesSavedByUser(
@@ -1717,10 +1639,7 @@ const stateByUpdatingFilteredFiles = (state: GalleryState) => {
             state.user?.id,
         );
         return { ...state, filteredFiles };
-    } else if (
-        state.view?.type == "album-overview" ||
-        state.view?.type == "links"
-    ) {
+    } else if (state.view?.type == "album-overview") {
         return { ...state, filteredFiles: [] };
     } else if (state.view?.type == "people") {
         const filteredFiles = derivePeopleFilteredFiles(
@@ -1895,21 +1814,3 @@ const constructUserIDToEmailMap = (
     return userIDToEmail;
 };
 
-const createShareSuggestionEmails = (
-    user: LocalUser,
-    familyData: FamilyData | undefined,
-    collections: Collection[],
-): string[] => [
-    ...new Set(
-        collections
-            .map(({ owner, sharees }) =>
-                owner.email && owner.id != user.id
-                    ? [owner.email]
-                    : sharees.map(({ email }) => email),
-            )
-            .flat()
-            .filter((e) => e !== undefined)
-            .concat((familyData?.members ?? []).map((member) => member.email))
-            .filter((email) => email != user.email),
-    ),
-];

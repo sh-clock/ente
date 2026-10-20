@@ -4,5 +4,6 @@ import { decryptBox, encryptBox, generateKey } from "ente-photos-wasm";
 export const {
     ensureMasterKeyFromSession,
     masterKeyFromSession,
+    saveMasterKeyInSessionAndSafeStore,
     updateSessionFromElectronSafeStorageIfNeeded,
 } = createSessionStorage({ decryptBox, encryptBox, generateKey });

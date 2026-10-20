@@ -5,7 +5,6 @@ import {
 } from "ente-new/photos/services/collection-summary";
 
 export type FileContextAction =
-    | "sendLink"
     | "download"
     | "fixTime"
     | "editLocation"
@@ -53,10 +52,6 @@ export function getAvailableFileActions(
         hasOnlyOwnFiles,
         showEditLocation,
     );
-
-    if (hasOnlyOwnFiles && collectionSummary?.id !== PseudoCollectionID.trash) {
-        insertSendLinkBeforeDownload(actions);
-    }
 
     if (showAddPerson && collectionSummary?.id !== PseudoCollectionID.trash) {
         insertAddPersonBeforeModifications(actions);
@@ -180,15 +175,6 @@ function getBaseActions(
     }
 
     return actions;
-}
-
-function insertSendLinkBeforeDownload(actions: FileContextAction[]): void {
-    const downloadIndex = actions.indexOf("download");
-    if (downloadIndex !== -1) {
-        actions.splice(downloadIndex, 0, "sendLink");
-    } else {
-        actions.unshift("sendLink");
-    }
 }
 
 const modificationActions: FileContextAction[] = [

@@ -18,12 +18,10 @@ interface SidebarAction {
 interface SidebarActionContext {
     onClose: () => void;
     showAccount: () => void;
-    showReferrals: () => void;
     showPreferences: () => void;
     showHelp: () => void;
     showFreeUpSpace: () => void;
     onShowExport: () => void;
-    onShowPlanSelector: () => void;
     onLogout: () => void;
     onShowWatchFolder: () => void;
     setPendingAccountAction: (a: SidebarActionID | undefined) => void;
@@ -41,12 +39,6 @@ const sidebarActions = (): SidebarAction[] => {
     const helpCategory = t("help");
 
     return [
-        {
-            id: "account.subscription",
-            label: t("manage_plan"),
-            path: [accountCategory, t("manage_plan")],
-            keywords: ["subscription", "plan", "upgrade", "billing", "pricing"],
-        },
         {
             id: "shortcuts.uncategorized",
             label: t("section_uncategorized"),
@@ -76,18 +68,6 @@ const sidebarActions = (): SidebarAction[] => {
             label: t("account"),
             path: [preferencesCategory, t("account")],
             keywords: ["profile", "user"],
-        },
-        {
-            id: "utility.referrals",
-            label: t("referrals"),
-            path: [preferencesCategory, t("referrals")],
-            keywords: [
-                "referral",
-                "invite",
-                "code",
-                "free storage",
-                "earn storage",
-            ],
         },
         {
             id: "utility.watchFolders",
@@ -148,48 +128,6 @@ const sidebarActions = (): SidebarAction[] => {
             keywords: ["recovery", "key", "backup"],
         },
         {
-            id: "account.twoFactor",
-            label: t("two_factor"),
-            path: [accountCategory, t("two_factor")],
-            keywords: ["2fa", "otp", "mfa", "two", "factor", "two factor"],
-        },
-        {
-            id: "account.twoFactor.reconfigure",
-            label: t("reconfigure"),
-            path: [accountCategory, t("two_factor"), t("reconfigure")],
-            keywords: ["reconfigure", "update", "2fa", "two factor"],
-        },
-        {
-            id: "account.passkeys",
-            label: t("passkeys"),
-            path: [accountCategory, t("passkeys")],
-            keywords: ["webauthn", "security key"],
-        },
-        {
-            id: "account.changePassword",
-            label: t("change_password"),
-            path: [accountCategory, t("change_password")],
-            keywords: ["password"],
-        },
-        {
-            id: "account.changeEmail",
-            label: t("change_email"),
-            path: [accountCategory, t("change_email")],
-            keywords: ["email"],
-        },
-        {
-            id: "account.deleteAccount",
-            label: t("delete_account"),
-            path: [accountCategory, t("delete_account")],
-            keywords: ["delete", "remove"],
-        },
-        {
-            id: "account.sessions",
-            label: t("active_sessions"),
-            path: [accountCategory, t("active_sessions")],
-            keywords: ["sessions", "devices", "logout"],
-        },
-        {
             id: "preferences.language",
             label: t("language"),
             path: [preferencesCategory, t("language")],
@@ -207,12 +145,6 @@ const sidebarActions = (): SidebarAction[] => {
             path: [preferencesCategory, t("app_lock")],
             keywords: ["lock", "pin", "password", "biometric", "privacy"],
             available: () => isDesktop,
-        },
-        {
-            id: "preferences.customDomains",
-            label: t("custom_domains"),
-            path: [preferencesCategory, t("custom_domains")],
-            keywords: ["domain", "link"],
         },
         {
             id: "preferences.map",
@@ -323,10 +255,6 @@ export const performSidebarAction = async (
             ctx.showAccount();
             return Promise.resolve();
 
-        case "utility.referrals":
-            ctx.showReferrals();
-            return Promise.resolve();
-
         case "utility.watchFolders":
             ctx.onShowWatchFolder();
             return Promise.resolve();
@@ -357,15 +285,7 @@ export const performSidebarAction = async (
             ctx.onLogout();
             return Promise.resolve();
 
-        case "account.subscription":
         case "account.recoveryKey":
-        case "account.twoFactor":
-        case "account.twoFactor.reconfigure":
-        case "account.passkeys":
-        case "account.changePassword":
-        case "account.changeEmail":
-        case "account.deleteAccount":
-        case "account.sessions":
             ctx.setPendingAccountAction(actionID);
             ctx.showAccount();
             return Promise.resolve();
@@ -373,7 +293,6 @@ export const performSidebarAction = async (
         case "preferences.language":
         case "preferences.theme":
         case "preferences.appLock":
-        case "preferences.customDomains":
         case "preferences.map":
         case "preferences.advanced":
         case "preferences.fasterUpload":

@@ -4,7 +4,6 @@ import type { CollectionSelectorAttributes } from "@/components/CollectionSelect
 import type { RemotePullOpts } from "@/components/gallery";
 import { TakeoutOptions } from "@/components/TakeoutOptions";
 import { UploadConfirmationDialog } from "@/components/UploadConfirmationDialog";
-import { downloadAppDialogAttributes } from "@/components/utils/download";
 import type {
     ImportSource,
     InProgressUpload,
@@ -191,7 +190,7 @@ export const Upload: React.FC<UploadProps> = ({
     onShowSessionExpiredDialog,
     ...props
 }) => {
-    const { showMiniDialog, onGenericError } = useBaseContext();
+    const { onGenericError } = useBaseContext();
     const { showNotification, watchFolderView } = usePhotosAppContext();
     const { isInternalUser } = useSettingsSnapshot();
 
@@ -1178,8 +1177,6 @@ export const Upload: React.FC<UploadProps> = ({
             case "zips":
                 if (electron) {
                     openZipFileSelector();
-                } else {
-                    showMiniDialog(downloadAppDialogAttributes());
                 }
                 break;
         }

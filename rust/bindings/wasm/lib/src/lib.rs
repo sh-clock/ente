@@ -1,7 +1,5 @@
 #[cfg(feature = "accounts")]
 pub mod accounts;
-#[cfg(feature = "cast")]
-pub mod cast;
 #[cfg(feature = "collections")]
 pub mod collections;
 #[cfg(feature = "contacts")]

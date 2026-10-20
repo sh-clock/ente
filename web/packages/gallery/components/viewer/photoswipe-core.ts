@@ -16,13 +16,7 @@ import {
     downloadProgressState,
     type DownloadProgressState,
 } from "./download-progress";
-import {
-    commentSVGPath,
-    createPSRegisterElementIconHTML,
-    heartFillSVGPath,
-    heartSVGPath,
-    settingsSVGPath,
-} from "./icons";
+import { createPSRegisterElementIconHTML, settingsSVGPath } from "./icons";
 
 export interface FileViewerPhotoSwipeAnnotatedFile {
     file: EnteFile;
@@ -61,9 +55,6 @@ export interface FileViewerPhotoSwipeDelegate<
     isFavoritePending: (annotatedFile: T) => boolean;
     // Handle foreseeable failures here; rejection leaves the button disabled.
     toggleFavorite: (annotatedFile: T) => Promise<void>;
-    isLiked: (annotatedFile: T) => boolean;
-    getCommentCount: (annotatedFile: T) => number;
-    shouldShowSocialButtons: (annotatedFile: T) => boolean;
     shouldIgnoreKeyboardEvent: (event: KeyboardEvent) => boolean;
     performKeyAction: (
         action:
@@ -84,15 +75,10 @@ export interface FileViewerPhotoSwipeCoreOptions<
     haveUser: boolean;
     isPublicAlbum?: boolean;
     publicAlbumLogoHTML?: string;
-    showSocialButtons: boolean;
-    enableComment: boolean;
     delegate: FileViewerPhotoSwipeDelegate<T>;
     onClose: () => void;
     onAnnotate: (file: EnteFile, itemData: ItemData) => T;
     onViewInfo: (annotatedFile: T) => void;
-    onViewComments: () => void;
-    onViewLikes: () => void;
-    onLikeClick: () => void;
     onDownload: (annotatedFile: T) => void;
     onMore: (buttonElement: HTMLElement) => void;
 }
@@ -115,8 +101,6 @@ export class FileViewerPhotoSwipe<
         haveUser,
         isPublicAlbum,
         publicAlbumLogoHTML,
-        showSocialButtons,
-        enableComment,
         showFullscreenButton,
         disableEscapeClose,
         disableGestureClose,
@@ -125,9 +109,6 @@ export class FileViewerPhotoSwipe<
         onClose,
         onAnnotate,
         onViewInfo,
-        onViewComments,
-        onViewLikes,
-        onLikeClick,
         onDownload,
         onMore,
     }: FileViewerPhotoSwipeCoreOptions<T>) {
@@ -771,44 +752,6 @@ export class FileViewerPhotoSwipe<
         this.refreshCurrentSlideFavoriteButtonIfNeeded =
             updateFavoriteButtonIfNeeded;
 
-        const updateLikeButtonIfNeeded = () => {
-            const heartIconFill = document.getElementById(
-                "pswp__icn-heart-fill",
-            );
-            const heartIconOutline = document.getElementById("pswp__icn-heart");
-            if (!heartIconFill || !heartIconOutline) {
-                return;
-            }
-
-            const af = currentAnnotatedFile();
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            if (!af) return;
-            const isLiked = delegate.isLiked(af);
-
-            showIf(heartIconFill, isLiked);
-            showIf(heartIconOutline, !isLiked);
-        };
-
-        this.refreshCurrentSlideLikeButtonIfNeeded = updateLikeButtonIfNeeded;
-
-        const updateCommentCountIfNeeded = () => {
-            const commentCountElement = document.querySelector<HTMLElement>(
-                ".pswp__comment-count",
-            );
-            if (!commentCountElement) {
-                return;
-            }
-
-            const af = currentAnnotatedFile();
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            if (!af) return;
-            const count = delegate.getCommentCount(af);
-            commentCountElement.textContent = String(count);
-        };
-
-        this.refreshCurrentSlideCommentCountIfNeeded =
-            updateCommentCountIfNeeded;
-
         const handleToggleFavorite = () => void toggleFavorite();
 
         const handleToggleFavoriteIfEnabled = () => {
@@ -1310,23 +1253,6 @@ export class FileViewerPhotoSwipe<
                 onInit: (element, pswp) => {
                     const captionEl =
                         element.querySelector<HTMLElement>(".pswp__caption")!;
-                    const actionButtonsEl = element.querySelector<HTMLElement>(
-                        ".pswp__action-buttons",
-                    );
-
-                    const updateSocialButtonsVisibility = () => {
-                        if (!actionButtonsEl) return;
-                        if (!_currentAnnotatedFile) return;
-                        const af = currentAnnotatedFile();
-                        const baseShow =
-                            showSocialButtons ||
-                            delegate.shouldShowSocialButtons(af);
-                        const shouldShow = baseShow && enableComment;
-                        actionButtonsEl.style.display = shouldShow
-                            ? "flex"
-                            : "none";
-                    };
-
                     pswp.on("change", () => {
                         const { fileType, alt } = currSlideData();
                         const { text: captionText, wasTruncated } =
@@ -1347,25 +1273,7 @@ export class FileViewerPhotoSwipe<
                             "ente-video",
                             fileType == FileType.video,
                         );
-                        updateSocialButtonsVisibility();
                     });
-                    const commentButton = element.querySelector<HTMLElement>(
-                        '.pswp__action-button[aria-label="Comment"]',
-                    );
-                    commentButton?.addEventListener("click", onViewComments);
-                    const likeButton = element.querySelector<HTMLElement>(
-                        '.pswp__action-button[aria-label="Like"]',
-                    );
-                    likeButton?.addEventListener("click", onLikeClick);
-                    likeButton?.addEventListener("contextmenu", (e) => {
-                        e.preventDefault();
-                        onViewLikes();
-                    });
-                    pswp.on("change", updateLikeButtonIfNeeded);
-                    updateLikeButtonIfNeeded();
-                    pswp.on("change", updateCommentCountIfNeeded);
-                    updateCommentCountIfNeeded();
-                    updateSocialButtonsVisibility();
                 },
             });
         });
@@ -1643,8 +1551,6 @@ export class FileViewerPhotoSwipe<
 
     refreshSlideOnFilesUpdateIfNeeded: () => void;
     refreshCurrentSlideFavoriteButtonIfNeeded: () => void;
-    refreshCurrentSlideLikeButtonIfNeeded: () => void;
-    refreshCurrentSlideCommentCountIfNeeded: () => void;
 }
 
 const hlsVideoHTML = (
@@ -1713,15 +1619,6 @@ const livePhotoVideoHTML = (videoURL: string) => `
 
 const bottomRightControlsHTML = () => `
 <div class="pswp__caption"><p></p></div>
-<div class="pswp__action-buttons">
-  <button class="pswp__action-button" aria-label="Like">
-    <svg viewBox="0 0 30 26" fill="none">${heartSVGPath} id="pswp__icn-heart" />${heartFillSVGPath} id="pswp__icn-heart-fill" /></svg>
-  </button>
-  <button class="pswp__action-button pswp__action-button--comment" aria-label="Comment">
-    <svg viewBox="0 0 28 28" fill="none">${commentSVGPath} /></svg>
-    <span class="pswp__comment-count"></span>
-  </button>
-</div>
 `;
 
 const truncateCaptionIfNeeded = (

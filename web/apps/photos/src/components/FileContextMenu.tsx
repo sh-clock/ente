@@ -7,7 +7,6 @@ import {
     Download01Icon,
     Download05Icon,
     Location01Icon,
-    Navigation03Icon,
     RemoveCircleIcon,
     StarIcon,
     StarOffIcon,
@@ -52,7 +51,6 @@ const hugeIcon = (icon: IconSvgElement, size = 20) => (
 );
 
 const actionConfigs: Record<FileContextAction, ActionConfig> = {
-    sendLink: { label: "send_link", Icon: hugeIcon(Navigation03Icon) },
     download: { label: "download", Icon: hugeIcon(Download01Icon) },
     fixTime: { label: "fix_creation_time", Icon: hugeIcon(Time04Icon) },
     editLocation: { label: "edit_location", Icon: hugeIcon(Location01Icon) },

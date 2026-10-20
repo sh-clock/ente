@@ -4,7 +4,6 @@ edition.workspace = true
 
 [features]
 accounts = ["dep:ente-accounts", "dep:serde", "dep:serde-wasm-bindgen", "dep:tsify"]
-cast = ["dep:ente-cast", "dep:serde", "dep:serde-wasm-bindgen", "dep:tsify"]
 collections = ["session", "dep:ente-collections"]
 contacts = [
     "session",
@@ -27,7 +26,6 @@ session = [
 
 [dependencies]
 ente-accounts = { workspace = true, optional = true }
-ente-cast = { workspace = true, optional = true }
 ente-collections = { workspace = true, optional = true }
 ente-contacts = { workspace = true, optional = true }
 ente-core.workspace = true

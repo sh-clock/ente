@@ -6,7 +6,6 @@ import {
 } from "@/services/avatar";
 import { styled } from "@mui/material";
 import type { LocalUser } from "ente-accounts/services/user";
-import { useResolvedContactAvatar } from "ente-contacts";
 import type { EnteFile } from "ente-media/file";
 import React, { useMemo } from "react";
 
@@ -36,18 +35,6 @@ const AvatarBase = styled("div")<{
     font-size: ${({ size }) => `${Math.floor(size / 2)}px`};
 `;
 
-const AvatarImage = styled("img")<{
-    size: number;
-    opacity: number | undefined;
-}>`
-    width: ${({ size }) => `${size}px`};
-    height: ${({ size }) => `${size}px`};
-    border-radius: 50%;
-    object-fit: cover;
-    opacity: ${({ opacity }) =>
-        opacity === undefined ? 1 : Math.max(0, Math.min(opacity, 100)) / 100};
-`;
-
 const colorSeedFromEmail = (email: string) => {
     let seed = 0;
     for (const char of email) {
@@ -67,14 +54,6 @@ const Avatar: React.FC<AvatarProps> = ({
         !!file && !!user && file.ownerID === user.id && !!file.pubMagicMetadata;
     const uploaderName = file?.pubMagicMetadata?.data.uploaderName;
 
-    const resolvedContact = useResolvedContactAvatar(
-        file && file.ownerID !== user?.id
-            ? { userID: file.ownerID, email: emailByUserID?.get(file.ownerID) }
-            : { email },
-    );
-
-    const fallbackEmail = resolvedContact.actualEmail ?? email;
-
     const colorCode = useMemo(() => {
         if (isPublicCollectedAvatar) {
             return avatarBackgroundColorPublicCollectedFile;
@@ -82,45 +61,24 @@ const Avatar: React.FC<AvatarProps> = ({
         if (file && file.ownerID !== user?.id) {
             return avatarBackgroundColor(file.ownerID);
         }
-        if (!fallbackEmail) {
+        if (!email) {
             return undefined;
         }
-        if (user?.email === fallbackEmail) {
+        if (user?.email === email) {
             return avatarBackgroundColorPublicCollectedFile;
         }
         const matchedID = Array.from(emailByUserID?.keys() ?? []).find(
-            (key) => emailByUserID?.get(key) === fallbackEmail,
+            (key) => emailByUserID?.get(key) === email,
         );
-        return avatarBackgroundColor(
-            matchedID ?? colorSeedFromEmail(fallbackEmail),
-        );
-    }, [emailByUserID, fallbackEmail, file, isPublicCollectedAvatar, user]);
+        return avatarBackgroundColor(matchedID ?? colorSeedFromEmail(email));
+    }, [emailByUserID, email, file, isPublicCollectedAvatar, user]);
 
     const userLetter = useMemo(() => {
         if (isPublicCollectedAvatar) {
             return uploaderName?.[0]?.toUpperCase();
         }
-        if (resolvedContact.source === "contact") {
-            return resolvedContact.initial;
-        }
-        return fallbackEmail?.[0]?.toUpperCase();
-    }, [
-        fallbackEmail,
-        isPublicCollectedAvatar,
-        resolvedContact.initial,
-        resolvedContact.source,
-        uploaderName,
-    ]);
-
-    if (resolvedContact.avatarURL && !isPublicCollectedAvatar) {
-        return (
-            <AvatarImage
-                size={18}
-                opacity={opacity}
-                src={resolvedContact.avatarURL}
-            />
-        );
-    }
+        return email?.[0]?.toUpperCase();
+    }, [email, isPublicCollectedAvatar, uploaderName]);
 
     if (!colorCode || !userLetter) {
         return <></>;

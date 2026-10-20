@@ -2,7 +2,8 @@ import { getKVS } from "ente-base/kv";
 import { buildEnvCustomAPIEndpoint } from "./env";
 
 export const apiOrigin = async () =>
-    (await customAPIOrigin()) ?? "https://api.ente.com";
+    // Offline app: the API origin is never contacted; placeholder only.
+    (await customAPIOrigin()) ?? "http://127.0.0.1:1";
 
 // path must begin with "/".
 export const apiURL = async (
@@ -33,4 +34,4 @@ export const customAPIHost = async () => {
 
 // Custom deployments bypass Photos uploader worker.
 export const uploaderOrigin = async () =>
-    (await customAPIOrigin()) ?? "https://uploader.ente.com";
+    (await customAPIOrigin()) ?? "http://127.0.0.1:1";

@@ -43,13 +43,7 @@ const shared: CollectionSummary = {
     name: "Holiday album",
     attributes: new Set(["sharedOutgoing"]),
 };
-const link: CollectionSummary = {
-    ...owned,
-    id: 3,
-    name: "Trip link",
-    attributes: new Set(["quickLink", "sharedViaLink"]),
-};
-const albums = [owned, shared, link];
+const albums = [owned, shared];
 
 const renderSearch = (
     query: string,
@@ -57,7 +51,7 @@ const renderSearch = (
     mode: GalleryBarImplProps["mode"] = "albums",
 ) => {
     const normalizedQuery = query.trim().toLowerCase();
-    const summaries = mode == "links" ? [link] : albums;
+    const summaries = albums;
     const props: GalleryBarImplProps = {
         mode,
         albumFilter,
@@ -103,7 +97,7 @@ describe("sidebar album search across groups", () => {
 
     test("reveals matching Ente albums while Shared is selected", () => {
         const html = renderSearch("family", "shared");
-        expect(html).toContain('aria-label="Ente"');
+        expect(html).toContain('aria-label="Photos"');
         expect(html).toContain("Family");
         expect(html).not.toContain('aria-label="shared_albums_title"');
         expect(html).not.toContain("no-matches.svg");
@@ -119,28 +113,11 @@ describe("sidebar album search across groups", () => {
         "restores all group headings for query %j",
         (query) => {
             const html = renderSearch(query);
-            expect(html).toContain('aria-label="Ente"');
+            expect(html).toContain('aria-label="Photos"');
             expect(html).toContain('aria-label="shared_albums_title"');
             expect(html).toContain("Family");
             expect(html).toContain("Holiday album");
             expect(html).not.toContain("no-matches.svg");
         },
     );
-});
-
-describe("Links sidebar search", () => {
-    test("shows matching links outside album groups", () => {
-        const html = renderSearch("  TRIP  ", "ente", "links");
-        expect(html).toContain("Trip link");
-        expect(html).toContain('aria-label="search_links"');
-        expect(html).not.toContain('aria-label="filter_albums"');
-        expect(html).not.toContain("no-matches.svg");
-    });
-
-    test("uses the illustrated empty state when no links match", () => {
-        const html = renderSearch("missing", "ente", "links");
-        expect(html).toContain("no-matches.svg");
-        expect(html).not.toContain("Trip link");
-        expect(html).not.toContain('aria-label="filter_albums"');
-    });
 });

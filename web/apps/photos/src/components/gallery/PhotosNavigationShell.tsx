@@ -3,13 +3,10 @@ import {
     type GalleryBarAndListHeaderProps,
 } from "@/components/Collections/GalleryBarAndListHeader";
 import { SearchBar, type SearchBarProps } from "@/components/SearchBar";
-import { uploadManager } from "@/services/upload-manager";
 import {
     Album02Icon,
     Home01Icon,
-    Link05Icon,
     Settings01Icon,
-    Upload01Icon,
     UserGroupIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -25,7 +22,6 @@ import { EnteLogo, EnteLogoBox } from "ente-base/components/EnteLogo";
 import type { ButtonishProps } from "ente-base/components/mui";
 import { FocusVisibleButton } from "ente-base/components/mui/FocusVisibleButton";
 import { NavbarBase } from "ente-base/components/Navbar";
-import { useIsSmallWidth } from "ente-base/components/utils/hooks";
 import { useModalVisibility } from "ente-base/components/utils/modal";
 import { ut } from "ente-base/i18n";
 import { thumbnailGridPadding } from "ente-new/photos/components/utils/thumbnail-grid-layout";
@@ -39,7 +35,6 @@ import type { GalleryBarMode } from "./reducer";
 
 type PhotosNavigationShellProps = SearchBarProps & {
     onSidebar: () => void;
-    onUpload: () => void;
     onHome: () => void;
     mode: GalleryBarMode;
     onChangeMode: (mode: GalleryBarMode) => boolean;
@@ -243,9 +238,10 @@ export const PhotosNavigationShell: React.FC<
     );
 };
 
-const NormalHeaderContents: React.FC<
-    PhotosNavigationShellProps & { railOpen: boolean; toggleRail: () => void }
-> = ({ onUpload, railOpen, toggleRail }) => {
+const NormalHeaderContents: React.FC<{
+    railOpen: boolean;
+    toggleRail: () => void;
+}> = ({ railOpen, toggleRail }) => {
     return (
         <Box
             sx={{
@@ -301,13 +297,12 @@ const NormalHeaderContents: React.FC<
                 <EnteLogo height={15} />
             </EnteLogoBox>
             <Box sx={{ flex: 1 }} />
-            <UploadButton onClick={onUpload} />
         </Box>
     );
 };
 
 const NormalNavigationRail: React.FC<
-    Omit<PhotosNavigationShellProps, "onUpload" | "onChangeMode"> & {
+    Omit<PhotosNavigationShellProps, "onChangeMode"> & {
         onChangeMode: (mode: GalleryBarMode) => void;
         isHome: boolean;
         opensDialog: boolean;
@@ -337,7 +332,7 @@ const NormalNavigationRail: React.FC<
                 ...theme.applyStyles("dark", { bgcolor: "#3E3E3E" }),
             })}
         />
-        {(["albums", "people", "links"] as const).map((item) =>
+        {(["albums", "people"] as const).map((item) =>
             item == "people" && !isMLSupported ? null : (
                 <Tooltip key={item} title={t(item)}>
                     <FocusVisibleButton
@@ -371,11 +366,7 @@ const NormalNavigationRail: React.FC<
                     >
                         <HugeiconsIcon
                             icon={
-                                item == "albums"
-                                    ? Album02Icon
-                                    : item == "links"
-                                      ? Link05Icon
-                                      : UserGroupIcon
+                                item == "albums" ? Album02Icon : UserGroupIcon
                             }
                             size={20}
                             strokeWidth={1.8}
@@ -440,54 +431,3 @@ const HomeButton: React.FC<ButtonishProps & { selected: boolean }> = ({
     </Tooltip>
 );
 
-const UploadButton: React.FC<ButtonishProps> = ({ onClick }) => {
-    const disabled = uploadManager.isUploadInProgress();
-    const isSmallWidth = useIsSmallWidth();
-
-    const icon = (
-        <HugeiconsIcon icon={Upload01Icon} size={20} strokeWidth={1.8} />
-    );
-
-    return (
-        <>
-            {isSmallWidth ? (
-                <FocusVisibleButton
-                    color="secondary"
-                    aria-label={t("upload")}
-                    sx={{
-                        minWidth: 0,
-                        width: 38,
-                        height: 38,
-                        p: 0,
-                        borderRadius: "12px",
-                    }}
-                    {...{ onClick, disabled }}
-                >
-                    {icon}
-                </FocusVisibleButton>
-            ) : (
-                <FocusVisibleButton
-                    color="secondary"
-                    startIcon={icon}
-                    sx={{
-                        minWidth: "140px",
-                        flexShrink: 0,
-                        whiteSpace: "nowrap",
-                        height: "52px",
-                        p: "18px 24px",
-                        borderRadius: "20px",
-                        border: 0,
-                        fontSize: "14px",
-                        fontWeight: 600,
-                        lineHeight: "20px",
-                        gap: "8px",
-                        "& .MuiButton-startIcon": { m: 0 },
-                    }}
-                    {...{ onClick, disabled }}
-                >
-                    {t("upload")}
-                </FocusVisibleButton>
-            )}
-        </>
-    );
-};

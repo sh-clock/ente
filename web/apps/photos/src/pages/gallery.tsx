@@ -15,18 +15,14 @@ import {
     type AlbumDetails,
 } from "@/components/Collections/EditAlbumDetailsDialog";
 import { slideshowFiles } from "@/components/Collections/album-slideshow";
-import { FamilyManagement } from "@/components/FamilyManagement";
 import type { FileListHeaderOrFooter } from "@/components/FileList";
 import { FileListWithViewer } from "@/components/FileListWithViewer";
 import { FixCreationTime } from "@/components/FixCreationTime";
-import { PlanSelector } from "@/components/PlanSelector";
-import { QuickLinkCreatedNotification } from "@/components/QuickLinkCreatedNotification";
 import {
     SelectedFileOptions,
     type CollectionOp,
     type FileOp,
 } from "@/components/SelectedFileOptions";
-import { Upload } from "@/components/Upload";
 import { WhatsNew } from "@/components/WhatsNew";
 import {
     GalleryEmptyState,
@@ -39,7 +35,6 @@ import { DuplicatesView } from "@/components/gallery/DuplicatesView";
 import { LargeFilesView } from "@/components/gallery/LargeFilesView";
 import { PeopleOverview } from "@/components/gallery/PeopleOverview";
 import { PhotosNavigationShell } from "@/components/gallery/PhotosNavigationShell";
-import { PublicLinkDetails } from "@/components/gallery/PublicLinkDetails";
 import {
     albumShortcutCollectionID,
     findCollectionCreatingIfNeeded,
@@ -59,49 +54,29 @@ import {
 import { useIsOffline } from "@/components/utils/use-is-offline";
 import { shouldShowWhatsNew } from "@/services/changelog";
 import exportService from "@/services/export";
-import { processPendingAlbumJoin } from "@/services/join-album";
 import {
     albumFilters,
     visibleAlbumFilters,
     type AlbumFilter,
 } from "@/utils/album-filters";
 import type { PeopleSortBy } from "@/utils/people-sort";
-import { visibleQuickLinks } from "@/utils/quick-links";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { Link, Typography } from "@mui/material";
 import { sessionExpiredDialogAttributes } from "ente-accounts/components/utils/dialog";
-import {
-    getAndClearIsFirstLogin,
-    savedJustSignedUp,
-} from "ente-accounts/services/accounts-db";
-import { stashRedirect } from "ente-accounts/services/redirect";
-import { isSessionInvalid } from "ente-accounts/services/session";
+import { getAndClearIsFirstLogin } from "ente-accounts/services/accounts-db";
 import { ensureLocalUser } from "ente-accounts/services/user";
 import { isDesktop } from "ente-base/app";
-import type { MiniDialogAttributes } from "ente-base/components/MiniDialog";
 import { SingleInputDialog } from "ente-base/components/SingleInputDialog";
 import { CenteredRow } from "ente-base/components/containers";
-import { TranslucentLoadingOverlay } from "ente-base/components/loaders";
-import { errorDialogAttributes } from "ente-base/components/utils/dialog";
 import { useModalVisibility } from "ente-base/components/utils/modal";
 import { useBaseContext } from "ente-base/context";
 import { subscribeMainWindowFocus } from "ente-base/electron";
 import { isNamedError } from "ente-base/error";
-import { isHTTPErrorWithStatus } from "ente-base/http";
-import { hasPendingAlbumToJoin } from "ente-base/join-album";
 import log from "ente-base/log";
-import {
-    clearSessionStorage,
-    haveMasterKeyInSession,
-} from "ente-base/session-storage";
+import { haveMasterKeyInSession } from "ente-base/session-storage";
 import { savedAuthToken } from "ente-base/token";
 import type { Location } from "ente-base/types";
-import { initContacts, pullContacts } from "ente-contacts";
 import { DownloadStatusNotifications } from "ente-gallery/components/DownloadStatusNotifications";
-import { FullScreenDropZone } from "ente-gallery/components/FullScreenDropZone";
-import type { UploadTypeSelectorIntent } from "ente-gallery/components/Upload";
 import { useSaveGroups } from "ente-gallery/components/utils/save-groups";
-import type { FileViewerInitialSidebar } from "ente-gallery/components/viewer/FileViewer";
 import type { Collection } from "ente-media/collection";
 import type { EnteFile } from "ente-media/file";
 import { ItemVisibility, metadataHash } from "ente-media/file-metadata";
@@ -111,25 +86,19 @@ import {
     useMLStatusSnapshot,
     usePeopleStateSnapshot,
     useSettingsSnapshot,
-    useUserDetailsSnapshot,
 } from "ente-new/photos/components/utils/use-snapshot";
-import { masterKeyFromSession } from "ente-new/photos/services/account-keys";
 import { reauthenticateWithAppLock } from "ente-new/photos/services/app-lock";
 import {
-    addToCollection,
     addToFavoritesCollection,
     canAddFilesToCollection,
     createAlbum,
     createHiddenAlbum,
-    createPublicURL,
-    createQuickLinkCollection,
     removeFromCollection,
     removeFromFavoritesCollection,
     renameCollection,
     updateCollectionDetails,
 } from "ente-new/photos/services/collection";
 import {
-    haveOnlySystemCollections,
     PseudoCollectionID,
     type CollectionsSortBy,
     type CollectionSummary,
@@ -142,11 +111,7 @@ import {
     addManualFileAssignmentsToPerson,
     isMLEnabled,
 } from "ente-new/photos/services/ml";
-import { contactsGetDiff, contactsGetProfilePicture } from "ente-photos-wasm";
-
 import { ensureAuthenticatedSession } from "@/services/authenticated-session";
-import { postPullFiles, prePullFiles, pullFiles } from "@/services/pull";
-import { uploadManager } from "@/services/upload-manager";
 import watcher from "@/services/watch";
 import {
     selectedFavoriteCount as countSelectedFavorites,
@@ -155,10 +120,6 @@ import {
     type SelectedState,
 } from "@/utils/file";
 import type { FileContextAction } from "@/utils/file-actions";
-import {
-    quickLinkNameForFiles,
-    resolveQuickLinkURL,
-} from "ente-gallery/utils/quick-link";
 import {
     savedCollectionFiles,
     savedCollections,
@@ -176,27 +137,17 @@ import {
     initSettings,
     updateMapEnabled,
 } from "ente-new/photos/services/settings";
-import {
-    redirectToCustomerPortal,
-    savedUserDetailsOrTriggerPull,
-    verifyStripeSubscription,
-} from "ente-new/photos/services/user-details";
 import { usePhotosAppContext } from "ente-new/photos/types/context";
 import { PromiseQueue } from "ente-utils/promise";
+import { Typography } from "@mui/material";
 import { t } from "i18next";
-import { useRouter, type NextRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { FileWithPath } from "react-dropzone";
-import { Trans } from "react-i18next";
 
 const Page: React.FC = () => {
     const { logout, showMiniDialog, onGenericError } = useBaseContext();
-    const {
-        showLoadingBar,
-        hideLoadingBar,
-        watchFolderView,
-        showNotification,
-    } = usePhotosAppContext();
+    const { showLoadingBar, hideLoadingBar, showNotification } =
+        usePhotosAppContext();
 
     const isOffline = useIsOffline();
     const [state, dispatch] = useGalleryReducer();
@@ -229,13 +180,8 @@ const Page: React.FC = () => {
         },
         [],
     );
-    const [blockingLoad, setBlockingLoad] = useState(false);
     const [peopleSortBy, setPeopleSortBy] =
         useState<PeopleSortBy>("count-desc");
-    const [shouldDisableDropzone, setShouldDisableDropzone] = useState(false);
-    const [dragAndDropFiles, setDragAndDropFiles] = useState<FileWithPath[]>(
-        [],
-    );
     const [isFileViewerOpen, setIsFileViewerOpen] = useState(false);
     const [slideshow, setSlideshow] = useState<{
         files: EnteFile[];
@@ -246,8 +192,6 @@ const Page: React.FC = () => {
 
     const [pendingFileNavigation, setPendingFileNavigation] = useState<{
         fileIndex: number;
-        sidebar?: FileViewerInitialSidebar;
-        commentID?: string;
     }>();
 
     const pendingSingleFileAdd = useRef<
@@ -256,10 +200,6 @@ const Page: React.FC = () => {
     // Pull pipelines mutate the same local DB and reducer state.
     const remoteFilesPullQueue = useRef(new PromiseQueue<void>());
     const remotePullQueue = useRef(new PromiseQueue<void>());
-
-    const [uploadTypeSelectorView, setUploadTypeSelectorView] = useState(false);
-    const [uploadTypeSelectorIntent, setUploadTypeSelectorIntent] =
-        useState<UploadTypeSelectorIntent>("upload");
 
     const [fixCreationTimeFiles, setFixCreationTimeFiles] = useState<
         EnteFile[]
@@ -272,8 +212,7 @@ const Page: React.FC = () => {
     const [collectionSelectorAttributes, setCollectionSelectorAttributes] =
         useState<CollectionSelectorAttributes | undefined>();
 
-    const { customDomain, mapEnabled } = useSettingsSnapshot();
-    const userDetails = useUserDetailsSnapshot();
+    const { mapEnabled } = useSettingsSnapshot();
     const peopleState = usePeopleStateSnapshot();
     const mlStatus = useMLStatusSnapshot();
 
@@ -312,12 +251,6 @@ const Page: React.FC = () => {
     const pendingPeopleSearchReset = useRef<(() => void) | undefined>(
         undefined,
     );
-    const { show: showPlanSelector, props: planSelectorVisibilityProps } =
-        useModalVisibility();
-    const {
-        show: showFamilyManagement,
-        props: familyManagementVisibilityProps,
-    } = useModalVisibility();
     const { show: showWhatsNew, props: whatsNewVisibilityProps } =
         useModalVisibility();
     const { show: showFixCreationTime, props: fixCreationTimeVisibilityProps } =
@@ -358,10 +291,6 @@ const Page: React.FC = () => {
         albumId?: number;
         albumName?: string;
     }>({ open: false, phase: "processing" });
-    const [publicLinkToast, setPublicLinkToast] = useState<{
-        open: boolean;
-        url?: string;
-    }>({ open: false });
 
     const onAuthenticateCallback = useRef<
         ((didAuthenticate: boolean) => void) | undefined
@@ -401,18 +330,9 @@ const Page: React.FC = () => {
         }
     }, []);
 
-    const closeSidebarOverlays = useCallback(() => {
-        planSelectorVisibilityProps.onClose();
-        familyManagementVisibilityProps.onClose();
-    }, [
-        planSelectorVisibilityProps.onClose,
-        familyManagementVisibilityProps.onClose,
-    ]);
-
     const handleSidebarClose = useCallback(() => {
-        closeSidebarOverlays();
         sidebarVisibilityProps.onClose();
-    }, [closeSidebarOverlays, sidebarVisibilityProps.onClose]);
+    }, [sidebarVisibilityProps.onClose]);
 
     const handleSidebarActionHandled = useCallback(
         () => setPendingSidebarAction(undefined),
@@ -444,73 +364,18 @@ const Page: React.FC = () => {
         state.view?.type == "album-overview"
             ? state.view.albumFilter
             : undefined;
-    const quickLinkVisibility =
-        barMode == "hidden-albums"
-            ? ItemVisibility.hidden
-            : ItemVisibility.visible;
     const activeCollectionID =
-        state.view?.type == "people" ||
-        state.view?.type == "album-overview" ||
-        state.view?.type == "links"
+        state.view?.type == "people" || state.view?.type == "album-overview"
             ? undefined
             : state.view?.activeCollectionSummaryID;
     const activeCollection =
-        state.view?.type == "people" ||
-        state.view?.type == "album-overview" ||
-        state.view?.type == "links"
+        state.view?.type == "people" || state.view?.type == "album-overview"
             ? undefined
             : state.view?.activeCollection;
     const activeCollectionSummary =
-        state.view?.type == "people" ||
-        state.view?.type == "album-overview" ||
-        state.view?.type == "links"
+        state.view?.type == "people" || state.view?.type == "album-overview"
             ? undefined
             : state.view?.activeCollectionSummary;
-    const selectedLinkID =
-        state.view?.type == "links" ? state.view.selectedLinkID : undefined;
-    const quickLinks = useMemo(
-        () =>
-            visibleQuickLinks(
-                state.collections,
-                user?.id ?? 0,
-                state.hiddenCollectionIDs,
-            ),
-        [state.collections, user?.id, state.hiddenCollectionIDs],
-    );
-    const linkSummaries = useMemo(
-        () =>
-            new Map(
-                quickLinks.flatMap((collection) => {
-                    const summary = normalCollectionSummaries.get(
-                        collection.id,
-                    );
-                    return summary ? [[collection.id, summary] as const] : [];
-                }),
-            ),
-        [quickLinks, normalCollectionSummaries],
-    );
-    const selectedLink = quickLinks.find(({ id }) => id === selectedLinkID);
-    const selectedLinkSummary =
-        selectedLink && linkSummaries.get(selectedLink.id);
-    const selectedLinkFiles = useMemo(
-        () =>
-            selectedLinkID === undefined
-                ? []
-                : state.collectionFiles.filter(
-                      ({ id, collectionID }) =>
-                          collectionID === selectedLinkID &&
-                          !hiddenFileIDs.has(id) &&
-                          !tempDeletedFileIDs.has(id) &&
-                          !tempHiddenFileIDs.has(id),
-                  ),
-        [
-            selectedLinkID,
-            state.collectionFiles,
-            hiddenFileIDs,
-            tempDeletedFileIDs,
-            tempHiddenFileIDs,
-        ],
-    );
     const activePerson =
         state.view?.type == "people" ? state.view.activePerson : undefined;
     const activePersonID = activePerson?.id;
@@ -616,13 +481,11 @@ const Page: React.FC = () => {
         selectedFilesInView.length === filteredFiles.length;
 
     const barCollectionSummaries =
-        barMode == "links"
-            ? linkSummaries
-            : barMode == "hidden-albums"
-              ? state.hiddenCollectionSummaries
-              : barMode == "archive-albums"
-                ? state.archivedCollectionSummaries
-                : state.normalCollectionSummaries;
+        barMode == "hidden-albums"
+            ? state.hiddenCollectionSummaries
+            : barMode == "archive-albums"
+              ? state.archivedCollectionSummaries
+              : state.normalCollectionSummaries;
 
     useEffect(() => {
         setAlbumSearchQuery("");
@@ -648,19 +511,12 @@ const Page: React.FC = () => {
 
     useEffect(() => {
         const electron = globalThis.electron;
-        let syncIntervalID: ReturnType<typeof setInterval> | undefined;
         let unsubscribeMainWindowFocus: (() => void) | undefined;
 
         void (async () => {
             const authToken = await savedAuthToken();
             if (!haveMasterKeyInSession() || !authToken) {
-                stashRedirect("/gallery");
                 void router.push("/");
-                return;
-            }
-
-            if (savedJustSignedUp()) {
-                void router.replace("/plan");
                 return;
             }
 
@@ -675,7 +531,6 @@ const Page: React.FC = () => {
                 return;
             }
 
-            preloadImage("/images/subscription-card-background");
             initSettings();
             setupSelectAllKeyBoardShortcutHandler();
 
@@ -684,66 +539,18 @@ const Page: React.FC = () => {
             setIsFirstLoad(getAndClearIsFirstLogin());
 
             const user = ensureLocalUser();
-            void initContacts(
-                user.id,
-                ensureAuthenticatedSession,
-                contactsGetDiff,
-                contactsGetProfilePicture,
-            )
-                .then(pullContacts)
-                .catch((error: unknown) => {
-                    log.warn(
-                        "[gallery] Failed to warm contacts display cache",
-                        error,
-                    );
-                });
-            const userDetails = await savedUserDetailsOrTriggerPull();
             dispatch({
                 type: "mount",
                 user,
-                familyData: userDetails?.familyData,
                 collections: await savedCollections(),
                 collectionFiles: await savedCollectionFiles(),
                 trashItems: await savedTrashItems(),
             });
 
-            // Join first so the initial pull includes the new album.
-            let joinedAlbumId: number | null = null;
-
-            if (hasPendingAlbumToJoin()) {
-                try {
-                    const joinedCollectionId = await processPendingAlbumJoin();
-                    if (joinedCollectionId) {
-                        joinedAlbumId = joinedCollectionId;
-                    }
-                } catch (error) {
-                    log.error("Failed to join album", error);
-                    showMiniDialog({
-                        title: t("error"),
-                        message: t("album_join_failed"),
-                    });
-                }
-            }
-
-            await remotePull({ source: "gallery-mount" });
-
-            if (joinedAlbumId) {
-                dispatch({
-                    type: "showCollectionSummary",
-                    collectionSummaryID: joinedAlbumId,
-                });
-            }
-
             setIsFirstLoad(false);
-
-            syncIntervalID = setInterval(
-                () => remotePull({ silent: true, source: "gallery-periodic" }),
-                5 * 60 * 1000,
-            );
 
             if (electron) {
                 unsubscribeMainWindowFocus = subscribeMainWindowFocus(() => {
-                    void remotePull({ silent: true, source: "desktop-focus" });
                     void watcher.checkAccessibility();
                 });
                 if (await shouldShowWhatsNew(electron)) showWhatsNew();
@@ -751,16 +558,9 @@ const Page: React.FC = () => {
         })();
 
         return () => {
-            clearInterval(syncIntervalID);
             unsubscribeMainWindowFocus?.();
         };
     }, []);
-
-    useEffect(() => {
-        if (state.user && userDetails) {
-            dispatch({ type: "setUserDetails", userDetails });
-        }
-    }, [state.user, userDetails]);
 
     useEffect(() => {
         if (
@@ -781,16 +581,6 @@ const Page: React.FC = () => {
     useEffect(() => {
         if (!activeCollectionSummary) closeCollectionMap();
     }, [activeCollectionSummary, closeCollectionMap]);
-
-    useEffect(() => {
-        if (router.isReady && haveMasterKeyInSession()) {
-            void handleSubscriptionCompletionRedirectIfNeeded(
-                showMiniDialog,
-                showLoadingBar,
-                router,
-            );
-        }
-    }, [router.isReady]);
 
     useEffect(() => {
         updateSearchCollectionsAndFiles(
@@ -861,10 +651,8 @@ const Page: React.FC = () => {
         if (
             !user ||
             !filteredFiles.length ||
-            uploadTypeSelectorView ||
             openCollectionSelector ||
             sidebarVisibilityProps.open ||
-            planSelectorVisibilityProps.open ||
             fixCreationTimeVisibilityProps.open ||
             authenticateUserVisibilityProps.open ||
             albumNameInputVisibilityProps.open ||
@@ -952,11 +740,6 @@ const Page: React.FC = () => {
         };
     }, [selectAll, clearSelection, isCleanupViewOpen]);
 
-    const showSessionExpiredDialog = useCallback(
-        () => showMiniDialog(sessionExpiredDialogAttributes(logout)),
-        [showMiniDialog, logout],
-    );
-
     const handleVisualFeedback = useCallback(() => {
         showLoadingBar();
         setTimeout(hideLoadingBar, 0);
@@ -966,60 +749,47 @@ const Page: React.FC = () => {
         setPendingFileNavigation(undefined);
     }, []);
 
-    // Use this for collection/file/trash-only effects; a full pull costs more.
+    // Local-only state refresh; remote sync is disabled in the offline vault.
+    // TODO(protocol): replace with a local file import + protocol upload flow.
     const remoteFilesPull = useCallback(
         () =>
-            remoteFilesPullQueue.current.add(() =>
-                pullFiles({
-                    onSetCollections: (collections) =>
-                        dispatch({ type: "setCollections", collections }),
-                    onSetCollectionFiles: (collectionFiles) =>
-                        dispatch({
-                            type: "setCollectionFiles",
-                            collectionFiles,
-                        }),
-                    onSetTrashedItems: (trashItems) =>
-                        dispatch({ type: "setTrashItems", trashItems }),
-                    onDidUpdateCollectionFiles: () =>
-                        exportService.onLocalFilesUpdated(),
-                }),
-            ),
+            remoteFilesPullQueue.current.add(async () => {
+                dispatch({
+                    type: "setCollections",
+                    collections: await savedCollections(),
+                });
+                dispatch({
+                    type: "setCollectionFiles",
+                    collectionFiles: await savedCollectionFiles(),
+                });
+                dispatch({
+                    type: "setTrashItems",
+                    trashItems: await savedTrashItems(),
+                });
+                exportService.onLocalFilesUpdated();
+            }),
         [],
     );
 
     const remotePull = useCallback(
         async (opts?: RemotePullOpts) =>
             remotePullQueue.current.add(async () => {
-                const { silent, source, strict } = opts ?? {};
+                const { silent, strict } = opts ?? {};
 
-                if (!navigator.onLine) {
-                    if (strict) throw new Error("Remote pull failed: offline");
-                    return;
-                }
-                if (await isSessionInvalid()) {
-                    showSessionExpiredDialog();
-                    if (strict)
-                        throw new Error("Remote pull failed: invalid session");
-                    return;
-                }
-                if (!(await masterKeyFromSession())) {
-                    clearSessionStorage();
-                    void router.push("/credentials");
+                if (!haveMasterKeyInSession()) {
+                    void router.push("/");
                     if (strict)
                         throw new Error(
-                            "Remote pull failed: missing master key",
+                            "Local refresh failed: missing master key",
                         );
                     return;
                 }
 
                 try {
                     if (!silent) showLoadingBar();
-                    await prePullFiles();
                     await remoteFilesPull();
-                    await postPullFiles(source);
                 } catch (e) {
-                    // A later pull retries transient failures after remote mutations.
-                    log.error("Remote pull failed", e);
+                    log.error("Local refresh failed", e);
                     if (strict) throw e;
                 } finally {
                     dispatch({ type: "clearUnsyncedState" });
@@ -1030,7 +800,6 @@ const Page: React.FC = () => {
             showLoadingBar,
             hideLoadingBar,
             router,
-            showSessionExpiredDialog,
             remoteFilesPull,
         ],
     );
@@ -1278,22 +1047,6 @@ const Page: React.FC = () => {
         }
     };
 
-    const onSendLinkError = useCallback(
-        (e: unknown) => {
-            if (isHTTPErrorWithStatus(e, 402)) {
-                log.error("Could not create share link", e);
-                showMiniDialog(
-                    errorDialogAttributes(
-                        t("share_link_subscription_required"),
-                    ),
-                );
-            } else {
-                onGenericError(e);
-            }
-        },
-        [showMiniDialog, onGenericError],
-    );
-
     const createFileOpHandler =
         (op: FileOp, options?: { suppressSelectionBar?: boolean }) => () => {
             return (async () => {
@@ -1302,47 +1055,6 @@ const Page: React.FC = () => {
                 }
                 showLoadingBar();
                 try {
-                    if (op == "sendLink") {
-                        const selectedFiles = getSelectedFiles(
-                            selected,
-                            filteredFiles,
-                        );
-                        const ownedSelectedFiles = selectedFiles.filter(
-                            (file) => file.ownerID == user!.id,
-                        );
-                        if (!ownedSelectedFiles.length) return;
-                        if (ownedSelectedFiles.length != selectedFiles.length) {
-                            showMiniDialog(notifyOthersFilesDialogAttributes());
-                        }
-
-                        const quickLinkCollection =
-                            await createQuickLinkCollection(
-                                quickLinkNameForFiles(ownedSelectedFiles),
-                                quickLinkVisibility,
-                            );
-                        await addToCollection(
-                            quickLinkCollection,
-                            ownedSelectedFiles,
-                        );
-                        const publicURL = await createPublicURL(
-                            quickLinkCollection.id,
-                            { enableJoin: false },
-                        );
-                        const resolvedURL = await resolveQuickLinkURL(
-                            publicURL.url,
-                            quickLinkCollection.key,
-                            customDomain,
-                        );
-                        setPublicLinkToast({ open: true, url: resolvedURL });
-
-                        clearSelection();
-                        await remotePull({
-                            silent: true,
-                            source: "selected-files-quick-link",
-                        });
-                        return;
-                    }
-
                     // Hide every non-hidden copy, including copies outside this view.
                     const opFiles =
                         op == "hide"
@@ -1403,8 +1115,6 @@ const Page: React.FC = () => {
                 } catch (e) {
                     if (op == "trash") {
                         throw e;
-                    } else if (op == "sendLink") {
-                        onSendLinkError(e);
                     } else {
                         onGenericError(e);
                     }
@@ -1531,12 +1241,6 @@ const Page: React.FC = () => {
         }
     };
 
-    const openUploader = (intent?: UploadTypeSelectorIntent) => {
-        if (uploadManager.isUploadInProgress()) return;
-        setUploadTypeSelectorView(true);
-        setUploadTypeSelectorIntent(intent ?? "upload");
-    };
-
     const handleShowCollectionSummaryWithID = useCallback(
         (collectionSummaryID: number | undefined) => {
             setCleanupView(undefined);
@@ -1629,12 +1333,6 @@ const Page: React.FC = () => {
     };
 
     const handleChangeBarMode = (mode: GalleryBarMode) => {
-        if (mode == "links") {
-            setCleanupView(undefined);
-            clearSelection();
-            dispatch({ type: "showLinks" });
-            return true;
-        }
         if (mode == "people") {
             return handleShowPeople();
         }
@@ -1692,45 +1390,6 @@ const Page: React.FC = () => {
             }
         },
         [],
-    );
-
-    const handleFileViewerSendLink = useCallback(
-        async (file: EnteFile) => {
-            if (file.ownerID != user?.id) return;
-
-            showLoadingBar();
-            try {
-                const quickLinkCollection = await createQuickLinkCollection(
-                    quickLinkNameForFiles([file]),
-                    quickLinkVisibility,
-                );
-                await addToCollection(quickLinkCollection, [file]);
-                const publicURL = await createPublicURL(
-                    quickLinkCollection.id,
-                    { enableJoin: false },
-                );
-                const resolvedURL = await resolveQuickLinkURL(
-                    publicURL.url,
-                    quickLinkCollection.key,
-                    customDomain,
-                );
-                setPublicLinkToast({ open: true, url: resolvedURL });
-                await remotePull({ silent: true, source: "viewer-send-link" });
-            } catch (e) {
-                onSendLinkError(e);
-            } finally {
-                hideLoadingBar();
-            }
-        },
-        [
-            user?.id,
-            showLoadingBar,
-            hideLoadingBar,
-            customDomain,
-            quickLinkVisibility,
-            remotePull,
-            onSendLinkError,
-        ],
     );
 
     const handleMarkTempDeleted = useCallback(
@@ -1828,11 +1487,6 @@ const Page: React.FC = () => {
         ) => {
             const suppressSelectionBar = !!meta?.isEphemeralSingleSelection;
             switch (action) {
-                case "sendLink":
-                    void createFileOpHandler("sendLink", {
-                        suppressSelectionBar,
-                    })();
-                    break;
                 case "download":
                     void createFileOpHandler("download", {
                         suppressSelectionBar,
@@ -2071,14 +1725,6 @@ const Page: React.FC = () => {
         [handleOpenCollectionSelector, remotePull, onGenericError],
     );
 
-    const showAppDownloadFooter =
-        state.collectionFiles.length < 30 && !isInSearchMode;
-
-    const fileListFooter = useMemo(
-        () => (showAppDownloadFooter ? createAppDownloadFooter() : undefined),
-        [showAppDownloadFooter],
-    );
-
     const hasActiveFileSelection =
         selected.count > 0 && selected.collectionID === activeCollectionID;
     const showSelectionBar =
@@ -2091,34 +1737,10 @@ const Page: React.FC = () => {
         return <div></div>;
     }
 
-    const subscriptionDialogs = (
-        <>
-            <PlanSelector
-                {...planSelectorVisibilityProps}
-                setLoading={(v) => setBlockingLoad(v)}
-                onManageFamily={showFamilyManagement}
-            />
-            {familyManagementVisibilityProps.open && (
-                <FamilyManagement
-                    {...familyManagementVisibilityProps}
-                    onShowPlanSelector={showPlanSelector}
-                />
-            )}
-        </>
-    );
-
     const showNormalNavigation = !showSelectionBar;
 
     return (
-        <FullScreenDropZone
-            message={
-                watchFolderView ? t("watch_folder_dropzone_hint") : undefined
-            }
-            disabled={shouldDisableDropzone || !!slideshow || isCleanupViewOpen}
-            onDrop={setDragAndDropFiles}
-        >
-            {blockingLoad && <TranslucentLoadingOverlay />}
-            {!sidebarVisibilityProps.open && subscriptionDialogs}
+        <>
             <CollectionSelector
                 open={openCollectionSelector}
                 onClose={handleCloseCollectionSelector}
@@ -2152,7 +1774,6 @@ const Page: React.FC = () => {
                 mode={barMode}
                 onChangeMode={handleChangeBarMode}
                 onSidebar={showSidebar}
-                onUpload={openUploader}
                 onHome={() =>
                     handleShowCollectionSummaryWithID(PseudoCollectionID.all)
                 }
@@ -2163,13 +1784,10 @@ const Page: React.FC = () => {
                     isCleanupViewOpen
                         ? undefined
                         : {
-                              user,
                               // TODO: These are incorrect assertions, the types of the
                               // component need to be updated.
                               activeCollection: activeCollection!,
-                              activeCollectionID: (barMode == "links"
-                                  ? selectedLinkID
-                                  : activeCollectionID)!,
+                              activeCollectionID: activeCollectionID!,
                               activePerson,
                               albumFilter,
                               albumSearchQuery,
@@ -2193,22 +1811,12 @@ const Page: React.FC = () => {
                               uncategorizedCollectionSummaryID:
                                   state.uncategorizedCollectionSummaryID,
                               onShowCollectionSummary: showCollectionSummary,
-                              emailByUserID: state.emailByUserID,
-                              shareSuggestionEmails:
-                                  state.shareSuggestionEmails,
                               people:
                                   (state.view?.type == "people"
                                       ? state.view.visiblePeople
                                       : undefined) ?? [],
-                              setBlockingLoad,
                               setActiveCollectionID:
-                                  barMode == "links"
-                                      ? (collectionID) =>
-                                            dispatch({
-                                                type: "selectLink",
-                                                collectionID,
-                                            })
-                                      : handleShowCollectionSummaryWithID,
+                                  handleShowCollectionSummaryWithID,
                               hasActiveFileSelection,
                               onRemotePull: remotePull,
                               onSelectPerson: handleSelectPerson,
@@ -2263,30 +1871,11 @@ const Page: React.FC = () => {
                     <DuplicatesView onRemoteFilesPull={remoteFilesPull} />
                 ) : cleanupView === "large-files" ? (
                     <LargeFilesView onRemoteFilesPull={remoteFilesPull} />
-                ) : !isInSearchMode && barMode == "links" ? (
-                    selectedLink ? (
-                        <PublicLinkDetails
-                            key={selectedLink.id}
-                            collection={selectedLink}
-                            fileCount={
-                                selectedLinkSummary?.fileCount ??
-                                selectedLinkFiles.length
-                            }
-                            files={selectedLinkFiles}
-                            user={user}
-                            setBlockingLoad={setBlockingLoad}
-                            onRemotePull={remotePull}
-                            coverFile={selectedLinkSummary?.coverFile}
-                        />
-                    ) : null
                 ) : !isInSearchMode &&
                   !isFirstLoad &&
                   !state.collectionFiles.length &&
                   activeCollectionID === PseudoCollectionID.all ? (
-                    <GalleryEmptyState
-                        isUploadInProgress={uploadManager.isUploadInProgress()}
-                        onUpload={openUploader}
-                    />
+                    <GalleryEmptyState />
                 ) : !isInSearchMode && !isFirstLoad && isAlbumOverview ? (
                     <AlbumsOverview
                         onRemotePull={remotePull}
@@ -2321,7 +1910,6 @@ const Page: React.FC = () => {
                         mode={barMode}
                         modePlus={isInSearchMode ? "search" : barMode}
                         header={fileListHeader}
-                        footer={fileListFooter}
                         user={user}
                         files={filteredFiles}
                         onShowMap={handleShowCollectionMap}
@@ -2358,13 +1946,11 @@ const Page: React.FC = () => {
                             pendingVisibilityUpdates,
                             onAddSaveGroup,
                         }}
-                        collectionSummaries={normalCollectionSummaries}
                         emailByUserID={state.emailByUserID}
                         onToggleFavorite={handleFileViewerToggleFavorite}
                         onFileVisibilityUpdate={
                             handleFileViewerFileVisibilityUpdate
                         }
-                        onSendLink={handleFileViewerSendLink}
                         onMarkTempDeleted={handleMarkTempDeleted}
                         onSetOpenFileViewer={setIsFileViewerOpen}
                         onRemotePull={remotePull}
@@ -2374,42 +1960,12 @@ const Page: React.FC = () => {
                         onSelectPerson={handleSelectPerson}
                         onAddFileToCollection={handleAddSingleFileToCollection}
                         pendingFileIndex={pendingFileNavigation?.fileIndex}
-                        pendingFileSidebar={pendingFileNavigation?.sidebar}
-                        pendingHighlightCommentID={
-                            pendingFileNavigation?.commentID
-                        }
                         onPendingNavigationConsumed={
                             handlePendingNavigationConsumed
                         }
                     />
                 )}
             </PhotosNavigationShell>
-            <Upload
-                {...{
-                    user,
-                    dragAndDropFiles,
-                    uploadTypeSelectorIntent,
-                    uploadTypeSelectorView,
-                }}
-                isFirstUpload={haveOnlySystemCollections(
-                    normalCollectionSummaries,
-                )}
-                activeCollection={activeCollection}
-                closeUploadTypeSelector={setUploadTypeSelectorView.bind(
-                    null,
-                    false,
-                )}
-                setLoading={setBlockingLoad}
-                setShouldDisableDropzone={setShouldDisableDropzone}
-                onRemotePull={remotePull}
-                onRemoteFilesPull={remoteFilesPull}
-                onOpenCollectionSelector={handleOpenCollectionSelector}
-                onCloseCollectionSelector={handleCloseCollectionSelector}
-                onUploadFile={(file) => dispatch({ type: "uploadFile", file })}
-                onShowPlanSelector={showPlanSelector}
-                onShowSessionExpiredDialog={showSessionExpiredDialog}
-                isInHiddenSection={barMode == "hidden-albums"}
-            />
             <Sidebar
                 {...sidebarVisibilityProps}
                 onClose={handleSidebarClose}
@@ -2417,12 +1973,9 @@ const Page: React.FC = () => {
                 onShowDuplicates={handleShowDuplicates}
                 pendingAction={pendingSidebarAction}
                 onActionHandled={handleSidebarActionHandled}
-                onShowPlanSelector={showPlanSelector}
                 collectionNameByID={collectionNameByID}
-                onCloseOverlays={closeSidebarOverlays}
                 onAuthenticateUser={authenticateUser}
             >
-                {sidebarVisibilityProps.open && subscriptionDialogs}
             </Sidebar>
             <WhatsNew {...whatsNewVisibilityProps} />
             <PeopleConsentDialog
@@ -2502,17 +2055,6 @@ const Page: React.FC = () => {
                 }}
                 onSubmit={handleAlbumNameSubmit}
             />
-            <QuickLinkCreatedNotification
-                open={publicLinkToast.open}
-                onCopy={() => {
-                    if (publicLinkToast.url) {
-                        void navigator.clipboard.writeText(publicLinkToast.url);
-                    }
-                }}
-                onClose={() =>
-                    setPublicLinkToast((prev) => ({ ...prev, open: false }))
-                }
-            />
             <AlbumAddedNotification
                 open={addToAlbumProgress.open}
                 onClose={() =>
@@ -2526,7 +2068,7 @@ const Page: React.FC = () => {
                 files={selectedFilesInView}
                 onConfirm={handleEditLocationConfirm}
             />
-        </FullScreenDropZone>
+        </>
     );
 };
 
@@ -2549,115 +2091,4 @@ const OfflineMessage: React.FC = () => (
     </Typography>
 );
 
-const preloadImage = (imgBasePath: string) => {
-    const srcset: string[] = [];
-    for (let i = 1; i <= 3; i++) srcset.push(`${imgBasePath}/${i}x.png ${i}x`);
-    new Image().srcset = srcset.join(",");
-};
 
-const handleSubscriptionCompletionRedirectIfNeeded = async (
-    showMiniDialog: (attributes: MiniDialogAttributes) => void,
-    showLoadingBar: () => void,
-    router: NextRouter,
-) => {
-    const { session_id: sessionID, status, reason } = router.query;
-
-    if (status == "success") {
-        try {
-            const subscription = await verifyStripeSubscription(sessionID);
-            showMiniDialog({
-                title: t("thank_you"),
-                message: (
-                    <Trans
-                        i18nKey="subscription_purchase_success"
-                        values={{ date: subscription.expiryTime }}
-                    />
-                ),
-                continue: { text: t("ok") },
-                cancel: false,
-            });
-        } catch (e) {
-            log.error("Subscription verification failed", e);
-            showMiniDialog(
-                errorDialogAttributes(t("subscription_verification_error")),
-            );
-        }
-    } else if (status == "fail") {
-        log.error(`Subscription purchase failed`, reason);
-        switch (reason) {
-            case "canceled":
-                showMiniDialog({
-                    message: t("subscription_purchase_cancelled"),
-                    continue: { text: t("ok"), color: "primary" },
-                    cancel: false,
-                });
-                break;
-            case "requires_payment_method":
-                showMiniDialog({
-                    title: t("update_payment_method"),
-                    message: t("update_payment_method_message"),
-                    continue: {
-                        text: t("update_payment_method"),
-                        action: () => {
-                            showLoadingBar();
-                            return redirectToCustomerPortal();
-                        },
-                    },
-                });
-                break;
-            case "authentication_failed":
-                showMiniDialog({
-                    title: t("update_payment_method"),
-                    message: t("payment_method_authentication_failed"),
-                    continue: {
-                        text: t("update_payment_method"),
-                        action: () => {
-                            showLoadingBar();
-                            return redirectToCustomerPortal();
-                        },
-                    },
-                });
-                break;
-            default:
-                showMiniDialog(
-                    errorDialogAttributes(t("subscription_purchase_failed")),
-                );
-        }
-    }
-};
-
-const createAppDownloadFooter = (): FileListHeaderOrFooter => ({
-    component: (
-        <Typography
-            variant="small"
-            sx={{
-                alignSelf: "flex-end",
-                marginInline: "auto",
-                marginBlock: 0.75,
-                textAlign: "center",
-                color: "text.faint",
-            }}
-        >
-            <Trans
-                i18nKey={"install_mobile_app"}
-                components={{
-                    a: (
-                        <Link
-                            href="https://play.google.com/store/apps/details?id=io.ente.photos"
-                            target="_blank"
-                            rel="noopener"
-                        />
-                    ),
-                    b: (
-                        <Link
-                            href="https://apps.apple.com/in/app/ente-photos/id1542026904"
-                            target="_blank"
-                            rel="noopener"
-                        />
-                    ),
-                }}
-            />
-        </Typography>
-    ),
-    height: 90,
-});

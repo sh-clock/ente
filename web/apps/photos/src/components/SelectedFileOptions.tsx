@@ -5,22 +5,21 @@ import {
     type FileContextAction,
 } from "@/utils/file-actions";
 import {
-    AddSquareIcon,
-    ArrowRight02Icon,
-    Clock02Icon,
-    Delete02Icon,
     Download01Icon,
-    Download05Icon,
-    Location01Icon,
-    Navigation03Icon,
-    RemoveCircleIcon,
     StarIcon,
     StarOffIcon,
-    Time04Icon,
+    Download05Icon,
     Unarchive03Icon,
-    UserAdd02Icon,
-    ViewIcon,
     ViewOffSlashIcon,
+    ViewIcon,
+    Delete02Icon,
+    Clock02Icon,
+    Time04Icon,
+    Location01Icon,
+    AddSquareIcon,
+    UserAdd02Icon,
+    ArrowRight02Icon,
+    RemoveCircleIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -35,7 +34,6 @@ import type { CollectionSummary } from "ente-new/photos/services/collection-summ
 import { t } from "i18next";
 
 export type FileOp =
-    | "sendLink"
     | "download"
     | "fixTime"
     | "favorite"
@@ -100,7 +98,6 @@ export const SelectedFileOptions: React.FC<SelectedFileOptionsProps> = ({
     const handleUnfavorite = createFileOpHandler("unfavorite");
     const handleFixTime = createFileOpHandler("fixTime");
     const handleDownload = createFileOpHandler("download");
-    const handleSendLink = createFileOpHandler("sendLink");
     const handleArchive = createFileOpHandler("archive");
     const handleUnarchive = createFileOpHandler("unarchive");
 
@@ -229,8 +226,6 @@ export const SelectedFileOptions: React.FC<SelectedFileOptionsProps> = ({
 
     const renderActionButton = (action: FileContextAction) => {
         switch (action) {
-            case "sendLink":
-                return <SendLinkButton key={action} onClick={handleSendLink} />;
             case "download":
                 return <DownloadButton key={action} onClick={handleDownload} />;
             case "fixTime":
@@ -332,13 +327,6 @@ const DownloadButton: React.FC<ButtonishProps> = ({ onClick }) => (
     </Tooltip>
 );
 
-const SendLinkButton: React.FC<ButtonishProps> = ({ onClick }) => (
-    <Tooltip title={t("send_link")}>
-        <IconButton {...{ onClick }} aria-label="Send link">
-            <HugeiconsIcon icon={Navigation03Icon} />
-        </IconButton>
-    </Tooltip>
-);
 
 const FavoriteButton: React.FC<ButtonishProps> = ({ onClick }) => (
     <Tooltip title={t("favorite")}>
