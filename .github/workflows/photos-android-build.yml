@@ -31,7 +31,16 @@ jobs:
                   sudo rm -rf /usr/share/dotnet /usr/local/lib/ghcup /opt/ghc \
                     /usr/local/share/boost /usr/share/swift /usr/lib/jvm \
                     /usr/local/lib/android/emulator /usr/local/lib/android/system-images \
-                    /usr/local/lib/android/ndk 2>/dev/null || true
+                    /usr/local/lib/android/ndk /usr/lib/google-cloud-sdk \
+                    /usr/share/miniconda /opt/ghc 2>/dev/null || true
+                  # Trim the preinstalled SDK: keep only the newest platforms
+                  # and build-tools; gradle re-downloads whatever it misses.
+                  SDK=/usr/local/lib/android/sdk
+                  if [ -d "$SDK" ]; then
+                    ls -d "$SDK"/platforms/android-* 2>/dev/null | sort -V | head -n -1 | sudo xargs -r rm -rf
+                    ls -d "$SDK"/build-tools/* 2>/dev/null | sort -V | head -n -1 | sudo xargs -r rm -rf
+                    sudo rm -rf "$SDK/cmake" "$SDK/extras" "$SDK/sources"
+                  fi
                   sudo docker image prune -af 2>/dev/null || true
                   sudo apt-get clean
                   df -h /
