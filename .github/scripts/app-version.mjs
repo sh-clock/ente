@@ -10,28 +10,14 @@ const [app, command, ...args] = process.argv.slice(2);
 
 const scripts = {
     photos: ["flutter-version.mjs", "photos"],
-    auth: ["flutter-version.mjs", "auth"],
     locker: ["flutter-version.mjs", "locker"],
-    ensu: ["ensu-version.mjs"],
-    cast: ["cast-version.mjs"],
     "photos-desktop": ["photos-desktop-version.mjs"],
 };
 
 const versionFiles = {
     photos: ["mobile/apps/photos/pubspec.yaml"],
-    auth: ["mobile/apps/auth/pubspec.yaml"],
     locker: ["mobile/apps/locker/pubspec.yaml"],
-    ensu: [
-        "rust/apps/ensu/package.json",
-        "rust/apps/ensu/package-lock.json",
-        "rust/apps/ensu/src-tauri/tauri.conf.json",
-        "rust/apps/ensu/src-tauri/Cargo.toml",
-        "rust/Cargo.lock",
-        "android/apps/ensu/app/build.gradle.kts",
-        "apple/apps/ensu/Ensu.xcodeproj/project.pbxproj",
-        "apple/apps/ensu/Ensu/Info.plist",
-    ],
-    cast: ["apple/apps/cast/Cast.xcodeproj/project.pbxproj"],
+    "photos-desktop": ["desktop/package.json"],
 };
 
 function usage() {

@@ -1,9 +1,0 @@
-{
-  "indentation": { "spaces": 4 },
-  "lineLength": 100,
-  "rules": {
-    "AllPublicDeclarationsHaveDocumentation": false,
-    "FileScopedDeclarationPrivacy": false
-  },
-  "version": 1
-}

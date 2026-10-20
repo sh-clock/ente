@@ -7,9 +7,6 @@
     },
     "devDependencies": {
         "ente-build-config": "*",
-        "ente-cast-wasm": "*",
-        "ente-legacy-wasm": "*",
-        "ente-locker-wasm": "*",
         "ente-photos-wasm": "*",
         "ente-prelogin-wasm": "*",
         "vite-plugin-wasm": "3.6.0",

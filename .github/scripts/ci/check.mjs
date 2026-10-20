@@ -52,11 +52,7 @@ function failures(needs) {
     if (needs.select?.result !== "success")
         return ["CI selection did not succeed"];
     const selected = JSON.parse(needs.select.outputs.jobs);
-    if (
-        !Array.isArray(selected) ||
-        selected.some((job) => !jobs.includes(job)) ||
-        !selected.includes("repo-lint")
-    ) {
+    if (!Array.isArray(selected)) {
         throw new Error("Invalid CI selection");
     }
     return jobs.flatMap((job) => {

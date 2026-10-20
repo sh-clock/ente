@@ -13,7 +13,6 @@ flutter:
     enable-uiscene-migration: false
 
 workspace:
-  - apps/auth
   - apps/locker
   - apps/photos
   - apps/photos/plugins/ente_background_manager
@@ -38,7 +37,6 @@ workspace:
   - packages/install_source
   - packages/ente_pure_utils
   - packages/ente_qr
-  - packages/ente_qr_scanner
   - packages/ente_screen_brightness
   - packages/events
   - packages/feature_flag
@@ -51,7 +49,6 @@ workspace:
   - packages/native_video_editor
   - packages/network
   - packages/qr
-  - packages/scoped_dir_access
   - packages/screen_cover
   - packages/sharing
   - packages/strings

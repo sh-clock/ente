@@ -1,46 +1,27 @@
 [workspace]
 resolver = "2"
 members = [
-    "apps/cli",
-    "apps/cli-next",
-    "apps/ensu/src-tauri",
     "bindings/frb/lib",
     "bindings/frb/locker",
     "bindings/frb/log",
     "bindings/frb/photos",
     "bindings/napi/photos",
-    "bindings/uniffi/cast",
-    "bindings/uniffi/ensu",
-    "bindings/uniffi/log",
-    "bindings/wasm/auth",
-    "bindings/wasm/cast",
-    "bindings/wasm/ensu",
-    "bindings/wasm/legacy",
     "bindings/wasm/lib",
-    "bindings/wasm/locker",
-    "bindings/wasm/paste",
     "bindings/wasm/photos",
     "bindings/wasm/prelogin",
-    "bindings/wasm/space",
     "crates/accounts",
     "crates/assets",
-    "crates/auth",
     "crates/cast",
     "crates/collections",
     "crates/contacts",
     "crates/core",
-    "crates/ensu",
-    "crates/ensu-crypto",
     "crates/exif",
     "crates/image",
     "crates/legacy",
     "crates/location",
     "crates/locker",
     "crates/ml",
-    "crates/paste",
     "crates/photos",
-    "crates/photos-export",
-    "crates/space",
     "crates/test-support",
     "crates/vecdb",
     "tools/codegen",
@@ -59,13 +40,10 @@ dialoguer = { version = "0.12.0", default-features = false }
 dirs = "7.0.0"
 ente-accounts = { path = "crates/accounts" }
 ente-assets = { path = "crates/assets" }
-ente-auth = { path = "crates/auth" }
 ente-cast = { path = "crates/cast" }
 ente-collections = { path = "crates/collections" }
 ente-contacts = { path = "crates/contacts" }
 ente-core = { path = "crates/core" }
-ente-ensu = { path = "crates/ensu" }
-ente-ensu-crypto = { path = "crates/ensu-crypto" }
 ente-exif = { path = "crates/exif" }
 ente-frb-lib = { path = "bindings/frb/lib" }
 ente-frb-log = { path = "bindings/frb/log" }
@@ -74,12 +52,8 @@ ente-legacy = { path = "crates/legacy" }
 ente-location = { path = "crates/location" }
 ente-locker = { path = "crates/locker" }
 ente-ml = { path = "crates/ml" }
-ente-paste = { path = "crates/paste" }
 ente-photos = { path = "crates/photos" }
-ente-photos-export = { path = "crates/photos-export" }
-ente-space = { path = "crates/space" }
 ente-test-support = { path = "crates/test-support" }
-ente-uniffi-log = { path = "bindings/uniffi/log" }
 ente-vecdb = { path = "crates/vecdb" }
 ente-wasm-lib = { path = "bindings/wasm/lib" }
 env_logger = { version = "0.11.11", default-features = false }
@@ -119,8 +93,6 @@ thiserror = "2.0.21"
 tokio = "1.53.1"
 tsify = { version = "0.5.8", default-features = false, features = ["js"] }
 unicode-normalization = "0.1.25"
-uniffi = { version = "=0.32.2" }
-uniffi_bindgen = { version = "=0.32.2", default-features = false, features = ["cargo-metadata"] }
 url = "2.5.8"
 urlencoding = "2.1.3"
 uuid = "1.26.1"
@@ -129,10 +101,6 @@ wasm-bindgen-futures = "0.4.75"
 web-sys = "0.3.102"
 zeroize = { version = "1.9.0", features = ["derive"] }
 zip = { version = "9.0.4", default-features = false, features = ["deflate-flate2-zlib-rs"] }
-
-[patch.crates-io]
-# TODO: Remove after tauri-plugin-updater 2.14.1 ships the ZIP 9 fix.
-tauri-plugin-updater = { git = "https://github.com/tauri-apps/plugins-workspace", rev = "ba98bfadc4c868c9a7e1a226c83af528e1f11b89" }
 
 [workspace.lints.rust]
 unexpected_cfgs = { level = "deny", check-cfg = ['cfg(frb_expand)'] }

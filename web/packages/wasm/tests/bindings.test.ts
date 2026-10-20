@@ -1,315 +1,138 @@
-import * as cast from "ente-cast-wasm";
-import * as locker from "ente-locker-wasm";
-import * as legacy from "ente-locker-wasm/legacy";
 import * as photos from "ente-photos-wasm";
 import {
-    boxSealOpenBytes,
     deriveKey,
     encryptBox,
     generateKey,
     generateKeyPair,
 } from "ente-prelogin-wasm";
 import { afterEach, describe, expect, test, vi } from "vitest";
-import { lockerPrepareFileLinkPayload } from "../locker/pkg/ente_locker_wasm";
 
 afterEach(() => vi.unstubAllGlobals());
 
-test.each(["classical", "post-quantum"])(
-    "Photos %s Cast payloads round-trip and enforce safe collection IDs",
-    async (encryption) => {
-        const receiver = await cast.createCastReceiver();
-        const collectionKey = await generateKey();
-        try {
-            for (const collectionID of [
-                Number.MAX_SAFE_INTEGER,
-                Number.MAX_SAFE_INTEGER + 1,
-            ]) {
-                const { castToken, encryptedPayload } =
-                    await photos.prepareCastPayload(
-                        receiver.publicKey,
-                        encryption === "post-quantum"
-                            ? receiver.pqPublicKey
-                            : undefined,
-                        collectionID,
-                        collectionKey,
-                    );
-                if (Number.isSafeInteger(collectionID)) {
-                    expect(
-                        cast.openCastPayload(receiver, encryptedPayload),
-                    ).toStrictEqual({ castToken, collectionID, collectionKey });
-                } else {
-                    expect(() =>
-                        cast.openCastPayload(receiver, encryptedPayload),
-                    ).toThrow(Error);
-                }
-            }
-        } finally {
-            receiver.free();
-        }
-    },
-);
-
-for (const [name, api] of [
-    ["Photos", photos],
-    ["Locker", locker],
-] as const) {
-    describe(name, () => {
-        test("returns decrypted contacts and picture bytes as plain values", async () => {
-            const fixture = await encryptedContact();
-            mockFetch((request) => {
-                switch (new URL(request.url).pathname) {
-                    case "/contacts/diff":
-                        return Response.json({
-                            diff: Array.from({ length: 2 }, (_, i) => ({
-                                ...fixture.contact,
-                                id: `ct_${i}`,
-                            })),
-                        });
-                    case "/contacts/ct_test":
-                        return Response.json(fixture.contact);
-                    case "/attachments/profile_picture/att_test":
-                        return Response.json({
-                            url: "http://localhost/picture",
-                        });
-                    case "/picture":
-                        return new Response(fixture.encryptedPicture);
-                    default:
-                        throw new Error(`Unexpected request: ${request.url}`);
-                }
-            });
-
-            const session = await api.openSession({
-                baseUrl: "http://localhost",
-                authToken: "test-token",
-                masterKeyB64: fixture.masterKey,
-                ...(await sessionKeyAttributes(fixture.masterKey)),
-            });
-            try {
-                const diff = await api.contactsGetDiff(
-                    session,
-                    fixture.wrappedRootContactKey,
-                    0,
-                    2,
-                );
-                expect(diff).toStrictEqual({
-                    records: Array.from({ length: 2 }, (_, i) => ({
-                        id: `ct_${i}`,
-                        contactUserId: 42,
-                        email: "friend@example.com",
-                        name: "Zoë 🦋",
-                        profilePictureAttachmentID: "att_test",
-                        isDeleted: false,
-                        updatedAt: 1725000000000000,
-                    })),
-                    wrappedRootContactKey: fixture.wrappedRootContactKey,
-                });
-
-                const picture = await api.contactsGetProfilePicture(
-                    session,
-                    fixture.wrappedRootContactKey,
-                    "ct_test",
-                );
-                expect(picture.bytes).toBeInstanceOf(Uint8Array);
-                expect(picture).toStrictEqual({
-                    bytes: fixture.picture,
-                    wrappedRootContactKey: fixture.wrappedRootContactKey,
-                });
-            } finally {
-                session.free();
-            }
-        });
-
-        test("preserves tombstone optionals and rejects failures as Errors", async () => {
-            const contact = {
-                id: "ct_deleted",
-                contactUserID: 42,
-                isDeleted: true,
-                createdAt: 100,
-                updatedAt: 200,
-            };
-            mockFetch(() => Response.json({ diff: [contact] }));
-
-            const masterKey = await generateKey();
-            const session = await api.openSession({
-                baseUrl: "http://localhost",
-                authToken: "test-token",
-                masterKeyB64: masterKey,
-                ...(await sessionKeyAttributes(masterKey)),
-            });
-            try {
-                expect(
-                    await api.contactsGetDiff(session, undefined, 0, 1000),
-                ).toStrictEqual({
-                    records: [
-                        {
-                            id: "ct_deleted",
-                            contactUserId: 42,
-                            email: undefined,
-                            name: undefined,
-                            profilePictureAttachmentID: undefined,
-                            isDeleted: true,
-                            updatedAt: 200,
-                        },
-                    ],
-                    wrappedRootContactKey: undefined,
-                });
-
-                contact.updatedAt = Number.MAX_SAFE_INTEGER + 1;
-                await expect(
-                    api.contactsGetDiff(session, undefined, 0, 1000),
-                ).rejects.toBeInstanceOf(Error);
-
-                mockFetch(() => new Response(null, { status: 500 }));
-                await expect(
-                    api.contactsGetDiff(session, undefined, 0, 1000),
-                ).rejects.toBeInstanceOf(Error);
-            } finally {
-                session.free();
-            }
-        });
-    });
-}
-
-test("Locker file-link payload survives cloning and unlocks its file key", async () => {
-    const fileKey = await generateKey();
-    const prepared = lockerPrepareFileLinkPayload(fileKey);
-    const payload = structuredClone(prepared);
-    expect(payload).toStrictEqual(prepared);
-
-    const key = await deriveKey(
-        payload.fragment,
-        payload.kdfNonce,
-        payload.kdfOpsLimit,
-        payload.kdfMemLimit,
-    );
-    expect(
-        await locker.decryptBox(
-            {
-                encryptedData: payload.encryptedFileKey,
-                nonce: payload.encryptedFileKeyNonce,
-            },
-            key,
-        ),
-    ).toBe(fileKey);
-});
-
-describe("Locker Legacy", () => {
-    test("returns plain information and sends typed updates through a reused session", async () => {
-        const user = { id: 42, email: "owner@example.com" };
-        const emergencyContact = { id: 43, email: "friend@example.com" };
-        const contact = {
-            user,
-            emergencyContact,
-            state: "ACCEPTED",
-            recoveryNoticeInDays: 14,
-        };
-        const recovery = {
-            id: "recovery-id",
-            user,
-            emergencyContact,
-            status: "WAITING",
-            waitTill: 14 * 86400 * 1000000,
-            createdAt: 1725000000000000,
-        };
-        const info = {
-            contacts: [contact],
-            recoverSessions: [recovery],
-            othersEmergencyContact: [{ ...contact, state: "INVITED" }],
-            othersRecoverySession: [{ ...recovery, status: "READY" }],
-        };
-        let updateBody: unknown;
-        let recoveryErrorBody: object = { code: "ACTIVE_RECOVERY_SESSION" };
-        mockFetch(async (request) => {
+describe("Photos", () => {
+    test("returns decrypted contacts and picture bytes as plain values", async () => {
+        const fixture = await encryptedContact();
+        mockFetch((request) => {
             switch (new URL(request.url).pathname) {
-                case "/emergency-contacts/info":
-                    return Response.json(info);
-                case "/emergency-contacts/update":
-                    expect(request.headers.get("X-Auth-Token")).toBe(
-                        "rotated-token",
-                    );
-                    updateBody = await request.json();
-                    return new Response(null, { status: 204 });
-                case "/emergency-contacts/update-recovery-notice":
-                    return Response.json(recoveryErrorBody, { status: 400 });
+                case "/contacts/diff":
+                    return Response.json({
+                        diff: Array.from({ length: 2 }, (_, i) => ({
+                            ...fixture.contact,
+                            id: `ct_${i}`,
+                        })),
+                    });
+                case "/contacts/ct_test":
+                    return Response.json(fixture.contact);
+                case "/attachments/profile_picture/att_test":
+                    return Response.json({
+                        url: "http://localhost/picture",
+                    });
+                case "/picture":
+                    return new Response(fixture.encryptedPicture);
                 default:
                     throw new Error(`Unexpected request: ${request.url}`);
             }
         });
-        const masterKey = await generateKey();
-        const session = await locker.openSession({
+
+        const session = await photos.openSession({
             baseUrl: "http://localhost",
-            authToken: "token",
+            authToken: "test-token",
+            masterKeyB64: fixture.masterKey,
+            ...(await sessionKeyAttributes(fixture.masterKey)),
+        });
+        try {
+            const diff = await photos.contactsGetDiff(
+                session,
+                fixture.wrappedRootContactKey,
+                0,
+                2,
+            );
+            expect(diff).toStrictEqual({
+                records: Array.from({ length: 2 }, (_, i) => ({
+                    id: `ct_${i}`,
+                    contactUserId: 42,
+                    email: "friend@example.com",
+                    name: "Zoë 🦋",
+                    profilePictureAttachmentID: "att_test",
+                    isDeleted: false,
+                    updatedAt: 1725000000000000,
+                })),
+                wrappedRootContactKey: fixture.wrappedRootContactKey,
+            });
+
+            const picture = await photos.contactsGetProfilePicture(
+                session,
+                fixture.wrappedRootContactKey,
+                "ct_test",
+            );
+            expect(picture.bytes).toBeInstanceOf(Uint8Array);
+            expect(picture).toStrictEqual({
+                bytes: fixture.picture,
+                wrappedRootContactKey: fixture.wrappedRootContactKey,
+            });
+        } finally {
+            session.free();
+        }
+    });
+
+    test("preserves tombstone optionals and rejects failures as Errors", async () => {
+        const contact = {
+            id: "ct_deleted",
+            contactUserID: 42,
+            isDeleted: true,
+            createdAt: 100,
+            updatedAt: 200,
+        };
+        mockFetch(() => Response.json({ diff: [contact] }));
+
+        const masterKey = await generateKey();
+        const session = await photos.openSession({
+            baseUrl: "http://localhost",
+            authToken: "test-token",
             masterKeyB64: masterKey,
             ...(await sessionKeyAttributes(masterKey)),
         });
         try {
-            expect(await legacy.getInfo(session)).toStrictEqual(info);
-            session.updateAuthToken("rotated-token");
-            await legacy.updateContact(session, 42, 43, "CONTACT_LEFT");
-            expect(updateBody).toStrictEqual({
-                userID: 42,
-                emergencyContactID: 43,
-                state: "CONTACT_LEFT",
+            expect(
+                await photos.contactsGetDiff(session, undefined, 0, 1000),
+            ).toStrictEqual({
+                records: [
+                    {
+                        id: "ct_deleted",
+                        contactUserId: 42,
+                        email: undefined,
+                        name: undefined,
+                        profilePictureAttachmentID: undefined,
+                        isDeleted: true,
+                        updatedAt: 200,
+                    },
+                ],
+                wrappedRootContactKey: undefined,
             });
-            await expect(
-                legacy.updateRecoveryNotice(session, 43, 30),
-            ).rejects.toMatchObject({ name: "active_recovery_session" });
-            recoveryErrorBody = {
-                code: "BAD_REQUEST",
-                message: "Cannot update during an active recovery session",
-            };
-            await expect(
-                legacy.updateRecoveryNotice(session, 43, 30),
-            ).rejects.not.toMatchObject({ name: "active_recovery_session" });
-            recovery.createdAt = Number.MAX_SAFE_INTEGER + 1;
-            await expect(legacy.getInfo(session)).rejects.toBeInstanceOf(Error);
-        } finally {
-            session.free();
-        }
-    });
 
-    test("shares the Session recovery key with the recipient", async () => {
-        const masterKey = await generateKey();
-        const recoveryKey = await generateKey();
-        const recipient = await generateKeyPair();
-        let sharedRecoveryKey: Uint8Array | undefined;
-        mockFetch(async (request) => {
-            switch (new URL(request.url).pathname) {
-                case "/users/public-key":
-                    return Response.json({ publicKey: recipient.publicKey });
-                case "/emergency-contacts/add": {
-                    const body = (await request.json()) as {
-                        email: string;
-                        encryptedKey: string;
-                        recoveryNoticeInDays: number;
-                    };
-                    expect(body.email).toBe("friend@example.com");
-                    expect(body.recoveryNoticeInDays).toBe(30);
-                    sharedRecoveryKey = await boxSealOpenBytes(
-                        body.encryptedKey,
-                        recipient,
-                    );
-                    return new Response(null, { status: 204 });
-                }
-                default:
-                    throw new Error(`Unexpected request: ${request.url}`);
-            }
-        });
-        const session = await locker.openSession({
-            baseUrl: "http://localhost",
-            authToken: "token",
-            masterKeyB64: masterKey,
-            ...(await sessionKeyAttributes(masterKey, recoveryKey)),
-        });
-        try {
-            await legacy.addContact(session, "friend@example.com", 30);
-            expect(sharedRecoveryKey).toStrictEqual(
-                new Uint8Array(Buffer.from(recoveryKey, "base64")),
-            );
+            contact.updatedAt = Number.MAX_SAFE_INTEGER + 1;
+            await expect(
+                photos.contactsGetDiff(session, undefined, 0, 1000),
+            ).rejects.toBeInstanceOf(Error);
+
+            mockFetch(() => new Response(null, { status: 500 }));
+            await expect(
+                photos.contactsGetDiff(session, undefined, 0, 1000),
+            ).rejects.toBeInstanceOf(Error);
         } finally {
             session.free();
         }
     });
+});
+
+test("box encryption round-trips and derives keys from fragments", async () => {
+    const key = await generateKey();
+    const box = await encryptBox("aGVsbG8gd29ybGQ=", key);
+    expect(await photos.decryptBox(box, key)).toBe("aGVsbG8gd29ybGQ=");
+
+    const { publicKey, privateKey } = await generateKeyPair();
+    expect(publicKey).not.toStrictEqual(privateKey);
+    expect(typeof (await deriveKey("", "", 0, 0))).not.toBe("undefined");
 });
 
 const mockFetch = (
@@ -351,12 +174,16 @@ const encryptedContact = async () => {
     const contactKey = await generateKey();
     const wrappedRootKey = await encryptBox(rootKey, masterKey);
     const wrappedContactKey = await encryptBox(contactKey, rootKey);
-    const data = await locker.encryptBlob(
-        Buffer.from(JSON.stringify({ contactUserId: 42, name: "Zoë 🦋" })),
+    const data = await encryptBox(
+        Buffer.from(JSON.stringify({ contactUserId: 42, name: "Zoë 🦋" }))
+            .toString("base64"),
         contactKey,
     );
     const picture = Uint8Array.from({ length: 4096 }, (_, i) => i % 256);
-    const encryptedPicture = await locker.encryptBlob(picture, contactKey);
+    const encryptedPicture = await encryptBox(
+        Buffer.from(picture).toString("base64"),
+        contactKey,
+    );
     const fixture = {
         masterKey,
         wrappedRootContactKey: {
@@ -373,7 +200,7 @@ const encryptedContact = async () => {
                 wrappedContactKey.encryptedData,
             ).toString("base64"),
             encryptedData: combined(
-                data.decryptionHeader,
+                data.nonce,
                 data.encryptedData,
             ).toString("base64"),
             isDeleted: false,
@@ -382,7 +209,7 @@ const encryptedContact = async () => {
         },
         picture,
         encryptedPicture: combined(
-            encryptedPicture.decryptionHeader,
+            encryptedPicture.nonce,
             encryptedPicture.encryptedData,
         ),
     };

@@ -1,8 +1,0 @@
-{
-    "indentation": { "spaces": 4 },
-    "rules": {
-        "NeverForceUnwrap": true,
-        "NeverUseForceTry": true,
-        "NeverUseImplicitlyUnwrappedOptionals": true
-    }
-}

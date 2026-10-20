@@ -1,9 +1,0 @@
-[package]
-name = "ente-uniffi-log"
-edition.workspace = true
-
-[dependencies]
-log = { workspace = true, features = ["std"] }
-
-[lints]
-workspace = true
