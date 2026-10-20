@@ -57,13 +57,13 @@ jobs:
                   shared-key: photos-android
                   cache-on-failure: true
 
-            - name: Generate FRB bindings
-              working-directory: rust
-              run: cargo codegen frb photos
-
             - name: Pub get
               working-directory: mobile/apps/photos
               run: flutter pub get --enforce-lockfile
+
+            - name: Generate FRB bindings
+              working-directory: rust
+              run: cargo codegen frb photos
 
             - name: Build debug APK (independent flavor)
               working-directory: mobile/apps/photos
