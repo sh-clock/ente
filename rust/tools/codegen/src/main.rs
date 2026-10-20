@@ -88,7 +88,12 @@ fn generate_frb(target: FrbTarget) -> Result<(), DynError> {
             let types_path = package_dir
                 .join("lib/src/rust/third_party/ente_frb_lib")
                 .join(format!("{name}/types.dart"));
-            let types = fs::read_to_string(&types_path)?
+            // Apps that do not bind ente-frb-lib (e.g. photos) do not
+            // generate these third-party types; skip them.
+            let Ok(types) = fs::read_to_string(&types_path) else {
+                continue;
+            };
+            let types = types
                 .replace(
                     "part 'types.freezed.dart';",
                     &format!("part '{name}.freezed.dart';"),
