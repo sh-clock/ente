@@ -31,7 +31,7 @@ jobs:
                   sudo rm -rf /usr/share/dotnet /usr/local/lib/ghcup /opt/ghc \
                     /usr/local/share/boost /usr/share/swift /usr/lib/jvm \
                     /usr/local/lib/android/emulator /usr/local/lib/android/system-images \
-                    /usr/local/lib/android/ndk-baseline 2>/dev/null || true
+                    /usr/local/lib/android/ndk 2>/dev/null || true
                   sudo docker image prune -af 2>/dev/null || true
                   sudo apt-get clean
                   df -h /
@@ -48,7 +48,7 @@ jobs:
             - name: Setup Rust
               uses: dtolnay/rust-toolchain@stable
               with:
-                  targets: aarch64-linux-android,armv7-linux-androideabi,x86_64-linux-android
+                  targets: aarch64-linux-android
 
             - name: Rust cache
               uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
@@ -64,6 +64,12 @@ jobs:
             - name: Generate FRB bindings
               working-directory: rust
               run: cargo codegen frb photos
+
+            - name: Reclaim codegen build disk
+              # The host (x86_64) debug build of the codegen tool is ~2.5GB
+              # and is dead weight once bindings are generated; cargokit needs
+              # the space for the aarch64 cross-compile.
+              run: rm -rf rust/target
 
             - name: Build debug APK (independent flavor)
               working-directory: mobile/apps/photos
