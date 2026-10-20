@@ -26,6 +26,8 @@ const windowLoaded = new Promise((resolve) => {
 
 const appVersion = () => ipcRenderer.invoke("appVersion");
 
+const localAPIOrigin = (): Promise<string> => ipcRenderer.invoke("localAPIOrigin");
+
 const logToDisk = (message: string): void =>
     ipcRenderer.send("logToDisk", message);
 
@@ -261,6 +263,7 @@ const clearPendingUploads = () => ipcRenderer.invoke("clearPendingUploads");
 // contextBridge copies ArrayBuffers between processes; use stream:// for large data.
 contextBridge.exposeInMainWorld("electron", {
     appVersion,
+    localAPIOrigin,
     logToDisk,
     openDirectory,
     openLogDirectory,

@@ -53,6 +53,8 @@ import {
 import { useIsOffline } from "@/components/utils/use-is-offline";
 import { shouldShowWhatsNew } from "@/services/changelog";
 import exportService from "@/services/export";
+import { uploadManager } from "@/services/upload-manager";
+import { Upload } from "@/components/Upload";
 import {
     albumFilters,
     visibleAlbumFilters,
@@ -111,7 +113,17 @@ import {
     isMLEnabled,
 } from "ente-new/photos/services/ml";
 import { ensureAuthenticatedSession } from "@/services/authenticated-session";
+import {
+    postPullFiles,
+    prePullFiles,
+    pullFiles,
+} from "@/services/pull";
 import watcher from "@/services/watch";
+import { TranslucentLoadingOverlay } from "ente-base/components/loaders";
+import { FullScreenDropZone } from "ente-gallery/components/FullScreenDropZone";
+import type { UploadTypeSelectorIntent } from "ente-gallery/components/Upload";
+import { haveOnlySystemCollections } from "ente-new/photos/services/collection-summary";
+import type { FileWithPath } from "react-dropzone";
 import {
     selectedFavoriteCount as countSelectedFavorites,
     getSelectedFiles,
@@ -145,7 +157,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const Page: React.FC = () => {
     const { logout, showMiniDialog, onGenericError } = useBaseContext();
-    const { showLoadingBar, hideLoadingBar, showNotification } =
+    const { showLoadingBar, hideLoadingBar, showNotification, watchFolderView } =
         usePhotosAppContext();
 
     const isOffline = useIsOffline();
@@ -157,6 +169,14 @@ const Page: React.FC = () => {
     const isCleanupViewOpen = cleanupView !== undefined;
     const [isFirstLoad, setIsFirstLoad] = useState(false);
     const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
+    const [blockingLoad, setBlockingLoad] = useState(false);
+    const [shouldDisableDropzone, setShouldDisableDropzone] = useState(false);
+    const [dragAndDropFiles, setDragAndDropFiles] = useState<FileWithPath[]>(
+        [],
+    );
+    const [uploadTypeSelectorView, setUploadTypeSelectorView] = useState(false);
+    const [uploadTypeSelectorIntent, setUploadTypeSelectorIntent] =
+        useState<UploadTypeSelectorIntent>("upload");
     const [suppressContextSelectionBar, setSuppressContextSelectionBar] =
         useState(false);
     const [selected, setSelected] = useState<SelectedState>({
@@ -480,6 +500,7 @@ const Page: React.FC = () => {
     useEffect(() => {
         const electron = globalThis.electron;
         let unsubscribeMainWindowFocus: (() => void) | undefined;
+        let syncIntervalID: ReturnType<typeof setInterval> | undefined;
 
         void (async () => {
             const authToken = await savedAuthToken();
@@ -517,8 +538,18 @@ const Page: React.FC = () => {
 
             setIsFirstLoad(false);
 
+            // Sync with the local backend (the app's "remote").
+            await remotePull({ source: "gallery-mount" });
+
+            const syncInterval = setInterval(
+                () => remotePull({ silent: true, source: "gallery-periodic" }),
+                5 * 60 * 1000,
+            );
+            syncIntervalID = syncInterval;
+
             if (electron) {
                 unsubscribeMainWindowFocus = subscribeMainWindowFocus(() => {
+                    void remotePull({ silent: true, source: "desktop-focus" });
                     void watcher.checkAccessibility();
                 });
                 if (await shouldShowWhatsNew(electron)) showWhatsNew();
@@ -526,6 +557,7 @@ const Page: React.FC = () => {
         })();
 
         return () => {
+            if (syncIntervalID) clearInterval(syncIntervalID);
             unsubscribeMainWindowFocus?.();
         };
     }, []);
@@ -716,24 +748,24 @@ const Page: React.FC = () => {
         setPendingFileNavigation(undefined);
     }, []);
 
-    // Local-only state refresh; remote sync is disabled in the offline vault.
-    // TODO(protocol): replace with a local file import + protocol upload flow.
+    // Pull the canonical state from the local backend server into the fdb and
+    // dispatch the refreshed state into the gallery.
     const remoteFilesPull = useCallback(
         () =>
             remoteFilesPullQueue.current.add(async () => {
-                dispatch({
-                    type: "setCollections",
-                    collections: await savedCollections(),
+                await pullFiles({
+                    onSetCollections: (collections) =>
+                        dispatch({ type: "setCollections", collections }),
+                    onSetCollectionFiles: (collectionFiles) =>
+                        dispatch({
+                            type: "setCollectionFiles",
+                            collectionFiles,
+                        }),
+                    onSetTrashedItems: (trashItems) =>
+                        dispatch({ type: "setTrashItems", trashItems }),
+                    onDidUpdateCollectionFiles: () =>
+                        exportService.onLocalFilesUpdated(),
                 });
-                dispatch({
-                    type: "setCollectionFiles",
-                    collectionFiles: await savedCollectionFiles(),
-                });
-                dispatch({
-                    type: "setTrashItems",
-                    trashItems: await savedTrashItems(),
-                });
-                exportService.onLocalFilesUpdated();
             }),
         [],
     );
@@ -741,7 +773,7 @@ const Page: React.FC = () => {
     const remotePull = useCallback(
         async (opts?: RemotePullOpts) =>
             remotePullQueue.current.add(async () => {
-                const { silent, strict } = opts ?? {};
+                const { silent, strict, source } = opts ?? {};
 
                 if (!haveMasterKeyInSession()) {
                     void router.push("/");
@@ -754,7 +786,9 @@ const Page: React.FC = () => {
 
                 try {
                     if (!silent) showLoadingBar();
+                    await prePullFiles();
                     await remoteFilesPull();
+                    await postPullFiles(source);
                 } catch (e) {
                     log.error("Local refresh failed", e);
                     if (strict) throw e;
@@ -1206,6 +1240,17 @@ const Page: React.FC = () => {
             const shouldExitSearchMode = options?.shouldExitSearchMode ?? true;
             dispatch({ type: "exitSearch", shouldExitSearchMode });
         }
+    };
+
+    const showSessionExpiredDialog = useCallback(
+        () => showMiniDialog(sessionExpiredDialogAttributes(logout)),
+        [showMiniDialog, logout],
+    );
+
+    const openUploader = (intent?: UploadTypeSelectorIntent) => {
+        if (uploadManager.isUploadInProgress()) return;
+        setUploadTypeSelectorView(true);
+        setUploadTypeSelectorIntent(intent ?? "upload");
     };
 
     const handleShowCollectionSummaryWithID = useCallback(
@@ -1707,7 +1752,14 @@ const Page: React.FC = () => {
     const showNormalNavigation = !showSelectionBar;
 
     return (
-        <>
+        <FullScreenDropZone
+            message={
+                watchFolderView ? t("watch_folder_dropzone_hint") : undefined
+            }
+            disabled={shouldDisableDropzone || !!slideshow || isCleanupViewOpen}
+            onDrop={setDragAndDropFiles}
+        >
+            {blockingLoad && <TranslucentLoadingOverlay />}
             <CollectionSelector
                 open={openCollectionSelector}
                 onClose={handleCloseCollectionSelector}
@@ -1741,6 +1793,7 @@ const Page: React.FC = () => {
                 mode={barMode}
                 onChangeMode={handleChangeBarMode}
                 onSidebar={showSidebar}
+                onUpload={openUploader}
                 onHome={() =>
                     handleShowCollectionSummaryWithID(PseudoCollectionID.all)
                 }
@@ -1842,7 +1895,10 @@ const Page: React.FC = () => {
                   !isFirstLoad &&
                   !state.collectionFiles.length &&
                   activeCollectionID === PseudoCollectionID.all ? (
-                    <GalleryEmptyState />
+                    <GalleryEmptyState
+                        isUploadInProgress={uploadManager.isUploadInProgress()}
+                        onUpload={openUploader}
+                    />
                 ) : !isInSearchMode && !isFirstLoad && isAlbumOverview ? (
                     <AlbumsOverview
                         onRemotePull={remotePull}
@@ -1933,6 +1989,31 @@ const Page: React.FC = () => {
                     />
                 )}
             </PhotosNavigationShell>
+            <Upload
+                {...{
+                    user,
+                    dragAndDropFiles,
+                    uploadTypeSelectorIntent,
+                    uploadTypeSelectorView,
+                }}
+                isFirstUpload={haveOnlySystemCollections(
+                    normalCollectionSummaries,
+                )}
+                activeCollection={activeCollection}
+                closeUploadTypeSelector={setUploadTypeSelectorView.bind(
+                    null,
+                    false,
+                )}
+                setLoading={setBlockingLoad}
+                setShouldDisableDropzone={setShouldDisableDropzone}
+                onRemotePull={remotePull}
+                onRemoteFilesPull={remoteFilesPull}
+                onOpenCollectionSelector={handleOpenCollectionSelector}
+                onCloseCollectionSelector={handleCloseCollectionSelector}
+                onUploadFile={(file) => dispatch({ type: "uploadFile", file })}
+                onShowSessionExpiredDialog={showSessionExpiredDialog}
+                isInHiddenSection={barMode == "hidden-albums"}
+            />
             <Sidebar
                 {...sidebarVisibilityProps}
                 onClose={handleSidebarClose}
@@ -2030,7 +2111,7 @@ const Page: React.FC = () => {
                 files={selectedFilesInView}
                 onConfirm={handleEditLocationConfirm}
             />
-        </>
+        </FullScreenDropZone>
     );
 };
 

@@ -7,6 +7,7 @@ import {
     Album02Icon,
     Home01Icon,
     Settings01Icon,
+    Upload01Icon,
     UserGroupIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -18,9 +19,11 @@ import {
     useMediaQuery,
     useTheme,
 } from "@mui/material";
+import { uploadManager } from "@/services/upload-manager";
 import { PhotosWordmark, PhotosWordmarkBox } from "ente-base/components/PhotosWordmark";
 import type { ButtonishProps } from "ente-base/components/mui";
 import { FocusVisibleButton } from "ente-base/components/mui/FocusVisibleButton";
+import { useIsSmallWidth } from "ente-base/components/utils/hooks";
 import { NavbarBase } from "ente-base/components/Navbar";
 import { useModalVisibility } from "ente-base/components/utils/modal";
 import { ut } from "ente-base/i18n";
@@ -36,6 +39,7 @@ import type { GalleryBarMode } from "./reducer";
 type PhotosNavigationShellProps = SearchBarProps & {
     onSidebar: () => void;
     onHome: () => void;
+    onUpload: () => void;
     mode: GalleryBarMode;
     onChangeMode: (mode: GalleryBarMode) => boolean;
 };
@@ -238,10 +242,9 @@ export const PhotosNavigationShell: React.FC<
     );
 };
 
-const NormalHeaderContents: React.FC<{
-    railOpen: boolean;
-    toggleRail: () => void;
-}> = ({ railOpen, toggleRail }) => {
+const NormalHeaderContents: React.FC<
+    PhotosNavigationShellProps & { railOpen: boolean; toggleRail: () => void }
+> = ({ onUpload, railOpen, toggleRail }) => {
     return (
         <Box
             sx={{
@@ -297,6 +300,7 @@ const NormalHeaderContents: React.FC<{
                 <PhotosWordmark height={15} />
             </PhotosWordmarkBox>
             <Box sx={{ flex: 1 }} />
+            <UploadButton onClick={onUpload} />
         </Box>
     );
 };
@@ -401,6 +405,58 @@ const NormalNavigationRail: React.FC<
         </Tooltip>
     </>
 );
+
+const UploadButton: React.FC<ButtonishProps> = ({ onClick }) => {
+    const disabled = uploadManager.isUploadInProgress();
+    const isSmallWidth = useIsSmallWidth();
+
+    const icon = (
+        <HugeiconsIcon icon={Upload01Icon} size={20} strokeWidth={1.8} />
+    );
+
+    return (
+        <>
+            {isSmallWidth ? (
+                <FocusVisibleButton
+                    color="secondary"
+                    aria-label={t("upload")}
+                    sx={{
+                        minWidth: 0,
+                        width: 38,
+                        height: 38,
+                        p: 0,
+                        borderRadius: "12px",
+                    }}
+                    {...{ onClick, disabled }}
+                >
+                    {icon}
+                </FocusVisibleButton>
+            ) : (
+                <FocusVisibleButton
+                    color="secondary"
+                    startIcon={icon}
+                    sx={{
+                        minWidth: "140px",
+                        flexShrink: 0,
+                        whiteSpace: "nowrap",
+                        height: "52px",
+                        p: "18px 24px",
+                        borderRadius: "20px",
+                        border: 0,
+                        fontSize: "14px",
+                        fontWeight: 600,
+                        lineHeight: "20px",
+                        gap: "8px",
+                        "& .MuiButton-startIcon": { m: 0 },
+                    }}
+                    {...{ onClick, disabled }}
+                >
+                    {t("upload")}
+                </FocusVisibleButton>
+            )}
+        </>
+    );
+};
 
 const HomeButton: React.FC<ButtonishProps & { selected: boolean }> = ({
     onClick,

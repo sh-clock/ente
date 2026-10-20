@@ -5,7 +5,6 @@ import {
 } from "ente-base/file-download";
 import {
     authenticatedPublicAlbumsRequestHeaders,
-    authenticatedRequestHeaders,
     retryEnsuringHTTPOk,
     type PublicAlbumsCredentials,
 } from "ente-base/http";
@@ -128,43 +127,17 @@ class DownloadManager {
 export const downloadManager = new DownloadManager();
 
 const photos_downloadThumbnail = async (file: EnteFile) => {
-    const customOrigin = await customAPIOrigin();
-
-    const getThumbnail = async () => {
-        if (customOrigin) {
-            return fetchFile(file.id, "thumbnail");
-        } else {
-            return fetch(`https://thumbnails.ente.com/?fileID=${file.id}`, {
-                headers: await authenticatedRequestHeaders(),
-            });
-        }
-    };
-
-    const res = await retryEnsuringHTTPOk(getThumbnail);
+    // The local vault backend serves thumbnails via the API.
+    const res = await retryEnsuringHTTPOk(() => fetchFile(file.id, "thumbnail"));
     return new Uint8Array(await res.arrayBuffer());
 };
 
 const photos_downloadFile = async (
     file: EnteFile,
-    opts?: FileDownloadOpts,
+    _opts?: FileDownloadOpts,
 ): Promise<Response> => {
-    const { background } = opts ?? {};
-
-    const customOrigin = await customAPIOrigin();
-
-    // Custom origins and background jobs fetch directly.
-    // Interactive Ente downloads use the lower-latency proxy.
-    const getFile = async () => {
-        if (customOrigin || background) {
-            return fetchFile(file.id, "file");
-        } else {
-            return fetch(`https://files.ente.com/?fileID=${file.id}`, {
-                headers: await authenticatedRequestHeaders(),
-            });
-        }
-    };
-
-    return retryEnsuringHTTPOk(getFile);
+    // The local vault backend serves files via the API (Range-capable).
+    return retryEnsuringHTTPOk(() => fetchFile(file.id, "file"));
 };
 
 const publicAlbums_downloadThumbnail = async (

@@ -23,6 +23,10 @@ import { createApplicationMenu, createTrayContextMenu } from "./main/menu";
 import autoLauncher from "./main/services/auto-launcher";
 import { shouldHideDockIcon } from "./main/services/store";
 import { createWatcher } from "./main/services/watch";
+import {
+    localBackendOrigin,
+    startLocalBackendIfNeeded,
+} from "./main/services/local-backend";
 import { userPreferences } from "./main/stores/user-preferences";
 import { registerStreamProtocol } from "./main/stream";
 import { wait } from "./main/utils/common";
@@ -79,6 +83,11 @@ const main = () => {
 
         void (async () => {
             if (isDev) await waitForRendererDevServer();
+
+            // The local vault backend must be up before the renderer loads.
+            await startLocalBackendIfNeeded(app.getPath("userData"), (
+                ...args: unknown[]
+            ) => log.info(...(args as [unknown, ...unknown[]])));
 
             mainWindow = createMainWindow();
 

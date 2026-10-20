@@ -25,6 +25,10 @@ import {
 } from "./services/dir";
 import { ffmpegDetermineVideoDuration, ffmpegExec } from "./services/ffmpeg";
 import {
+    defaultLocalBackendPort,
+    localBackendOrigin,
+} from "./services/local-backend";
+import {
     fsExists,
     fsFindFiles,
     fsIsDir,
@@ -131,6 +135,9 @@ const on = <A extends unknown[]>(
 
 export const attachIPCHandlers = () => {
     handle("appVersion", () => appVersion());
+
+    handle("localAPIOrigin", () =>
+        localBackendOrigin() ?? `http://127.0.0.1:${defaultLocalBackendPort}`);
 
     handle("openDirectory", (_, dirPath: string) => openDirectory(dirPath));
 

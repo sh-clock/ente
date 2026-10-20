@@ -1,9 +1,23 @@
 import { getKVS } from "ente-base/kv";
 import { buildEnvCustomAPIEndpoint } from "./env";
 
+/**
+ * The app's "API origin" is a loopback server embedded in the desktop app
+ * (or running standalone next to a web build). It serves the museum-compatible
+ * API that backs the local vault, so the app works fully offline.
+ */
+const defaultLocalAPIOrigin = "http://127.0.0.1:41119";
+
+export const localAPIOrigin = async (): Promise<string> => {
+    try {
+        return (await globalThis.electron?.localAPIOrigin?.()) ?? defaultLocalAPIOrigin;
+    } catch {
+        return defaultLocalAPIOrigin;
+    }
+};
+
 export const apiOrigin = async () =>
-    // Offline app: the API origin is never contacted; placeholder only.
-    (await customAPIOrigin()) ?? "http://127.0.0.1:1";
+    (await customAPIOrigin()) ?? (await localAPIOrigin());
 
 // path must begin with "/".
 export const apiURL = async (
@@ -32,6 +46,6 @@ export const customAPIHost = async () => {
     return origin ? new URL(origin).host : undefined;
 };
 
-// Custom deployments bypass Photos uploader worker.
+// The local backend also proxies large binary uploads for the renderer.
 export const uploaderOrigin = async () =>
-    (await customAPIOrigin()) ?? "http://127.0.0.1:1";
+    (await customAPIOrigin()) ?? (await localAPIOrigin());

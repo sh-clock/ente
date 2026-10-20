@@ -23,6 +23,7 @@ export interface PersistedAppLockConfig {
 
 export interface Electron {
     appVersion: () => Promise<string>;
+    localAPIOrigin: () => Promise<string>;
     logToDisk: (message: string) => void;
     openDirectory: (dirPath: string) => Promise<void>;
     openLogDirectory: () => Promise<void>;

@@ -1,13 +1,29 @@
+import { ImageAdd02Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import FileDownloadIcon from "@mui/icons-material/FileDownloadOutlined";
 import { Paper, Stack, styled, Typography } from "@mui/material";
 import { PhotosWordmark } from "ente-base/components/PhotosWordmark";
+import { LoadingButton } from "ente-base/components/mui/LoadingButton";
 import { t } from "i18next";
 import React from "react";
 import { Trans } from "react-i18next";
+import type { UploadTypeSelectorIntent } from "ente-gallery/components/Upload";
+
+interface GalleryEmptyStateProps {
+    isUploadInProgress: boolean;
+    onUpload: (intent: UploadTypeSelectorIntent) => void;
+}
 
 const galleryEmptyStateShelfTiles = Array.from({ length: 20 }, (_, i) => i);
 const galleryEmptyStateGridTiles = Array.from({ length: 56 }, (_, i) => i);
 
-export function GalleryEmptyState(): React.JSX.Element {
+export function GalleryEmptyState({
+    isUploadInProgress,
+    onUpload,
+}: GalleryEmptyStateProps): React.JSX.Element {
+    const handleImport = () => onUpload("import");
+    const handleUpload = () => onUpload("upload");
+
     return (
         <Stack
             sx={{
@@ -104,6 +120,31 @@ export function GalleryEmptyState(): React.JSX.Element {
                         {t("gallery_empty_state_subtitle")}
                     </Typography>
                 </Stack>
+
+                <Stack sx={{ mt: "40px", width: 334, maxWidth: "100%", gap: 1 }}>
+                    <GalleryEmptyStateButton
+                        color="accent"
+                        onClick={handleImport}
+                        disabled={isUploadInProgress}
+                        startIcon={<FileDownloadIcon />}
+                    >
+                        {t("upload_existing_library")}
+                    </GalleryEmptyStateButton>
+                    <GalleryEmptyStateButton
+                        color="secondary"
+                        onClick={handleUpload}
+                        disabled={isUploadInProgress}
+                        startIcon={
+                            <HugeiconsIcon
+                                icon={ImageAdd02Icon}
+                                size={20}
+                                strokeWidth={2}
+                            />
+                        }
+                    >
+                        {t("upload_first_photo")}
+                    </GalleryEmptyStateButton>
+                </Stack>
             </Paper>
         </Stack>
     );
@@ -192,7 +233,7 @@ const GalleryEmptyStateSkeletonRoot = styled("div")(({ theme }) => {
             display: "grid",
             flex: 1,
             gridTemplateColumns: "repeat(auto-fill, minmax(198px, 1fr))",
-            gridAutoRows: "minmax(160px, 1fr)",
+            gridAutoRows: "minmax(160px, 1fr))",
             gap: 4,
             marginTop: 11,
             minHeight: 0,
@@ -224,6 +265,16 @@ const GalleryEmptyStateSkeletonOverlay = styled("div")(({ theme }) => ({
     pointerEvents: "none",
     opacity: 0.6,
     background: theme.vars.palette.background.default,
+}));
+
+const GalleryEmptyStateButton = styled(LoadingButton)(({ theme }) => ({
+    height: 48,
+    borderRadius: 12,
+    fontSize: 15,
+    fontWeight: 500,
+    boxShadow: "none",
+    "&:hover": { boxShadow: "none" },
+    "&.Mui-disabled": { bgcolor: theme.vars.palette.fill.faint },
 }));
 
 // Draggable images trigger the upload overlay.
