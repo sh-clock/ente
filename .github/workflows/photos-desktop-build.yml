@@ -2,15 +2,6 @@ name: "Build (Photos Desktop)"
 
 on:
     workflow_dispatch:
-    push:
-        branches:
-            - main
-            - "surgery/**"
-        paths:
-            - desktop/**
-            - web/**
-            - rust/**
-            - .github/workflows/photos-desktop-build.yml
 
 concurrency:
     group: photos-desktop-build-${{ github.ref }}

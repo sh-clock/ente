@@ -2,13 +2,6 @@ name: "Build (Photos Android)"
 
 on:
     workflow_dispatch:
-    push:
-        branches:
-            - main
-            - "surgery/**"
-        paths:
-            - mobile/**
-            - rust/**
 
 concurrency:
     group: photos-android-build-${{ github.ref }}
