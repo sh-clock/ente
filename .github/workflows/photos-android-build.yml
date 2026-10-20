@@ -1,0 +1,75 @@
+name: "Build (Photos Android)"
+
+on:
+    workflow_dispatch:
+    push:
+        branches:
+            - main
+            - "surgery/**"
+        paths:
+            - mobile/**
+            - rust/**
+            - .github/workflows/photos-android-build.yml
+
+concurrency:
+    group: photos-android-build-${{ github.ref }}
+    cancel-in-progress: true
+
+permissions:
+    contents: read
+
+jobs:
+    debug-apk:
+        runs-on: ubuntu-latest
+        timeout-minutes: 90
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+            - name: Free disk space
+              run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android
+
+            - name: Setup Java
+              uses: actions/setup-java@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+              with:
+                  distribution: temurin
+                  java-version: 17
+
+            - name: Setup Flutter
+              uses: ./.github/actions/setup-flutter
+
+            - name: Setup Rust
+              uses: dtolnay/rust-toolchain@stable
+              with:
+                  targets: aarch64-linux-android,armv7-linux-androideabi,x86_64-linux-android
+
+            - name: Rust cache
+              uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+              with:
+                  workspaces: rust
+                  shared-key: photos-android
+
+            - name: Generate FRB bindings
+              working-directory: rust
+              run: cargo codegen frb photos
+
+            - name: Pub get
+              working-directory: mobile/apps/photos
+              run: flutter pub get --enforce-lockfile
+
+            - name: Build debug APK (independent flavor)
+              working-directory: mobile/apps/photos
+              run: |
+                  flutter build apk \
+                      --flavor independent \
+                      --debug \
+                      --target-platform android-arm64
+
+            - name: Upload artifact
+              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+              with:
+                  name: photos-android-debug-apk
+                  path: mobile/apps/photos/build/app/outputs/flutter-apk/app-independent-debug.apk
+                  if-no-files-found: error
+                  retention-days: 14
