@@ -26,6 +26,7 @@ import "package:package_info_plus/package_info_plus.dart";
 import 'package:path_provider/path_provider.dart';
 import 'package:photos/app.dart';
 import 'package:photos/core/configuration.dart';
+import 'package:photos/core/constants.dart';
 import 'package:photos/core/error-reporting/super_logging.dart';
 import 'package:photos/core/errors.dart';
 import 'package:photos/core/network/network.dart';
@@ -435,7 +436,7 @@ Future<void> _init(
       if (!initComplete && !isBackground) {
         _logger.severe("Stuck on splash screen for >= 15 seconds");
         triggerSendLogs(
-          "support@ente.com",
+          supportEmail,
           "Stuck on splash screen for >= 15 seconds on ${Platform.operatingSystem}",
           null,
         );

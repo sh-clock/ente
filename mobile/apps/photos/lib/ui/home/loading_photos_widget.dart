@@ -262,7 +262,7 @@ class _LoadingPhotosWidgetState extends State<LoadingPhotosWidget> {
                                 await sendLogs(
                                   context,
                                   context.strings.contactSupport,
-                                  "support@ente.com",
+                                  supportEmail,
                                   postShare: () {},
                                 );
                               },
