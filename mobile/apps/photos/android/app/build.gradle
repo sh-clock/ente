@@ -123,8 +123,9 @@ android {
           applicationIdSuffix '.debug'
           versionNameSuffix "-debug"
           ndk {
-            // Real devices (arm64) as well as emulators (x86_64).
-            abiFilters "arm64-v8a", "x86_64"
+            // Real devices only; emulators would double the cargokit rust
+            // cross-compile and overflow CI runner disk.
+            abiFilters "arm64-v8a"
           }
           externalNativeBuild {
             cmake {
