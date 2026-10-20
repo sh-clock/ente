@@ -67,7 +67,7 @@ jobs:
             - name: Install desktop dependencies
               run: npm ci
 
-            - name: Postinstall (native binaries: ort/vips/ffmpeg)
+            - name: "Postinstall (native binaries: ort/vips/ffmpeg)"
               run: npm run postinstall
 
             - name: Build (renderer + main + napi)
