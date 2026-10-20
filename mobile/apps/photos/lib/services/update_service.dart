@@ -144,7 +144,7 @@ class UpdateService {
       return false;
     }
     if (!kDebugMode &&
-        _packageInfo.packageName != "io.ente.photos.independent") {
+        _packageInfo.packageName != "com.shclock.photos.independent") {
       return false;
     }
     return true;
@@ -154,14 +154,14 @@ class UpdateService {
     if (Platform.isIOS) {
       return false;
     }
-    return _packageInfo.packageName.startsWith("io.ente.photos.fdroid");
+    return _packageInfo.packageName.startsWith("com.shclock.photos.fdroid");
   }
 
   bool isIndependentFlavor() {
     if (Platform.isIOS) {
       return false;
     }
-    return _packageInfo.packageName.startsWith("io.ente.photos.independent");
+    return _packageInfo.packageName.startsWith("com.shclock.photos.independent");
   }
 
   bool isPlayStoreFlavor() {

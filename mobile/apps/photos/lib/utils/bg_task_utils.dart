@@ -135,10 +135,10 @@ class BgTaskUtils {
       "io.ente.frame.iOSBackgroundAppRefresh";
   static const iOSBackgroundProcessingTask =
       "io.ente.frame.iOSBackgroundProcessing";
-  static const androidPeriodicTask = "io.ente.photos.androidPeriodicTask";
-  static const androidPushRefreshTask = "io.ente.photos.androidPushRefresh";
+  static const androidPeriodicTask = "com.shclock.photos.androidPeriodicTask";
+  static const androidPushRefreshTask = "com.shclock.photos.androidPushRefresh";
   static const androidBackgroundProcessingTask =
-      "io.ente.photos.androidBackgroundProcessing";
+      "com.shclock.photos.androidBackgroundProcessing";
 
   static bool allowsImageIndexing(String taskName) =>
       isRefreshTask(taskName) ||
