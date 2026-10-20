@@ -93,7 +93,7 @@ const parsePersistedAppLockConfig = (
     return { enabled, lockType, autoLockTimeMs };
 };
 
-const rendererOrigin = "ente://app";
+const rendererOrigin = "photos://app";
 
 // The preload bridge remains exposed while the window visits Stripe, so every
 // privileged handler must verify that its caller is our renderer.

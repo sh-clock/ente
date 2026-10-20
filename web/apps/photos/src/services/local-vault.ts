@@ -15,6 +15,7 @@ import {
 import { encryptBox, generateKey, generateKeyPair } from "ente-accounts/services/crypto";
 import type { KeyAttributes } from "ente-accounts/services/user";
 import { isDesktop } from "ente-base/app";
+import log from "ente-base/log";
 import { haveMasterKeyInSession } from "ente-base/session-storage";
 import { saveAuthToken } from "ente-base/token";
 import localforage from "localforage";
@@ -78,26 +79,32 @@ const generateVaultKeyAttributes = async (
  * render the gallery - entirely offline.
  */
 export const ensureLocalVault = async () => {
-    let user = savedLocalUser();
-    if (!user || !savedKeyAttributes()) {
-        // First run: generate the vault.
-        const masterKey = await generateKey();
-        const keyAttributes = await generateVaultKeyAttributes(masterKey);
-        replaceSavedLocalUser({
-            id: LOCAL_VAULT_USER_ID,
-            email: LOCAL_VAULT_EMAIL,
-        });
-        saveKeyAttributes(keyAttributes);
-        saveAuthToken(`local-vault-${crypto.randomUUID()}`);
-        await saveMasterKeyLocally(masterKey);
-        await saveMasterKeyInSessionAndSafeStore(masterKey);
-        return;
+    const user = savedLocalUser();
+    if (user && savedKeyAttributes()) {
+        // Existing vault: restore the master key into this session.
+        await updateSessionFromElectronSafeStorageIfNeeded();
+        if (!haveMasterKeyInSession()) {
+            const masterKey = await readMasterKeyLocally();
+            if (masterKey) await saveMasterKeyInSessionAndSafeStore(masterKey);
+        }
+        if (haveMasterKeyInSession()) return;
+        // The vault exists but its master key is unrecoverable (e.g. OS
+        // safeStorage was unavailable when it was created). A vault without
+        // its key is unusable, so regenerate it from scratch.
+        log.warn("Local vault master key unrecoverable; regenerating vault");
     }
 
-    // Existing vault: restore the master key into this session.
-    await updateSessionFromElectronSafeStorageIfNeeded();
-    if (!haveMasterKeyInSession()) {
-        const masterKey = await readMasterKeyLocally();
-        if (masterKey) await saveMasterKeyInSessionAndSafeStore(masterKey);
-    }
+    // First run (or regeneration): create the vault.
+    const masterKey = await generateKey();
+    const keyAttributes = await generateVaultKeyAttributes(masterKey);
+    const token = `local-vault-${crypto.randomUUID()}`;
+    replaceSavedLocalUser({
+        id: LOCAL_VAULT_USER_ID,
+        email: LOCAL_VAULT_EMAIL,
+        token,
+    });
+    saveKeyAttributes(keyAttributes);
+    saveAuthToken(token);
+    await saveMasterKeyLocally(masterKey);
+    await saveMasterKeyInSessionAndSafeStore(masterKey);
 };

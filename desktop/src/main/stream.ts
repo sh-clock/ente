@@ -27,7 +27,7 @@ export const registerStreamProtocol = (mainWindow: BrowserWindow) => {
     });
 };
 
-const rendererOrigin = "ente://app";
+const rendererOrigin = "photos://app";
 
 const handleStreamRequest = async (
     mainWindow: BrowserWindow,
