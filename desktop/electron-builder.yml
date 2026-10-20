@@ -1,4 +1,4 @@
-appId: io.ente.bhari-frame
+appId: com.shclock.photos
 artifactName: ${productName}-${version}-${arch}.${ext}
 files:
     - app/**/*
@@ -10,20 +10,12 @@ extraFiles:
 beforeBuild: scripts/beforeBuild.js
 beforePack: scripts/beforePack.js
 protocols:
-    - name: Ente
-      schemes: ["ente"]
+    - name: Photos
+      schemes: ["photos"]
 win:
     target:
-        - target: nsis
-          arch: [x64, arm64]
-    azureSignOptions:
-        publisherName: ENTE TECHNOLOGIES, INC.
-        endpoint: https://eus.codesigning.azure.net/
-        certificateProfileName: EnteTrustCertProfile
-        codeSigningAccountName: EnteTechnologiesInc
-    signExts: [".dll", ".node"]
-nsis:
-    deleteAppDataOnUninstall: true
+        - target: zip
+          arch: [x64]
 linux:
     target:
         - target: AppImage
@@ -35,7 +27,7 @@ linux:
         - target: pacman
           arch: [x64, arm64]
     category: Photography
-    icon: ./build/icon.icns
+    icon: ./build/icon.png
 # Remove this override when upgrading electron-builder to 27.0.0.
 pacman:
     depends:
@@ -52,14 +44,3 @@ pacman:
         - snappy
         - libnotify
         - libappindicator-gtk3
-mac:
-    minimumSystemVersion: "13.3"
-    target:
-        target: default
-        arch: [universal]
-    category: public.app-category.photography
-    hardenedRuntime: true
-    mergeASARs: false
-    # Both macOS build passes contain separate x64 and arm64 binaries. Copy them
-    # into the universal app unchanged; the app selects one at runtime.
-    x64ArchFiles: "**/{napi,onnxruntime}/**"

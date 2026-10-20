@@ -128,7 +128,7 @@ EnteWakeLockService get wakeLockService =>
 MlDecryptionRecordStore get mlDecryptionRecordStore =>
     ServiceLocator.instance.mlDecryptionRecordStore;
 
-// True when showing local-device photos instead of an Ente account. Network
+// True when showing local-device photos instead of an Photos account. Network
 // access may still be used.
 bool get isLocalGalleryMode => localSettings.isLocalGalleryMode;
 

@@ -467,7 +467,7 @@ class _LibrarySharingPageState extends State<LibrarySharingPage> {
 }
 
 // Positions the 250px empty state group at the reference screen's y=287.
-// Source: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Ente-Visual-Design?node-id=17186-38829&m=dev
+// Source: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Photos-Visual-Design?node-id=17186-38829&m=dev
 const double _fullLibraryEmptyStateTopPadding = 131;
 
 // Prevents the final grid row from jumping under the sheet before measurement.

@@ -85,12 +85,12 @@ class ChangeLogStrings {
         ChangeLogEntryStrings(
           title: 'Faster backup preparation',
           description:
-              'Ente now prepares your photos and videos for upload more quickly.',
+              'Photos now prepares your photos and videos for upload more quickly.',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: 'Now in Korean',
-          description: 'You can now use Ente Photos in Korean.',
+          description: 'You can now use Photos in Korean.',
         ),
         ChangeLogEntryStrings(
           title: 'And more!',
@@ -132,12 +132,12 @@ class ChangeLogStrings {
         ChangeLogEntryStrings(
           title: 'Preparació més ràpida de les còpies de seguretat',
           description:
-              'Ara Ente prepara les fotos i els vídeos més ràpidament per pujar-los.',
+              'Ara Photos prepara les fotos i els vídeos més ràpidament per pujar-los.',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: 'Ara en coreà',
-          description: 'Ara pots fer servir Ente Photos en coreà.',
+          description: 'Ara pots fer servir Photos en coreà.',
         ),
         ChangeLogEntryStrings(
           title: 'I més coses!',
@@ -179,12 +179,12 @@ class ChangeLogStrings {
         ChangeLogEntryStrings(
           title: 'Rychlejší příprava zálohování',
           description:
-              'Ente nyní rychleji připravuje vaše fotografie a videa k nahrání.',
+              'Photos nyní rychleji připravuje vaše fotografie a videa k nahrání.',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: 'Nyní i v korejštině',
-          description: 'Ente Photos nyní můžete používat v korejštině.',
+          description: 'Photos nyní můžete používat v korejštině.',
         ),
         ChangeLogEntryStrings(
           title: 'A mnohem více!',
@@ -226,12 +226,12 @@ class ChangeLogStrings {
         ChangeLogEntryStrings(
           title: 'Schnellere Vorbereitung der Datensicherung',
           description:
-              'Ente bereitet deine Fotos und Videos jetzt schneller für das Hochladen vor.',
+              'Photos bereitet deine Fotos und Videos jetzt schneller für das Hochladen vor.',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: 'Jetzt auf Koreanisch',
-          description: 'Du kannst Ente Photos jetzt auf Koreanisch nutzen.',
+          description: 'Du kannst Photos jetzt auf Koreanisch nutzen.',
         ),
         ChangeLogEntryStrings(
           title: 'Und mehr!',
@@ -273,12 +273,12 @@ class ChangeLogStrings {
         ChangeLogEntryStrings(
           title: 'Preparación más rápida de las copias de seguridad',
           description:
-              'Ahora Ente prepara tus fotos y vídeos más rápido para subirlos.',
+              'Ahora Photos prepara tus fotos y vídeos más rápido para subirlos.',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: 'Ahora en coreano',
-          description: 'Ahora puedes usar Ente Photos en coreano.',
+          description: 'Ahora puedes usar Photos en coreano.',
         ),
         ChangeLogEntryStrings(
           title: '¡Y mucho más!',
@@ -320,12 +320,12 @@ class ChangeLogStrings {
         ChangeLogEntryStrings(
           title: 'Préparation des sauvegardes plus rapide',
           description:
-              'Ente prépare désormais plus rapidement vos photos et vidéos pour leur envoi.',
+              'Photos prépare désormais plus rapidement vos photos et vidéos pour leur envoi.',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: 'Désormais en coréen',
-          description: 'Vous pouvez désormais utiliser Ente Photos en coréen.',
+          description: 'Vous pouvez désormais utiliser Photos en coréen.',
         ),
         ChangeLogEntryStrings(
           title: 'Et plus encore !',
@@ -367,12 +367,12 @@ class ChangeLogStrings {
         ChangeLogEntryStrings(
           title: 'Preparazione dei backup più rapida',
           description:
-              'Ora Ente prepara più rapidamente le tue foto e i tuoi video per il caricamento.',
+              'Ora Photos prepara più rapidamente le tue foto e i tuoi video per il caricamento.',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: 'Ora in coreano',
-          description: 'Ora puoi usare Ente Photos in coreano.',
+          description: 'Ora puoi usare Photos in coreano.',
         ),
         ChangeLogEntryStrings(
           title: 'E molto altro!',
@@ -416,7 +416,7 @@ class ChangeLogStrings {
         ),
         ChangeLogEntryStrings(
           title: '韓国語に対応',
-          description: 'Ente Photosを韓国語で使えるようになりました。',
+          description: 'Photosを韓国語で使えるようになりました。',
         ),
         ChangeLogEntryStrings(
           title: 'さらに！',
@@ -459,7 +459,7 @@ class ChangeLogStrings {
         ),
         ChangeLogEntryStrings(
           title: '이제 한국어로도 사용하세요',
-          description: '이제 Ente Photos를 한국어로 사용할 수 있어요.',
+          description: '이제 Photos를 한국어로 사용할 수 있어요.',
         ),
         ChangeLogEntryStrings(
           title: '그 밖에도!',
@@ -501,12 +501,12 @@ class ChangeLogStrings {
         ChangeLogEntryStrings(
           title: 'Snellere voorbereiding van back-ups',
           description:
-              'Ente bereidt je foto’s en video’s nu sneller voor op het uploaden.',
+              'Photos bereidt je foto’s en video’s nu sneller voor op het uploaden.',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: 'Nu in het Koreaans',
-          description: 'Je kunt Ente Photos nu in het Koreaans gebruiken.',
+          description: 'Je kunt Photos nu in het Koreaans gebruiken.',
         ),
         ChangeLogEntryStrings(
           title: 'En meer!',
@@ -548,12 +548,12 @@ class ChangeLogStrings {
         ChangeLogEntryStrings(
           title: 'Raskere klargjøring for sikkerhetskopiering',
           description:
-              'Ente klargjør nå bildene og videoene dine raskere for opplasting.',
+              'Photos klargjør nå bildene og videoene dine raskere for opplasting.',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: 'Nå på koreansk',
-          description: 'Du kan nå bruke Ente Photos på koreansk.',
+          description: 'Du kan nå bruke Photos på koreansk.',
         ),
         ChangeLogEntryStrings(
           title: 'Og mer!',
@@ -595,12 +595,12 @@ class ChangeLogStrings {
         ChangeLogEntryStrings(
           title: 'Szybsze przygotowanie kopii zapasowych',
           description:
-              'Ente teraz szybciej przygotowuje Twoje zdjęcia i filmy do przesłania.',
+              'Photos teraz szybciej przygotowuje Twoje zdjęcia i filmy do przesłania.',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: 'Teraz po koreańsku',
-          description: 'Możesz teraz korzystać z Ente Photos po koreańsku.',
+          description: 'Możesz teraz korzystać z Photos po koreańsku.',
         ),
         ChangeLogEntryStrings(
           title: 'I wiele więcej!',
@@ -642,12 +642,12 @@ class ChangeLogStrings {
         ChangeLogEntryStrings(
           title: 'Preparação mais rápida do backup',
           description:
-              'Agora o Ente prepara suas fotos e vídeos mais rapidamente para o envio.',
+              'Agora o Photos prepara suas fotos e vídeos mais rapidamente para o envio.',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: 'Agora em coreano',
-          description: 'Agora você pode usar o Ente Photos em coreano.',
+          description: 'Agora você pode usar o Photos em coreano.',
         ),
         ChangeLogEntryStrings(
           title: 'E muito mais!',
@@ -689,12 +689,12 @@ class ChangeLogStrings {
         ChangeLogEntryStrings(
           title: 'Preparação mais rápida das cópias de segurança',
           description:
-              'O Ente prepara agora as suas fotografias e vídeos mais rapidamente para o carregamento.',
+              'O Photos prepara agora as suas fotografias e vídeos mais rapidamente para o carregamento.',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: 'Agora em coreano',
-          description: 'Agora pode utilizar o Ente Photos em coreano.',
+          description: 'Agora pode utilizar o Photos em coreano.',
         ),
         ChangeLogEntryStrings(
           title: 'E muito mais!',
@@ -736,12 +736,12 @@ class ChangeLogStrings {
         ChangeLogEntryStrings(
           title: 'Pregătirea mai rapidă a copiilor de rezervă',
           description:
-              'Ente pregătește acum mai rapid fotografiile și videoclipurile tale pentru încărcare.',
+              'Photos pregătește acum mai rapid fotografiile și videoclipurile tale pentru încărcare.',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: 'Acum în coreeană',
-          description: 'Acum poți folosi Ente Photos în coreeană.',
+          description: 'Acum poți folosi Photos în coreeană.',
         ),
         ChangeLogEntryStrings(
           title: 'Și altele!',
@@ -783,13 +783,13 @@ class ChangeLogStrings {
         ChangeLogEntryStrings(
           title: 'Более быстрая подготовка резервного копирования',
           description:
-              'Теперь Ente быстрее подготавливает ваши фотографии и видео к загрузке.',
+              'Теперь Photos быстрее подготавливает ваши фотографии и видео к загрузке.',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: 'Теперь на корейском',
           description:
-              'Теперь Ente Photos можно использовать на корейском языке.',
+              'Теперь Photos можно использовать на корейском языке.',
         ),
         ChangeLogEntryStrings(
           title: 'И многое другое!',
@@ -831,12 +831,12 @@ class ChangeLogStrings {
         ChangeLogEntryStrings(
           title: 'Daha hızlı yedekleme hazırlığı',
           description:
-              'Ente artık fotoğraf ve videolarınızı yüklemeye daha hızlı hazırlıyor.',
+              'Photos artık fotoğraf ve videolarınızı yüklemeye daha hızlı hazırlıyor.',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: 'Artık Korece de var',
-          description: 'Ente Photos’u artık Korece kullanabilirsiniz.',
+          description: 'Photos’u artık Korece kullanabilirsiniz.',
         ),
         ChangeLogEntryStrings(
           title: 'Ve daha fazlası!',
@@ -878,13 +878,13 @@ class ChangeLogStrings {
         ChangeLogEntryStrings(
           title: 'Швидша підготовка резервного копіювання',
           description:
-              'Тепер Ente швидше готує ваші фотографії та відео до завантаження.',
+              'Тепер Photos швидше готує ваші фотографії та відео до завантаження.',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: 'Тепер корейською',
           description:
-              'Тепер Ente Photos можна використовувати корейською мовою.',
+              'Тепер Photos можна використовувати корейською мовою.',
         ),
         ChangeLogEntryStrings(
           title: 'І не тільки!',
@@ -925,13 +925,13 @@ class ChangeLogStrings {
         ChangeLogEntryStrings(
           title: 'Chuẩn bị sao lưu nhanh hơn',
           description:
-              'Ente giờ đây mất ít thời gian hơn để chuẩn bị ảnh và video của bạn cho việc tải lên.',
+              'Photos giờ đây mất ít thời gian hơn để chuẩn bị ảnh và video của bạn cho việc tải lên.',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: 'Đã có tiếng Hàn',
           description:
-              'Giờ đây, bạn có thể sử dụng Ente Photos bằng tiếng Hàn.',
+              'Giờ đây, bạn có thể sử dụng Photos bằng tiếng Hàn.',
         ),
         ChangeLogEntryStrings(
           title: 'Và còn nhiều hơn thế!',
@@ -968,12 +968,12 @@ class ChangeLogStrings {
         ),
         ChangeLogEntryStrings(
           title: '备份准备更快',
-          description: 'Ente 现在能更快地为照片和视频做好上传准备。',
+          description: 'Photos 现在能更快地为照片和视频做好上传准备。',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: '现已支持韩语',
-          description: '现在可以使用韩语版 Ente Photos 了。',
+          description: '现在可以使用韩语版 Photos 了。',
         ),
         ChangeLogEntryStrings(
           title: '还有更多！',
@@ -1008,12 +1008,12 @@ class ChangeLogStrings {
         ),
         ChangeLogEntryStrings(
           title: '備份準備更快速',
-          description: 'Ente 現在能更快地為照片和影片做好上傳準備。',
+          description: 'Photos 現在能更快地為照片和影片做好上傳準備。',
           isOnlineOnly: true,
         ),
         ChangeLogEntryStrings(
           title: '現已支援韓文',
-          description: '現在可以使用韓文版 Ente Photos 了。',
+          description: '現在可以使用韓文版 Photos 了。',
         ),
         ChangeLogEntryStrings(
           title: '還有更多！',

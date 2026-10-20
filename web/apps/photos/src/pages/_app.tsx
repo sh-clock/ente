@@ -107,7 +107,7 @@ const App: React.FC<PhotosAppProps> = ({ Component, pageProps }) => {
         const electron = globalThis.electron;
         if (!electron) return undefined;
 
-        const handleOpenEnteURL = (url: string) => {
+        const handleOpenAppURL = (url: string) => {
             if (url.startsWith("ente://app")) {
                 void router.push(url);
             } else {
@@ -134,11 +134,11 @@ const App: React.FC<PhotosAppProps> = ({ Component, pageProps }) => {
         if (isMLSupported) initML();
         if (isHLSGenerationSupported) void initVideoProcessing();
 
-        electron.onOpenEnteURL(handleOpenEnteURL);
+        electron.onOpenAppURL(handleOpenAppURL);
         electron.onAppUpdateAvailable(showUpdateDialog);
 
         return () => {
-            electron.onOpenEnteURL(undefined);
+            electron.onOpenAppURL(undefined);
             electron.onAppUpdateAvailable(undefined);
         };
     }, [router, showMiniDialog, showNotification]);

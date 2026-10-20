@@ -35,7 +35,7 @@ Future<void> showLinuxSystemAuthSetupDialog(
     builder: (context) => BottomSheetComponent(
       title: pendingTranslation('Linux setup required'),
       message: pendingTranslation(
-        'To use device lock on Linux, Ente Auth needs a one-time system authentication setup. The guide includes setup steps for Flatpak, AppImage, and fingerprint prompts.',
+        'To use device lock on Linux, Photos needs a one-time system authentication setup. The guide includes setup steps for Flatpak, AppImage, and fingerprint prompts.',
       ),
       isScrollable: true,
       actions: [

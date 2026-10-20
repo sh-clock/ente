@@ -109,9 +109,9 @@ const onMainWindowBlur = (cb: (() => void) | undefined) => {
 const setTitleBarOverlay = (themeMode: ThemeMode, isFileViewerOpen: boolean) =>
     ipcRenderer.send("setTitleBarOverlay", themeMode, isFileViewerOpen);
 
-const onOpenEnteURL = (cb: ((url: string) => void) | undefined) => {
-    ipcRenderer.removeAllListeners("openEnteURL");
-    if (cb) ipcRenderer.on("openEnteURL", (_, url: string) => cb(url));
+const onOpenAppURL = (cb: ((url: string) => void) | undefined) => {
+    ipcRenderer.removeAllListeners("openAppURL");
+    if (cb) ipcRenderer.on("openAppURL", (_, url: string) => cb(url));
 };
 
 const onAppUpdateAvailable = (
@@ -298,7 +298,7 @@ contextBridge.exposeInMainWorld("electron", {
     onMainWindowFocus,
     onMainWindowBlur,
     setTitleBarOverlay,
-    onOpenEnteURL,
+    onOpenAppURL,
 
     onAppUpdateAvailable,
     updateAndRestart,

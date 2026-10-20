@@ -18,7 +18,7 @@ enum IconButtonComponentVariant {
   circular,
 }
 
-// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Ente-Visual-Design?node-id=2207-42075&m=dev
+// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Photos-Visual-Design?node-id=2207-42075&m=dev
 class IconButtonComponent extends StatefulWidget {
   const IconButtonComponent({
     super.key,

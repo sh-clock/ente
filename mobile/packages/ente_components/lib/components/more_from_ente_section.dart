@@ -102,7 +102,7 @@ class _EnteAppLink extends StatelessWidget {
 
     return Semantics(
       button: true,
-      label: 'Ente $label',
+      label: 'Photos $label',
       child: ConstrainedBox(
         constraints: const BoxConstraints(minWidth: _appTileSize),
         child: Column(

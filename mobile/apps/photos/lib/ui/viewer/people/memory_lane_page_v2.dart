@@ -553,7 +553,7 @@ class _MemoryLanePageV2State extends State<MemoryLanePageV2> {
                     actionsPadding: EdgeInsets.only(
                       right: screenSize.width * 0.04,
                     ),
-                    // TODO: Replace with an Ente component when it supports this pressed overlay.
+                    // TODO: Replace with an Photos component when it supports this pressed overlay.
                     leading: Align(
                       alignment: Alignment.centerRight,
                       child: SizedBox.square(
@@ -575,7 +575,7 @@ class _MemoryLanePageV2State extends State<MemoryLanePageV2> {
                       if (widget.person != null &&
                           flagService.enableMemoryShareLink &&
                           !isLocalGalleryMode)
-                        // TODO: Replace with an Ente component when it supports this pressed overlay.
+                        // TODO: Replace with an Photos component when it supports this pressed overlay.
                         SizedBox.square(
                           dimension: 48,
                           child: IconButton(

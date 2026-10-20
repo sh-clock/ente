@@ -7,7 +7,7 @@ import "package:flutter/material.dart";
 
 enum FABComponentVariant { primary, secondary, outlined, destructive }
 
-// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Ente-Visual-Design?node-id=21843-6537&m=dev
+// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Photos-Visual-Design?node-id=21843-6537&m=dev
 class FABComponent extends StatefulWidget {
   final String? label;
 

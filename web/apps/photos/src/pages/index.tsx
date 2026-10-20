@@ -140,7 +140,7 @@ interface TappableContainerProps {
 const TappableContainer: React.FC<
     React.PropsWithChildren<TappableContainerProps>
 > = ({ onMaybeChangeHost, children }) => {
-    // Seven background taps open self-hosting settings outside Ente production.
+    // Seven background taps open self-hosting settings outside Photos production.
     const [tapCount, setTapCount] = useState(0);
     const [showDevSettings, setShowDevSettings] = useState(false);
 

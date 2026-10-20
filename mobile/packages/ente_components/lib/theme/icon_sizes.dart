@@ -1,4 +1,4 @@
-// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Ente-Visual-Design?node-id=4770-20147&m=dev
+// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Photos-Visual-Design?node-id=4770-20147&m=dev
 class IconSizes {
   const IconSizes._();
 

@@ -32,7 +32,7 @@ android {
     namespace = "io.ente.locker"
 
     defaultConfig {
-        applicationId = "io.ente.locker"
+        applicationId = "com.shclock.locker"
         minSdk = 26
         versionCode = flutter.versionCode
         versionName = flutter.versionName

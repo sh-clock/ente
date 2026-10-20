@@ -25,7 +25,7 @@ enum ButtonComponentSize { small, large }
 
 enum ButtonComponentDensity { regular, compact }
 
-// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Ente-Visual-Design?node-id=2207-41578&m=dev
+// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Photos-Visual-Design?node-id=2207-41578&m=dev
 class ButtonComponent extends StatefulWidget {
   const ButtonComponent({
     super.key,

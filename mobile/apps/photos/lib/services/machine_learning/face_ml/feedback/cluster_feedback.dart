@@ -50,7 +50,7 @@ class ClusterFeedbackService<T> {
 
   ClusterFeedbackService._privateConstructor();
   late final mlDataDB = MLDataDB.instance;
-  // Person suggestions belong to the Ente account, not the local gallery.
+  // Person suggestions belong to the Photos account, not the local gallery.
   IMLDataDB<int> get _mlDataDBForCentroidVectorDb => MLDataDB.instance;
   ClusterCentroidVectorDB get _clusterCentroidVectorDB =>
       ClusterCentroidVectorDB.instance;
@@ -82,11 +82,11 @@ class ClusterFeedbackService<T> {
   }) async {
     assert(
       !isLocalGalleryMode,
-      "Person suggestions require an Ente account and should not run in local gallery mode.",
+      "Person suggestions require an Photos account and should not run in local gallery mode.",
     );
     if (isLocalGalleryMode) {
       _logger.info(
-        "Skipping getSuggestionForPerson in local gallery mode because person suggestions require an Ente account",
+        "Skipping getSuggestionForPerson in local gallery mode because person suggestions require an Photos account",
       );
       return [];
     }
@@ -1721,11 +1721,11 @@ class ClusterFeedbackService<T> {
   }) async {
     assert(
       !isLocalGalleryMode,
-      "Fast person suggestions require an Ente account and should not run in local gallery mode.",
+      "Fast person suggestions require an Photos account and should not run in local gallery mode.",
     );
     if (isLocalGalleryMode) {
       _logger.info(
-        "Skipping _getFastSuggestions in local gallery mode because person suggestions require an Ente account",
+        "Skipping _getFastSuggestions in local gallery mode because person suggestions require an Photos account",
       );
       return [];
     }

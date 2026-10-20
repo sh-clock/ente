@@ -209,7 +209,7 @@
   "authToViewYourHiddenFiles": "隠しファイルを表示するには認証してください",
   "authToViewYourMemories": "思い出を閲覧するためには認証が必要です",
   "autoCastDialogBody": "利用可能なキャストデバイスが表示されます。",
-  "autoCastiOSPermission": "ローカルネットワークへのアクセス許可がEnte Photosアプリに与えられているか確認してください",
+  "autoCastiOSPermission": "ローカルネットワークへのアクセス許可がPhotosアプリに与えられているか確認してください",
   "autoLock": "自動ロック",
   "@autoLock": {
     "description": "Auto lock setting title"
@@ -913,9 +913,9 @@
   "guestView": "ゲストビュー",
   "guestViewEnablePreSteps": "アプリのロックを有効にするには、システム設定でデバイスのパスコードまたは画面ロックを設定してください。",
   "happyBirthday": "お誕生日おめでとうございます! 🥳",
-  "hearUsWhereOptionalTitle": "Ente についてどのようにお聞きになりましたか？（任意）",
+  "hearUsWhereOptionalTitle": "Photos についてどのようにお聞きになりましたか？（任意）",
   "@hearUsWhereOptionalTitle": {
-    "description": "Title asking how user heard about Ente"
+    "description": "Title asking how user heard about Photos"
   },
   "help": "ヘルプ",
   "helpAndSupport": "ヘルプとサポート",
@@ -981,7 +981,7 @@
     }
   },
   "importSuccessTitle": "やりました！",
-  "importTypeEnteEncrypted": "Ente 暗号化されたエクスポート",
+  "importTypeEnteEncrypted": "Photos 暗号化されたエクスポート",
   "incorrectDetails": "不正な詳細",
   "incorrectRecoveryKeyBody": "リカバリーキーが間違っています",
   "incorrectRecoveryKeyTitle": "リカバリーキーの誤り",
@@ -1239,11 +1239,11 @@
   "name": "名前順",
   "networkConnectionRefusedErr": "Enteに接続できませんでした。しばらくしてから再試行してください。エラーが解決しない場合は、サポートにお問い合わせください。",
   "@networkConnectionRefusedErr": {
-    "description": "Error message shown when the app cannot connect to Ente due to connection refused"
+    "description": "Error message shown when the app cannot connect to Photos due to connection refused"
   },
   "networkHostLookUpErr": "Enteに接続できませんでした。ネットワーク設定を確認し、エラーが解決しない場合はサポートにお問い合わせください。",
   "@networkHostLookUpErr": {
-    "description": "Error message shown when the app cannot connect to Ente due to network host lookup failure"
+    "description": "Error message shown when the app cannot connect to Photos due to network host lookup failure"
   },
   "never": "なし",
   "newAlbum": "新しいアルバム",
@@ -1361,9 +1361,9 @@
   "offlineNameFaceBannerTitle": "この顔に名前を付けてください",
   "offlineSettingsBannerTitle": "あなたの写真を見ることはできません。",
   "oneLineAboutTheIssue": "問題の概要",
-  "onEnte": "<branding>Ente</branding>が保管",
+  "onEnte": "<branding>Photos</branding>が保管",
   "@onEnte": {
-    "description": "The text displayed above albums backed up to Ente",
+    "description": "The text displayed above albums backed up to Photos",
     "type": "text"
   },
   "onlyFamilyAdminCanChangeCode": "コードを変更するには、 {familyAdminEmail} までご連絡ください。",

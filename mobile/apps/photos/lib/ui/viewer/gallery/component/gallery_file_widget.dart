@@ -363,7 +363,7 @@ class _GalleryFileWidgetState extends State<GalleryFileWidget> {
       return;
     }
     // Device folders (local-only contexts) should keep files visible
-    // even after deleting from Ente (remote) since they still exist locally
+    // even after deleting from Photos (remote) since they still exist locally
     final galleryType = GalleryContextState.of(context)?.galleryType;
     final isLocalOnlyContext = galleryType == GalleryType.localFolder;
     final page = DetailPage(

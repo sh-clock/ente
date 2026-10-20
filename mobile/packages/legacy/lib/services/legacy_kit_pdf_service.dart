@@ -104,10 +104,10 @@ class LegacyKitPdfService {
 
   pw.Document _document() {
     return pw.Document(
-      title: "Ente Legacy Kit",
+      title: "Photos Legacy Kit",
       author: "ente",
       creator: "ente locker",
-      subject: "Ente Legacy Kit recovery sheet",
+      subject: "Photos Legacy Kit recovery sheet",
       producer: "ente locker",
     );
   }

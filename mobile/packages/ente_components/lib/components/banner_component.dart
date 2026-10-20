@@ -8,8 +8,8 @@ import 'package:hugeicons/hugeicons.dart';
 
 enum BannerComponentState { failure, informative, success, warning, neutral }
 
-// Layout Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Ente-Visual-Design?node-id=14590-125265&m=dev
-// State Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Ente-Visual-Design?node-id=7255-38447&m=dev
+// Layout Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Photos-Visual-Design?node-id=14590-125265&m=dev
+// State Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Photos-Visual-Design?node-id=7255-38447&m=dev
 class BannerComponent extends StatelessWidget {
   const BannerComponent({
     required this.title,

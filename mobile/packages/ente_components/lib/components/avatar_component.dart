@@ -169,7 +169,7 @@ Color avatarComponentColorValue(
   };
 }
 
-// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Ente-Visual-Design?node-id=2482-6547&m=dev
+// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Photos-Visual-Design?node-id=2482-6547&m=dev
 class AvatarComponent extends StatelessWidget {
   const AvatarComponent({
     super.key,

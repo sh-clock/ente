@@ -674,7 +674,7 @@ class _WrappedViewerPageState extends State<WrappedViewerPage>
     if (result == null || cardCount == 0) {
       scheduleMicrotask(() {
         if (mounted) {
-          showShortToast(context, "Ente Rewind data not available");
+          showShortToast(context, "Photos Rewind data not available");
           Navigator.of(context).maybePop();
         }
       });
@@ -721,7 +721,7 @@ class _WrappedViewerPageState extends State<WrappedViewerPage>
                       leading: BackButton(
                         onPressed: () => unawaited(_closeViewer()),
                       ),
-                      title: Text("Ente Rewind", style: textTheme.largeBold),
+                      title: Text("Photos Rewind", style: textTheme.largeBold),
                       backgroundColor: Colors.black,
                       foregroundColor: enteColorScheme.textBase,
                       elevation: 0,
@@ -960,7 +960,7 @@ class _WrappedViewerPageState extends State<WrappedViewerPage>
         ),
       );
     } catch (error, stackTrace) {
-      _logger.severe("Failed to share Ente Rewind card", error, stackTrace);
+      _logger.severe("Failed to share Photos Rewind card", error, stackTrace);
       if (mounted) {
         showShortToast(context, "Share failed");
       }
@@ -1206,7 +1206,7 @@ class _WrappedViewerPageState extends State<WrappedViewerPage>
     } catch (error, stackTrace) {
       _musicLoadFailed = true;
       _logger.warning(
-        "Failed to initialize Ente Rewind music",
+        "Failed to initialize Photos Rewind music",
         error,
         stackTrace,
       );
@@ -1246,7 +1246,7 @@ class _WrappedViewerPageState extends State<WrappedViewerPage>
           _updateMusicPlaying(true);
         } catch (error, stackTrace) {
           _logger.warning(
-            "Failed to restart Ente Rewind music",
+            "Failed to restart Photos Rewind music",
             error,
             stackTrace,
           );
@@ -1271,7 +1271,7 @@ class _WrappedViewerPageState extends State<WrappedViewerPage>
         await _audioPlayer.pause();
       }
     } catch (error, stackTrace) {
-      _logger.fine("Failed to pause Ente Rewind music", error, stackTrace);
+      _logger.fine("Failed to pause Photos Rewind music", error, stackTrace);
     } finally {
       _updateMusicPlaying(false);
     }
@@ -1292,7 +1292,7 @@ class _WrappedViewerPageState extends State<WrappedViewerPage>
       unawaited(
         playFuture.catchError((Object error, StackTrace stackTrace) {
           _logger.warning(
-            "Failed to play Ente Rewind music",
+            "Failed to play Photos Rewind music",
             error,
             stackTrace,
           );
@@ -1301,7 +1301,7 @@ class _WrappedViewerPageState extends State<WrappedViewerPage>
       );
       _updateMusicPlaying(true);
     } catch (error, stackTrace) {
-      _logger.warning("Failed to play Ente Rewind music", error, stackTrace);
+      _logger.warning("Failed to play Photos Rewind music", error, stackTrace);
       _updateMusicPlaying(false);
     }
   }
@@ -1354,14 +1354,14 @@ class _WrappedViewerPageState extends State<WrappedViewerPage>
       }
       await _pauseMusic();
     } catch (error, stackTrace) {
-      _logger.fine("Failed to fade out Ente Rewind music", error, stackTrace);
+      _logger.fine("Failed to fade out Photos Rewind music", error, stackTrace);
       await _pauseMusic();
     } finally {
       try {
         await _audioPlayer.setVolume(initialVolume);
       } catch (error, stackTrace) {
         _logger.fine(
-          "Failed to restore Ente Rewind music volume",
+          "Failed to restore Photos Rewind music volume",
           error,
           stackTrace,
         );
@@ -1445,7 +1445,7 @@ class _WrappedViewerPageState extends State<WrappedViewerPage>
       _logger.info("Audio session configured for music");
     } catch (error, stackTrace) {
       _logger.fine(
-        "Failed to configure audio session for Ente Rewind music",
+        "Failed to configure audio session for Photos Rewind music",
         error,
         stackTrace,
       );

@@ -21,7 +21,7 @@ const AlbumsFontPreloads: React.FC = () => (
 );
 
 const albumsPreviewTitle = "Photos, shared with you";
-const albumsPreviewDescription = "Tap to view on Ente";
+const albumsPreviewDescription = "Tap to view on Photos";
 const albumsPreviewImage = "https://albums.ente.com/images/preview.png";
 const photosPreviewDescription =
     "Store and share your photos with absolute privacy.";
@@ -30,7 +30,7 @@ const photosPreviewImage = "https://photos.ente.com/images/preview.png";
 export const CustomHead: React.FC<React.PropsWithChildren<CustomHeadProps>> = ({
     title,
     children,
-    description = "Ente - end-to-end encrypted cloud with open-source apps",
+    description = "Photos - end-to-end encrypted cloud with open-source apps",
     viewportContent = "width=device-width, initial-scale=1",
 }) => (
     <Head>
@@ -70,7 +70,7 @@ export const CustomHeadPhotos: React.FC<CustomHeadProps> = ({ title }) =>
 const CustomHeadAlbumsStatic: React.FC = () => (
     <Head>
         <AlbumsFontPreloads />
-        <title>Ente Photos</title>
+        <title>Photos</title>
         <link rel="icon" href="/images/favicon.png" type="image/png" />
         <meta name="description" content={albumsPreviewDescription} />
         <meta property="og:type" content="website" />
@@ -91,7 +91,7 @@ const CustomHeadAlbumsStatic: React.FC = () => (
     </Head>
 );
 
-// Custom API builds must not embed Ente production preview metadata.
+// Custom API builds must not embed Photos production preview metadata.
 export const CustomHeadAlbums: React.FC<CustomHeadProps> = ({ title }) =>
     isCustomAPIOrigin ? (
         <CustomHead {...{ title }}>
@@ -103,7 +103,7 @@ export const CustomHeadAlbums: React.FC<CustomHeadProps> = ({ title }) =>
 
 const CustomHeadShareStatic: React.FC = () => (
     <Head>
-        <title>Ente Locker</title>
+        <title>Locker</title>
         <link rel="icon" href="/images/favicon.png" type="image/png" />
         <meta
             name="description"

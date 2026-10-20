@@ -144,7 +144,7 @@
   "importEnterSetupKey": "Syötä asetusavain",
   "importLabel": "Tuo",
   "importSelectJsonFile": "Valitse JSON-tiedosto",
-  "importTypeEnteEncrypted": "Ente salattu vienti",
+  "importTypeEnteEncrypted": "Photos salattu vienti",
   "incorrectDetails": "Virheelliset tiedot",
   "incorrectPasswordTitle": "Salasana on väärin",
   "@incorrectPasswordTitle": {

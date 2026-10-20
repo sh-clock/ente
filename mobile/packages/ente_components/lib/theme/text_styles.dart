@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Ente-Visual-Design?node-id=7672-54672&m=dev
+// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Photos-Visual-Design?node-id=7672-54672&m=dev
 class TextStyles {
   const TextStyles._();
 

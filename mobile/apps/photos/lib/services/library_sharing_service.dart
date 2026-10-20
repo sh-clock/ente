@@ -568,7 +568,7 @@ class LibrarySharingService implements LibrarySharingRepository {
   Future<String> _requirePublicKey(String email) async {
     final publicKey = await _userService.getPublicKey(email);
     if (publicKey == null || publicKey.isEmpty) {
-      throw StateError('No Ente public key found for recipient');
+      throw StateError('No Photos public key found for recipient');
     }
     return publicKey;
   }

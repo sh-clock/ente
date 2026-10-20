@@ -19,9 +19,9 @@ NetworkTileProvider get _tileProvider => NetworkTileProvider(
 String get _userAgent {
   try {
     final version = ServiceLocator.instance.packageInfo.version;
-    return "Ente Photos/$version (+https://ente.com; contact: team@ente.com)";
+    return "Photos/$version (+https://ente.com; contact: team@ente.com)";
   } catch (_) {
-    return "Ente Photos/unknown (+https://ente.com; contact: team@ente.com)";
+    return "Photos/unknown (+https://ente.com; contact: team@ente.com)";
   }
 }
 

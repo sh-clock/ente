@@ -69,7 +69,7 @@ const isFatalExportError = (e: unknown) =>
 
 const exportRecordFileName = "export_status.json";
 
-const exportDirectoryName = "Ente Photos";
+const exportDirectoryName = "Photos";
 
 export const ExportStage = {
     init: 0,

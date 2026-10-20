@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Ente-Visual-Design?node-id=57-6281&view=variables
+// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Photos-Visual-Design?node-id=57-6281&view=variables
 enum ComponentApp { photos, auth, locker }
 
 class ColorTokens {

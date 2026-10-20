@@ -22,14 +22,11 @@ export const createApplicationMenu = (mainWindow: BrowserWindow) => {
         hideDockIcon = !hideDockIcon;
     };
 
-    const handleHelp = () =>
-        void shell.openExternal("https://ente.com/help/photos/");
-
     return Menu.buildFromTemplate([
         {
-            label: "Ente Photos",
+            label: "Photos",
             submenu: [
-                ...macOSOnly([{ label: "About Ente", role: "about" }]),
+                ...macOSOnly([{ label: "About Photos", role: "about" }]),
                 { type: "separator" },
                 { label: "Check for Updates...", click: handleCheckForUpdates },
                 { type: "separator" },
@@ -50,7 +47,7 @@ export const createApplicationMenu = (mainWindow: BrowserWindow) => {
 
                 { type: "separator" },
                 ...macOSOnly([
-                    { label: "Hide Ente", role: "hide" },
+                    { label: "Hide Photos", role: "hide" },
                     { label: "Hide Others", role: "hideOthers" },
                     { type: "separator" },
                 ]),
@@ -98,11 +95,10 @@ export const createApplicationMenu = (mainWindow: BrowserWindow) => {
                     { type: "separator" },
                     { label: "Bring All to Front", role: "front" },
                     { type: "separator" },
-                    { label: "Ente Photos", role: "window" },
+                    { label: "Photos", role: "window" },
                 ]),
             ],
         },
-        { label: "Help", submenu: [{ label: "Ente Help", click: handleHelp }] },
     ]);
 };
 
@@ -117,7 +113,7 @@ export const createTrayContextMenu = (mainWindow: BrowserWindow) => {
     };
 
     return Menu.buildFromTemplate([
-        { label: "Open Ente", click: handleOpen },
-        { label: "Quit Ente", click: handleClose },
+        { label: "Open Photos", click: handleOpen },
+        { label: "Quit Photos", click: handleClose },
     ]);
 };

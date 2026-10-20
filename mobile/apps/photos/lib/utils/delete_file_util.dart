@@ -352,7 +352,7 @@ Future<void> showConfirmEmptyTrashSheet(
         didDeleteDeviceTrash = await _emptyDeviceTrash();
       }
     } catch (e, s) {
-      final trashKind = isOnEnteTrash ? "Ente" : "device";
+      final trashKind = isOnEnteTrash ? "Photos" : "device";
       _logger.severe("failed to empty $trashKind trash", e, s);
       if (context.mounted) {
         await showGenericErrorDialog(context: context, error: e);

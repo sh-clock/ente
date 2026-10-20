@@ -31,23 +31,23 @@ export const isDesktop = buildEnvIsDesktop;
 export const desktopAppVersion = buildEnvDesktopAppVersion;
 
 export const staticAppTitle = {
-    accounts: "Ente Accounts",
-    albums: "Ente Photos",
-    auth: "Ente Auth",
-    cast: "Ente Photos",
-    embed: "Ente Photos",
-    share: "Ente Locker",
-    photos: "Ente Photos",
+    accounts: "Photos Accounts",
+    albums: "Photos",
+    auth: "Photos Auth",
+    cast: "Photos",
+    embed: "Photos",
+    share: "Locker",
+    photos: "Photos",
     ensu: "Ensu",
-    locker: "Ente Locker",
-    legacy: "Ente Legacy Kit",
-    space: "Ente Space",
+    locker: "Locker",
+    legacy: "Photos Legacy Kit",
+    space: "Photos Space",
 }[appName];
 
 // Sent as the X-Client-Package header.
 export const clientPackageName = (() => {
     if (isDesktop) {
-        if (appName === "photos") return "io.ente.photos.desktop";
+        if (appName === "photos") return "com.shclock.photos.desktop";
         if (appName === "ensu") return "io.ente.ensu.desktop";
         throw new Error(`Unsupported desktop appName ${appName}`);
     }
@@ -58,7 +58,7 @@ export const clientPackageName = (() => {
         cast: "io.ente.cast.web",
         embed: "io.ente.photos.web", // Use photos package name for embed app
         share: "io.ente.share.web",
-        photos: "io.ente.photos.web",
+        photos: "com.shclock.photos.web",
         ensu: "io.ente.ensu",
         locker: "io.ente.locker.web",
         legacy: "io.ente.legacy.web",
@@ -72,7 +72,7 @@ export const clientIdentifier = (() => {
             throw new Error(`desktopAppVersion is not defined`);
 
         if (appName === "photos") {
-            return `io.ente.photos.desktop/${desktopAppVersion}`;
+            return `com.shclock.photos.desktop/${desktopAppVersion}`;
         }
         if (appName === "ensu") {
             return `io.ente.ensu.desktop/${desktopAppVersion}`;

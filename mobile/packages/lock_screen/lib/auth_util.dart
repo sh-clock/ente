@@ -44,16 +44,16 @@ class LocalAuthenticationUnavailableException implements Exception {
   String get userMessage {
     return switch (issue) {
       LocalAuthUnavailableIssue.notConfigured => pendingTranslation(
-        "System authentication is not set up. Set it up in your device settings, or switch Ente App lock to PIN/password.",
+        "System authentication is not set up. Set it up in your device settings, or switch Photos App lock to PIN/password.",
       ),
       LocalAuthUnavailableIssue.noHardware => pendingTranslation(
-        "System authentication is not available on this device. Switch Ente App lock to PIN/password.",
+        "System authentication is not available on this device. Switch Photos App lock to PIN/password.",
       ),
       LocalAuthUnavailableIssue.unavailable => pendingTranslation(
-        "System authentication is not available right now. Try again, or switch Ente App lock to PIN/password.",
+        "System authentication is not available right now. Try again, or switch Photos App lock to PIN/password.",
       ),
       LocalAuthUnavailableIssue.linuxSetupRequired => pendingTranslation(
-        "Linux system authentication needs one-time setup. Install the Ente Auth Polkit policy, or switch Ente App lock to PIN/password.",
+        "Linux system authentication needs one-time setup. Install the Photos Polkit policy, or switch Photos App lock to PIN/password.",
       ),
     };
   }
@@ -80,19 +80,19 @@ class WindowsLocalAuthenticationException implements Exception {
   String get userMessage {
     return switch (issue) {
       WindowsLocalAuthIssue.notConfigured => pendingTranslation(
-        "Windows Hello or a Windows PIN is not set up. Set it up in Windows Settings, or switch Ente App lock to PIN/password.",
+        "Windows Hello or a Windows PIN is not set up. Set it up in Windows Settings, or switch Photos App lock to PIN/password.",
       ),
       WindowsLocalAuthIssue.noHardware => pendingTranslation(
-        "Windows authentication is not available on this device. Switch Ente App lock to PIN/password to use this action.",
+        "Windows authentication is not available on this device. Switch Photos App lock to PIN/password to use this action.",
       ),
       WindowsLocalAuthIssue.busy => pendingTranslation(
-        "Windows authentication is busy. Try again, or switch Ente App lock to PIN/password.",
+        "Windows authentication is busy. Try again, or switch Photos App lock to PIN/password.",
       ),
       WindowsLocalAuthIssue.disabledByPolicy => pendingTranslation(
-        "Windows authentication is disabled by system policy. Switch Ente App lock to PIN/password to use this action.",
+        "Windows authentication is disabled by system policy. Switch Photos App lock to PIN/password to use this action.",
       ),
       WindowsLocalAuthIssue.unavailable => pendingTranslation(
-        "Windows authentication is not available right now. Set up Windows Hello/PIN or switch Ente App lock to PIN/password.",
+        "Windows authentication is not available right now. Set up Windows Hello/PIN or switch Photos App lock to PIN/password.",
       ),
     };
   }

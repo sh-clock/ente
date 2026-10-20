@@ -12,8 +12,8 @@ import 'package:hugeicons/hugeicons.dart';
 
 enum TextInputComponentMessageType { helper, error, alert, success }
 
-// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Ente-Visual-Design?node-id=2275-11526&m=dev
-// Multiline variant: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Ente-Visual-Design?node-id=2275-11746&m=dev
+// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Photos-Visual-Design?node-id=2275-11526&m=dev
+// Multiline variant: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Photos-Visual-Design?node-id=2275-11746&m=dev
 class TextInputComponent extends StatefulWidget {
   const TextInputComponent({
     super.key,

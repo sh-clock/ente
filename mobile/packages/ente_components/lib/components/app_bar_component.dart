@@ -25,7 +25,7 @@ class HeaderAppBarTitleState {
   final double height;
 }
 
-// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Ente-Visual-Design?node-id=11439-5036&m=dev
+// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Photos-Visual-Design?node-id=11439-5036&m=dev
 class AppBarComponent extends StatefulWidget {
   const AppBarComponent({
     super.key,
@@ -842,7 +842,7 @@ const _headerSnapTolerance = 1.0;
 const _headerSnapDuration = Duration(milliseconds: 160);
 const _titleTooltipShowDuration = Duration(seconds: 3);
 
-// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Ente-Visual-Design?node-id=21089-125212&m=dev
+// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Photos-Visual-Design?node-id=21089-125212&m=dev
 const _collapsedEyebrowGap = 6.0;
 const _minimumCollapsedTitleWidth = 24.0;
 

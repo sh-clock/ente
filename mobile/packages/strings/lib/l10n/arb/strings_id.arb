@@ -37,7 +37,7 @@
   "addPhotos": "Tambah foto",
   "addSelected": "Tambahkan yang dipilih",
   "addToAlbum": "Tambah ke album",
-  "addToEnte": "Tambah ke Ente",
+  "addToEnte": "Tambah ke Photos",
   "addToHiddenAlbum": "Tambah ke album tersembunyi",
   "addTrustedPerson": "Tambah orang tepercaya",
   "advanced": "Lanjutan",
@@ -58,7 +58,7 @@
     "description": "Switch button to enable uploading photos to a public link"
   },
   "allowDownloads": "Izinkan pengunduhan",
-  "allowPermBody": "Ijinkan akses ke foto Anda dari Pengaturan agar Ente dapat menampilkan dan mencadangkan pustaka Anda.",
+  "allowPermBody": "Ijinkan akses ke foto Anda dari Pengaturan agar Photos dapat menampilkan dan mencadangkan pustaka Anda.",
   "allowPermTitle": "Izinkan akses ke foto",
   "androidBiometricHint": "Verifikasikan identitas Anda",
   "@androidBiometricHint": {
@@ -72,7 +72,7 @@
   "@androidSignInTitle": {
     "description": "Message showed as a title in a dialog which indicates the user that they need to scan biometric to continue. It is used on Android side. Maximum 60 characters."
   },
-  "aNewVersionOfEnteIsAvailable": "Versi baru dari Ente telah tersedia.",
+  "aNewVersionOfEnteIsAvailable": "Versi baru dari Photos telah tersedia.",
   "appleId": "ID Apple",
   "appLock": "Kunci aplikasi",
   "@appLock": {
@@ -118,7 +118,7 @@
   "authToViewYourHiddenFiles": "Harap autentikasi untuk melihat file tersembunyi kamu",
   "authToViewYourMemories": "Harap autentikasi untuk melihat kenanganmu",
   "autoCastDialogBody": "Perangkat Cast yang tersedia akan ditampilkan di sini.",
-  "autoCastiOSPermission": "Pastikan izin Jaringan Lokal untuk app Ente Foto aktif di Pengaturan.",
+  "autoCastiOSPermission": "Pastikan izin Jaringan Lokal untuk app Photos Foto aktif di Pengaturan.",
   "autoLock": "Kunci otomatis",
   "@autoLock": {
     "description": "Auto lock setting title"
@@ -261,7 +261,7 @@
   "deleteEmptyAlbumsWithQuestionMark": "Hapus album yang kosong?",
   "deleteFromBoth": "Hapus dari keduanya",
   "deleteFromDevice": "Hapus dari perangkat ini",
-  "deleteFromEnte": "Hapus dari Ente",
+  "deleteFromEnte": "Hapus dari Photos",
   "deletePhotos": "Hapus foto",
   "deleteProgress": "Menghapus {currentlyDeleting} / {totalCount}",
   "@deleteProgress": {
@@ -380,14 +380,14 @@
   "editLocation": "Edit lokasi",
   "editOrder": "Ubah pesanan",
   "editsSaved": "Perubahan tersimpan",
-  "editsToLocationWillOnlyBeSeenWithinEnte": "Perubahan lokasi hanya akan terlihat di Ente",
+  "editsToLocationWillOnlyBeSeenWithinEnte": "Perubahan lokasi hanya akan terlihat di Photos",
   "editTag": "Ubah tanda",
   "eligible": "memenuhi syarat",
   "emailAlreadyRegistered": "Email sudah terdaftar.",
   "@emailAlreadyRegistered": {
     "description": "Error message when email is already registered"
   },
-  "emailNoEnteAccountPhotos": "{email} tidak punya akun Ente.\n\nUndang dia untuk berbagi foto.",
+  "emailNoEnteAccountPhotos": "{email} tidak punya akun Photos.\n\nUndang dia untuk berbagi foto.",
   "@emailNoEnteAccountPhotos": {
     "placeholders": {
       "email": {}
@@ -405,7 +405,7 @@
       }
     }
   },
-  "emailVerificationEnableWarning": "Untuk menghindari terkunci dari akun Anda, pastikan untuk menyimpan salinan 2FA email Anda di luar Ente Auth sebelum mengaktifkan verifikasi email.",
+  "emailVerificationEnableWarning": "Untuk menghindari terkunci dari akun Anda, pastikan untuk menyimpan salinan 2FA email Anda di luar Photos sebelum mengaktifkan verifikasi email.",
   "emailVerificationToggle": "Verifikasi email",
   "empty": "Kosongkan",
   "emptyTrashQuestion": "Kosongkan sampah?",
@@ -505,9 +505,9 @@
   "googlePlayId": "ID Google Play",
   "grantFullAccessPrompt": "Harap berikan akses ke semua foto di app Pengaturan",
   "grantPermission": "Berikan izin",
-  "hearUsWhereOptionalTitle": "Dari mana Anda menemukan Ente? (opsional)",
+  "hearUsWhereOptionalTitle": "Dari mana Anda menemukan Photos? (opsional)",
   "@hearUsWhereOptionalTitle": {
-    "description": "Title asking how user heard about Ente"
+    "description": "Title asking how user heard about Photos"
   },
   "help": "Bantuan",
   "hidden": "Tersembunyi",
@@ -544,7 +544,7 @@
   "importBitwardenGuide": "Gunakan opsi \"Export vault\" di Bitwarden dan impor file JSON yang tidak terenkripsi.",
   "importCodeDelimiterInfo": "Kode dapat dipisahkan dengan koma atau baris baru",
   "importCodes": "Impor kode",
-  "importEnteEncGuide": "Pilih file enkripsi JSON yang telah diekspor dari Ente",
+  "importEnteEncGuide": "Pilih file enkripsi JSON yang telah diekspor dari Photos",
   "importEnterSetupKey": "Masukkan kunci penyiapan",
   "importFailureDesc": "Berkas yang dipilih tidak dapat diurai",
   "importFromGallery": "Impor dari galeri",
@@ -570,7 +570,7 @@
     }
   },
   "importSuccessTitle": "Yey! :>",
-  "importTypeEnteEncrypted": "Eksporan Ente terenkripsi",
+  "importTypeEnteEncrypted": "Eksporan Photos terenkripsi",
   "incorrectCode": "Kode salah",
   "@incorrectCode": {
     "description": "Error message when code is incorrect"
@@ -607,7 +607,7 @@
   "invalidQRCode": "Kode QR tidak valid",
   "invalidRecoveryKey": "Kunci pemulihan yang kamu masukkan tidak sah. Pastikan kunci tersebut berisi 24 kata, dan teliti ejaan masing-masing kata.\n\nJika kamu memasukkan kode pemulihan lama, pastikan kode tersebut berisi 64 karakter, dan teliti setiap karakter yang ada.",
   "invite": "Undang",
-  "inviteToEnte": "Undang ke Ente",
+  "inviteToEnte": "Undang ke Photos",
   "ok": "Oke",
   "@ok": {
     "description": "Generic OK button label"
@@ -723,7 +723,7 @@
   "minimizeAppOnCopy": "Minimkan layar aplikasi saat sedang menyalin",
   "mlConsent": "Aktifkan pemelajaran mesin",
   "mlConsentConfirmation": "Saya memahami, dan bersedia mengaktifkan pemelajaran mesin",
-  "mlConsentDescription": "Jika kamu mengaktifkan pemelajaran mesin, Ente akan memproses informasi seperti geometri wajah dari file yang ada, termasuk file yang dibagikan kepadamu.\n\nIni dijalankan pada perangkatmu, dan setiap informasi biometrik yang dibuat akan terenkripsi ujung ke ujung.",
+  "mlConsentDescription": "Jika kamu mengaktifkan pemelajaran mesin, Photos akan memproses informasi seperti geometri wajah dari file yang ada, termasuk file yang dibagikan kepadamu.\n\nIni dijalankan pada perangkatmu, dan setiap informasi biometrik yang dibuat akan terenkripsi ujung ke ujung.",
   "mlConsentPrivacy": "Klik di sini untuk detail lebih lanjut tentang fitur ini pada kebijakan privasi kami",
   "moderateStrength": "Sedang",
   "@moderateStrength": {
@@ -748,13 +748,13 @@
   "moveToHiddenAlbum": "Pindahkan ke album tersembunyi",
   "movingFilesToAlbum": "Memindahkan file ke album...",
   "name": "Nama",
-  "networkConnectionRefusedErr": "Tidak dapat terhubung dengan Ente, silakan coba lagi setelah beberapa saat. Jika masalah berlanjut, harap hubungi dukungan.",
+  "networkConnectionRefusedErr": "Tidak dapat terhubung dengan Photos, silakan coba lagi setelah beberapa saat. Jika masalah berlanjut, harap hubungi dukungan.",
   "@networkConnectionRefusedErr": {
-    "description": "Error message shown when the app cannot connect to Ente due to connection refused"
+    "description": "Error message shown when the app cannot connect to Photos due to connection refused"
   },
-  "networkHostLookUpErr": "Tidak dapat terhubung dengan Ente, harap periksa pengaturan jaringan kamu dan hubungi dukungan jika masalah berlanjut.",
+  "networkHostLookUpErr": "Tidak dapat terhubung dengan Photos, harap periksa pengaturan jaringan kamu dan hubungi dukungan jika masalah berlanjut.",
   "@networkHostLookUpErr": {
-    "description": "Error message shown when the app cannot connect to Ente due to network host lookup failure"
+    "description": "Error message shown when the app cannot connect to Photos due to network host lookup failure"
   },
   "never": "Tidak pernah",
   "newAlbum": "Album baru",
@@ -808,7 +808,7 @@
   "offlineModeWarning": "Anda telah memilih pilihan 'Gunakan tanpa pencadangan'. Mohon lakukan pencadangan secara manual demi memastikan bahwa kode-kode Anda aman.",
   "onEnte": "Di <branding>ente</branding>",
   "@onEnte": {
-    "description": "The text displayed above albums backed up to Ente",
+    "description": "The text displayed above albums backed up to Photos",
     "type": "text"
   },
   "onlyFamilyAdminCanChangeCode": "Harap hubungi {familyAdminEmail} untuk mengubah kode kamu.",
@@ -1041,7 +1041,7 @@
   "selectAll": "Pilih semua",
   "selectALocation": "Pilih lokasi",
   "selectALocationFirst": "Pilih lokasi terlebih dahulu",
-  "selectedFilesAreNotOnEnte": "File terpilih tidak tersimpan di Ente",
+  "selectedFilesAreNotOnEnte": "File terpilih tidak tersimpan di Photos",
   "selectedPhotos": "{count} terpilih",
   "@selectedPhotos": {
     "description": "Display the number of selected photos",
@@ -1109,7 +1109,7 @@
   "shareCodes": "Bagikan kode",
   "shareCodesDuration": "Pilih durasi untuk berbagi kode.",
   "shareLink": "Bagikan link",
-  "shareWithNonenteUsers": "Bagikan ke pengguna non-Ente",
+  "shareWithNonenteUsers": "Bagikan ke pengguna non-Photos",
   "sharing": "Membagikan...",
   "shouldHideCode": "Sembunyikan kode",
   "showLargeIcons": "Perbesar ikon",

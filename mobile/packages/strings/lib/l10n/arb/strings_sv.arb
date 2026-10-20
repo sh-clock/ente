@@ -160,7 +160,7 @@
   "addTo": "Lägg till i",
   "addToAlbum": "Lägg till i album",
   "addToCollection": "Lägg till i samling",
-  "addToEnte": "Lägg till i Ente",
+  "addToEnte": "Lägg till i Photos",
   "addToHiddenAlbum": "Lägg till i dolt album",
   "addToPerson": "Koppla till person",
   "@addToPerson": {
@@ -224,8 +224,8 @@
   "allowDownloads": "Tillåt nedladdningar",
   "allowJoining": "Tillåt att gå med",
   "allowJoiningAlbum": "Tillåt att gå med till albumet",
-  "allowJoiningDescription": "Personer som kan se ditt album och har ett Ente-konto kan gå med i albumet och få uppdateringar",
-  "allowPermBody": "Tillåt åtkomst till dina foton i Inställningar så att Ente kan visa och säkerhetskopiera ditt bibliotek.",
+  "allowJoiningDescription": "Personer som kan se ditt album och har ett Photos-konto kan gå med i albumet och få uppdateringar",
+  "allowPermBody": "Tillåt åtkomst till dina foton i Inställningar så att Photos kan visa och säkerhetskopiera ditt bibliotek.",
   "allowPermTitle": "Tillåt åtkomst till foton",
   "allPersonGroupingWillReset": "Alla grupperingar för personen återställs och du förlorar alla förslag för personen",
   "allTabEmptyHint": "Inget här än. Tryck på + för att lägga till en kod eller öppna papperskorgen för att återställa en.",
@@ -259,8 +259,8 @@
       }
     }
   },
-  "aNewVersionOfEnteIsAvailable": "En ny version av Ente är tillgänglig.",
-  "aNewVersionOfEnteLockerIsAvailable": "En ny version av Ente Locker är tillgänglig.",
+  "aNewVersionOfEnteIsAvailable": "En ny version av Photos är tillgänglig.",
+  "aNewVersionOfEnteLockerIsAvailable": "En ny version av Photos är tillgänglig.",
   "anythingElse": "Något annat?",
   "@anythingElse": {
     "description": "Label for optional account deletion feedback"
@@ -268,7 +268,7 @@
   "appearance": "Utseende",
   "appIcon": "Appikon",
   "appleId": "Apple ID",
-  "applePhotosUnsupportedResource": "Det gick inte att spara filen i Apple Bilder. Du kan fortfarande visa den i Ente.",
+  "applePhotosUnsupportedResource": "Det gick inte att spara filen i Apple Bilder. Du kan fortfarande visa den i Photos.",
   "@applePhotosUnsupportedResource": {
     "description": "Shown when iOS Photos rejects a file while saving to gallery because the media resource is invalid or unsupported"
   },
@@ -379,7 +379,7 @@
   "autoAddPeople": "Lägg automatiskt till personer",
   "autoAddToAlbum": "Lägg automatiskt till album",
   "autoCastDialogBody": "Tillgängliga Cast-enheter visas här.",
-  "autoCastiOSPermission": "Kontrollera att behörigheten för lokalt nätverk är aktiverad för Ente Photos i Inställningar.",
+  "autoCastiOSPermission": "Kontrollera att behörigheten för lokalt nätverk är aktiverad för Photos i Inställningar.",
   "autoLock": "Automatisk låsning",
   "@autoLock": {
     "description": "Auto lock setting title"
@@ -437,7 +437,7 @@
   "backupModeScreenWillDim": "Skärmen tonar ned automatiskt för att spara batteri",
   "backupModeSettingsDescription": "Låt appen vara öppen för att slutföra säkerhetskopieringen",
   "backupModeStart": "Starta säkerhetskopieringsläge",
-  "backupModeStayInEnte": "Stanna i Ente. Säkerhetskopieringen pausas om du byter app.",
+  "backupModeStayInEnte": "Stanna i Photos. Säkerhetskopieringen pausas om du byter app.",
   "backupModeTapToWakeScreen": "Tryck för att aktivera skärmen",
   "backupOnlyNewPhotos": "Säkerhetskopiera endast nya bilder",
   "backupOnlyNewPhotosAllFoldersSelected": "Alla mappar är markerade för säkerhetskopiering.\n\nDu kan fortsätta nu eller uppdatera markerade mappar.",
@@ -459,7 +459,7 @@
   "backupSettings": "Säkerhetskopieringsinställningar",
   "backupStatus": "Säkerhetskopieringsstatus",
   "backupStatusDescription": "Objekt som har säkerhetskopierats kommer att visas här",
-  "backupToEnte": "Säkerhetskopiera till Ente",
+  "backupToEnte": "Säkerhetskopiera till Photos",
   "backupVideos": "Säkerhetskopiera videor",
   "beach": "Sand och hav",
   "birthday": "Födelsedag",
@@ -616,7 +616,7 @@
   "codeChangeLimitReached": "Tyvärr, du har nått gränsen för kodändringar.",
   "codeCopiedToClipboard": "Koden har kopierats till urklipp",
   "codeIssuerHint": "Utfärdare",
-  "collabLinkSectionDescription": "Låt andra lägga till foton utan ett Ente-konto",
+  "collabLinkSectionDescription": "Låt andra lägga till foton utan ett Photos-konto",
   "collaborator": "Samarbetspartner",
   "collageLayout": "Layout",
   "collageSaved": "Kollage sparat i galleriet",
@@ -707,7 +707,7 @@
       }
     }
   },
-  "confirmDeleteAccountAcrossApps": "Jag förstår att det här raderar min data i Ente Photos, Ente Auth och Ente Locker.",
+  "confirmDeleteAccountAcrossApps": "Jag förstår att det här raderar min data i Photos, Photos och Photos.",
   "@confirmDeleteAccountAcrossApps": {
     "description": "Checkbox label for final account deletion confirmation"
   },
@@ -734,7 +734,7 @@
   },
   "contactUs": "Kontakta oss",
   "@contactUs": {
-    "description": "Button label for contacting Ente support"
+    "description": "Button label for contacting Photos support"
   },
   "contactToManageSubscription": "Kontakta oss på support@ente.com för att hantera ditt {provider}-abonnemang.",
   "@contactToManageSubscription": {
@@ -799,7 +799,7 @@
   "createAccountTitle": "Skapa ett konto",
   "createAlbum": "Skapa album",
   "createAlbumActionHint": "Långtryck för att välja foton och klicka på + för att skapa ett album",
-  "createAnEnteAccount": "Skapa ett Ente-konto",
+  "createAnEnteAccount": "Skapa ett Photos-konto",
   "createAnotherKit": "Skapa en ny återställningsuppsättning",
   "createBackupNow": "Skapa säkerhetskopia nu",
   "createCollaborativeLink": "Skapa samarbetslänk",
@@ -912,12 +912,12 @@
   "@deletedComment": {
     "description": "Label for deleted comments"
   },
-  "deletedFromEnte": "Raderad från Ente",
+  "deletedFromEnte": "Raderad från Photos",
   "deletedItemsStayHereForThirtyDays": "Raderade objekt stannar här i 30 dagar",
   "deleteDuplicates": "Radera dubbletter",
   "deleteEmptyAlbums": "Radera tomma album",
   "deleteEmptyAlbumsWithQuestionMark": "Radera tomma album?",
-  "deleteEnteAccount": "Radera Ente-konto",
+  "deleteEnteAccount": "Radera Photos-konto",
   "@deleteEnteAccount": {
     "description": "Final destructive button label for account deletion"
   },
@@ -925,7 +925,7 @@
   "deleteFromBoth": "Radera från båda",
   "deleteFromDevice": "Radera från enhet",
   "deleteFromDeviceQuestion": "Radera från enhet?",
-  "deleteFromEnte": "Radera från Ente",
+  "deleteFromEnte": "Radera från Photos",
   "deleteHiddenFilesFromDevice": "Radera dolda filer från enheten",
   "deleteHiddenFilesFromDeviceDescription": "Radera lokala kopior av dolda filer från din enhet",
   "deleteItemCount": "{count, plural, one{Radera {count} objekt} other{Radera {count} objekt}}",
@@ -1217,7 +1217,7 @@
     "description": "Title shown when editing an existing secret"
   },
   "editsSaved": "Redigeringarna har sparats",
-  "editsToLocationWillOnlyBeSeenWithinEnte": "Ändringar av platsen syns bara i Ente",
+  "editsToLocationWillOnlyBeSeenWithinEnte": "Ändringar av platsen syns bara i Photos",
   "editStorageLimit": "Redigera lagringsgräns",
   "editTag": "Redigera tagg",
   "editTime": "Redigera tid",
@@ -1243,7 +1243,7 @@
     }
   },
   "emailHint": "Ange din e-postadress",
-  "emailNeedsEnteAccountForFamily": "{email} har inget Ente-konto.\n\nSkicka en inbjudan och lägg till personen i familjen när ett Ente-konto har skapats.",
+  "emailNeedsEnteAccountForFamily": "{email} har inget Photos-konto.\n\nSkicka en inbjudan och lägg till personen i familjen när ett Photos-konto har skapats.",
   "@emailNeedsEnteAccountForFamily": {
     "placeholders": {
       "email": {
@@ -1252,13 +1252,13 @@
       }
     }
   },
-  "emailNoEnteAccount": "{email} har inget Ente-konto.\n\nSkicka en inbjudan för att dela objekt.",
+  "emailNoEnteAccount": "{email} har inget Photos-konto.\n\nSkicka en inbjudan för att dela objekt.",
   "@emailNoEnteAccount": {
     "placeholders": {
       "email": {}
     }
   },
-  "emailNoEnteAccountPhotos": "{email} har inte ett Ente-konto.\n\nSkicka en inbjudan till dem för att dela foton.",
+  "emailNoEnteAccountPhotos": "{email} har inte ett Photos-konto.\n\nSkicka en inbjudan till dem för att dela foton.",
   "@emailNoEnteAccountPhotos": {
     "placeholders": {
       "email": {}
@@ -1276,7 +1276,7 @@
       }
     }
   },
-  "emailVerificationEnableWarning": "För att undvika att bli låst från ditt konto, se till att spara en kopia av din e-post 2FA utanför Ente Auth innan du aktiverar e-postverifiering.",
+  "emailVerificationEnableWarning": "För att undvika att bli låst från ditt konto, se till att spara en kopia av din e-post 2FA utanför Photos innan du aktiverar e-postverifiering.",
   "emailVerificationToggle": "E-postverifiering",
   "emailYourLogs": "E-posta dina loggar",
   "@emailYourLogs": {
@@ -1310,16 +1310,16 @@
   "@endpointUpdatedMessage": {
     "description": "Success message when endpoint is updated"
   },
-  "ente": "Ente",
-  "enteAuth": "Ente Auth",
+  "ente": "Photos",
+  "enteAuth": "Photos",
   "@enteAuth": {
     "description": "Product name"
   },
-  "enteLocker": "Ente Locker",
+  "enteLocker": "Photos",
   "@enteLocker": {
     "description": "Product name"
   },
-  "entePhotos": "Ente Photos",
+  "entePhotos": "Photos",
   "@entePhotos": {
     "description": "Product name"
   },
@@ -1680,9 +1680,9 @@
       }
     }
   },
-  "filesInAlbumSafelyOnEnte": "{count, plural, one{Objektet i albumet är säkerhetskopierat till Ente. Ta bort kopian från enheten för att frigöra utrymme utan att förlora det.} other{Alla {formattedNumber} objekt i albumet är säkerhetskopierade till Ente. Ta bort kopiorna från enheten för att frigöra utrymme utan att förlora dem.}}",
+  "filesInAlbumSafelyOnEnte": "{count, plural, one{Objektet i albumet är säkerhetskopierat till Photos. Ta bort kopian från enheten för att frigöra utrymme utan att förlora det.} other{Alla {formattedNumber} objekt i albumet är säkerhetskopierade till Photos. Ta bort kopiorna från enheten för att frigöra utrymme utan att förlora dem.}}",
   "@filesInAlbumSafelyOnEnte": {
-    "description": "Explains that device copies for files in an album can be deleted because the files are stored on Ente",
+    "description": "Explains that device copies for files in an album can be deleted because the files are stored on Photos",
     "placeholders": {
       "count": {
         "example": "395",
@@ -1724,9 +1724,9 @@
       }
     }
   },
-  "filesSafelyOnEnte": "{count, plural, one{Objektet är säkerhetskopierat till Ente. Ta bort kopian från enheten för att frigöra utrymme utan att förlora det.} other{Alla {formattedNumber} objekt är säkerhetskopierade till Ente. Ta bort kopiorna från enheten för att frigöra utrymme utan att förlora dem.}}",
+  "filesSafelyOnEnte": "{count, plural, one{Objektet är säkerhetskopierat till Photos. Ta bort kopian från enheten för att frigöra utrymme utan att förlora det.} other{Alla {formattedNumber} objekt är säkerhetskopierade till Photos. Ta bort kopiorna från enheten för att frigöra utrymme utan att förlora dem.}}",
   "@filesSafelyOnEnte": {
-    "description": "Explains that device copies can be deleted because the files are stored on Ente",
+    "description": "Explains that device copies can be deleted because the files are stored on Photos",
     "placeholders": {
       "count": {
         "example": "395",
@@ -1827,7 +1827,7 @@
   "grantGalleryPermissionDesc": "Ge behörighet att få åtkomst till och organisera foton med ansiktsigenkänning. All bearbetning sker på din enhet.",
   "grantGalleryPermissionTitle": "Hitta dina favoriter",
   "grantPermission": "Ge behörighet",
-  "grantPermissionDesc": "Tillåt att Ente får åtkomst till ditt bibliotek så att vi kan organisera det med ansiktsigenkänning. All bearbetning sker på din enhet.",
+  "grantPermissionDesc": "Tillåt att Photos får åtkomst till ditt bibliotek så att vi kan organisera det med ansiktsigenkänning. All bearbetning sker på din enhet.",
   "greenery": "Det gröna livet",
   "grid": "Rutnät",
   "groupBy": "Gruppera efter",
@@ -1839,11 +1839,11 @@
   "guestView": "Gästvy",
   "guestViewEnablePreSteps": "För att aktivera gästvyn måste du konfigurera en enhetskod eller skärmlås i systeminställningarna.",
   "happyBirthday": "Grattis på födelsedagen! 🥳",
-  "hearUsWhereOptionalTitle": "Hur hörde du talas om Ente? (valfritt)",
+  "hearUsWhereOptionalTitle": "Hur hörde du talas om Photos? (valfritt)",
   "@hearUsWhereOptionalTitle": {
-    "description": "Title asking how user heard about Ente"
+    "description": "Title asking how user heard about Photos"
   },
-  "hearUsWhereTitle": "Hur fick du höra talas om Ente?",
+  "hearUsWhereTitle": "Hur fick du höra talas om Photos?",
   "help": "Hjälp",
   "helpAndSupport": "Hjälp och support",
   "hidden": "Dold",
@@ -1940,7 +1940,7 @@
   "importBitwardenGuide": "Använd alternativet \"Exportera valv\" inom Bitwarden Tools och importera den okrypterade JSON-filen.",
   "importCodeDelimiterInfo": "Koderna kan separeras med kommatecken eller en ny rad",
   "importCodes": "Importera koder",
-  "importEnteEncGuide": "Välj den krypterade JSON-filen som exporteras från Ente",
+  "importEnteEncGuide": "Välj den krypterade JSON-filen som exporteras från Photos",
   "importEnterSetupKey": "Ange en konfigurationskod",
   "importFailureDesc": "Kunde inte tolka den valda filen.",
   "importFileTooLarge": "Den markerade filen är för stor. Maximal storlek: {size}.",
@@ -1988,7 +1988,7 @@
     }
   },
   "importSuccessTitle": "Hurra!",
-  "importTypeEnteEncrypted": "Ente krypterad export",
+  "importTypeEnteEncrypted": "Photos krypterad export",
   "incorrectCode": "Felaktig kod",
   "@incorrectCode": {
     "description": "Error message when code is incorrect"
@@ -2051,7 +2051,7 @@
       }
     }
   },
-  "inviteToEnte": "Bjud in till Ente",
+  "inviteToEnte": "Bjud in till Photos",
   "ok": "OK",
   "@ok": {
     "description": "Generic OK button label"
@@ -2433,7 +2433,7 @@
   "@loginTerms": {
     "description": "Terms agreement text for login"
   },
-  "loginToEnte": "Logga in på Ente",
+  "loginToEnte": "Logga in på Photos",
   "loginToExistingAccount": "Logga in på ett befintligt konto",
   "loginWithAuthAccount": "Logga in med ditt Auth-konto",
   "loginWithTOTP": "Logga in med TOTP",
@@ -2482,7 +2482,7 @@
   "mapsPrivacyNotice": "Ungefärliga koordinater skickas till integritetsmedvetna tredje parter som OpenStreetMap för att visa karta och plats.",
   "markingAsImportant": "Markerar som viktig...",
   "me": "Jag",
-  "mediaManagementHintMessage": "Slå på mediehantering för Ente i Inställningar så visas inte frågorna längre.",
+  "mediaManagementHintMessage": "Slå på mediehantering för Photos i Inställningar så visas inte frågorna längre.",
   "@mediaManagementHintMessage": {
     "description": "Message explaining that enabling Android media management permission avoids repeated delete confirmations."
   },
@@ -2573,7 +2573,7 @@
   "mixedGrouping": "Blandad gruppering?",
   "mlConsent": "Aktivera maskininlärning",
   "mlConsentConfirmation": "Jag förstår och vill aktivera maskininlärning",
-  "mlConsentDescription": "Om du aktiverar maskininlärning, kommer Ente extrahera information som ansiktsgeometri från filer, inklusive de som delas med dig.\n\nDetta kommer att hända på din enhet, och all genererad biometrisk information kommer att helsträckskrypteras.",
+  "mlConsentDescription": "Om du aktiverar maskininlärning, kommer Photos extrahera information som ansiktsgeometri från filer, inklusive de som delas med dig.\n\nDetta kommer att hända på din enhet, och all genererad biometrisk information kommer att helsträckskrypteras.",
   "mlConsentPrivacy": "Klicka här för mer information om denna funktion i vår integritetspolicy",
   "mlCouldNotProcessItems": "{count, plural, one{Det gick inte att bearbeta {count} objekt} other{Det gick inte att bearbeta {count} objekt}}",
   "@mlCouldNotProcessItems": {
@@ -2628,7 +2628,7 @@
   "moreDetails": "Mer detaljer",
   "moreFrom": "Mer från",
   "@moreFrom": {
-    "description": "Heading shown above links to other Ente apps"
+    "description": "Heading shown above links to other Photos apps"
   },
   "moreOptions": "Fler alternativ",
   "@moreOptions": {
@@ -2675,13 +2675,13 @@
       }
     }
   },
-  "networkConnectionRefusedErr": "Det gick inte att ansluta till Ente, försök igen om en stund. Om felet kvarstår, vänligen kontakta support.",
+  "networkConnectionRefusedErr": "Det gick inte att ansluta till Photos, försök igen om en stund. Om felet kvarstår, vänligen kontakta support.",
   "@networkConnectionRefusedErr": {
-    "description": "Error message shown when the app cannot connect to Ente due to connection refused"
+    "description": "Error message shown when the app cannot connect to Photos due to connection refused"
   },
-  "networkHostLookUpErr": "Det gick inte att ansluta till Ente, kontrollera dina nätverksinställningar och kontakta supporten om felet kvarstår.",
+  "networkHostLookUpErr": "Det gick inte att ansluta till Photos, kontrollera dina nätverksinställningar och kontakta supporten om felet kvarstår.",
   "@networkHostLookUpErr": {
-    "description": "Error message shown when the app cannot connect to Ente due to network host lookup failure"
+    "description": "Error message shown when the app cannot connect to Photos due to network host lookup failure"
   },
   "never": "Aldrig",
   "newAlbum": "Nytt album",
@@ -2834,7 +2834,7 @@
   "offlineHomeSignupBannerAction": "Säkerhetskopiera nu",
   "offlineHomeSignupBannerDescription": "Krypterade säkerhetskopiar på 3 platser för att hålla dina minnen säkra.",
   "offlineHomeSignupBannerTitle": "Skydda dina minnen för evigt",
-  "offlineKeyUnavailableMessage": "Ente Auth kan inte komma åt nyckeln till dina offlinekoder.",
+  "offlineKeyUnavailableMessage": "Photos kan inte komma åt nyckeln till dina offlinekoder.",
   "offlineModeWarning": "Du har valt att fortsätta utan säkerhetskopior. Vänligen ta manuella säkerhetskopior för att se till att dina koder är säkra.",
   "offlineNameFaceBannerSubtitle": "Registrera dig för att märka dem och enkelt hitta deras foton senare.",
   "offlineNameFaceBannerTitle": "Ge det här ansiktet ett namn",
@@ -2847,14 +2847,14 @@
     "description": "The text displayed above folders/albums stored on device",
     "type": "text"
   },
-  "oneAccountAcrossEnteApps": "Du har ett konto i Ente Photos, Ente Auth och Ente Locker.",
+  "oneAccountAcrossEnteApps": "Du har ett konto i Photos, Photos och Photos.",
   "@oneAccountAcrossEnteApps": {
-    "description": "Explains that account deletion affects all Ente apps"
+    "description": "Explains that account deletion affects all Photos apps"
   },
   "oneLineAboutTheIssue": "En rad om problemet",
   "onEnte": "På <branding>ente</branding>",
   "@onEnte": {
-    "description": "The text displayed above albums backed up to Ente",
+    "description": "The text displayed above albums backed up to Photos",
     "type": "text"
   },
   "onlyFamilyAdminCanChangeCode": "Kontakta {familyAdminEmail} för att ändra din kod.",
@@ -2988,7 +2988,7 @@
       }
     }
   },
-  "permanentlyDeleteYourEnteAccount": "Permanent radera ditt Ente-konto?",
+  "permanentlyDeleteYourEnteAccount": "Permanent radera ditt Photos-konto?",
   "@permanentlyDeleteYourEnteAccount": {
     "description": "Heading for final account deletion confirmation"
   },
@@ -3011,7 +3011,7 @@
   },
   "pets": "Fluffigt sällskap",
   "photoGridSize": "Storlek på bildrutnät",
-  "photoLibraryAddPermissionRequired": "Ente behöver behörighet att spara foton och videor i Apple Bilder. Du kan tillåta åtkomst i Inställningar.",
+  "photoLibraryAddPermissionRequired": "Photos behöver behörighet att spara foton och videor i Apple Bilder. Du kan tillåta åtkomst i Inställningar.",
   "photoLibraryAddPermissionRestricted": "Åtkomst till bildbiblioteket är begränsad på den här enheten.",
   "photoOrder": "Fotoordning",
   "photoViewerFilmstripLabel": "Fotoväljare",
@@ -3179,7 +3179,7 @@
     }
   },
   "publicLink": "Offentlig länk",
-  "publicLinkAccessDescription": "Alla med länken kan öppna albumet utan ett Ente-konto.",
+  "publicLinkAccessDescription": "Alla med länken kan öppna albumet utan ett Photos-konto.",
   "publicLinkCollectDescription": "Alla med länken kan lägga till foton i ditt album.",
   "publicLinkEnabled": "Offentlig länk aktiverad",
   "publicLinkViewDescription": "Alla med länken kan komma åt ditt album.",
@@ -3514,7 +3514,7 @@
   "resendInvite": "Skicka inbjudan igen",
   "reset": "Återställ",
   "resetIgnoredFiles": "Återställ ignorerade filer",
-  "resetIgnoredFilesDescription": "Återställ de ignorerade filerna så att Ente kan försöka ladda upp dem igen.",
+  "resetIgnoredFilesDescription": "Återställ de ignorerade filerna så att Photos kan försöka ladda upp dem igen.",
   "resetPasswordTitle": "Återställ lösenord",
   "@resetPasswordTitle": {
     "description": "Reset password title"
@@ -3666,7 +3666,7 @@
     "description": "Description text asking user if they want to save to storage or share with other apps"
   },
   "savePerson": "Spara person",
-  "saveToEnte": "Spara i Ente",
+  "saveToEnte": "Spara i Photos",
   "saveToLocker": "Spara till Locker",
   "saveYourRecoveryKeyIfYouHaventAlready": "Spara din återställningsnyckel om du inte redan har gjort det",
   "saving": "Sparar...",
@@ -3827,7 +3827,7 @@
   "securityDesc": "Kryptering, återställningsnycklar, applås och kontoskydd",
   "seeAllCollections": "Se alla samlingar",
   "seePublicAlbumLinksInApp": "Visa offentliga albumlänkar i appen",
-  "selectAlbumsToBackUpToEnte": "Välj album att säkerhetskopiera till Ente",
+  "selectAlbumsToBackUpToEnte": "Välj album att säkerhetskopiera till Photos",
   "selectAlbumToLikePhoto": "Välj album för att gilla fotot",
   "@selectAlbumToLikePhoto": {
     "description": "Instruction for liking photo"
@@ -3863,10 +3863,10 @@
       }
     }
   },
-  "selectedFilesAreNotOnEnte": "Markerade filer är inte på Ente",
+  "selectedFilesAreNotOnEnte": "Markerade filer är inte på Photos",
   "selectedFilesBackedUpToEnte": "Dessa objekt tas bort från alla album. Du kan återställa dem från papperskorgen.",
   "@selectedFilesBackedUpToEnte": {
-    "description": "Delete confirmation message for selected items that are backed up to Ente."
+    "description": "Delete confirmation message for selected items that are backed up to Photos."
   },
   "selectedFilesSavedOnDeviceOnly": "Objekt som inte är säkerhetskopierade. Ta bort dem permanent från enheten?",
   "@selectedFilesSavedOnDeviceOnly": {
@@ -4015,7 +4015,7 @@
   "share": "Dela",
   "shareALink": "Dela en länk",
   "shareAnAlbum": "Dela ett album",
-  "shareCodeEarnStorage": "Fördubbla din lagring i Ente",
+  "shareCodeEarnStorage": "Fördubbla din lagring i Photos",
   "shareCodes": "Dela koder",
   "shareCodesDuration": "Välj den tidsperiod under vilken du vill dela koder.",
   "shareCollection": "Dela samling",
@@ -4064,17 +4064,17 @@
       "verificationID": {}
     }
   },
-  "shareTextRecommendUsingEnte": "Ladda ner Ente så kan vi enkelt dela filer i originalkvalitet\n\nhttps://ente.com",
-  "shareTextRecommendUsingEnteForFamily": "Ladda ner Ente så att jag kan lägga till dig i mitt familjeabonnemang\n\nhttps://ente.com",
-  "shareTextRecommendUsingEnteForPhotos": "Ladda ner Ente så kan vi enkelt dela foton och videor i originalkvalitet\n\nhttps://ente.com",
-  "shareTextReferralInvite": "Få 20 GB gratis med Ente Photos! Ladda ner appen på https://ente.com/invite och använd koden {referralCode}.",
+  "shareTextRecommendUsingEnte": "Ladda ner Photos så kan vi enkelt dela filer i originalkvalitet\n\nhttps://ente.com",
+  "shareTextRecommendUsingEnteForFamily": "Ladda ner Photos så att jag kan lägga till dig i mitt familjeabonnemang\n\nhttps://ente.com",
+  "shareTextRecommendUsingEnteForPhotos": "Ladda ner Photos så kan vi enkelt dela foton och videor i originalkvalitet\n\nhttps://ente.com",
+  "shareTextReferralInvite": "Få 20 GB gratis med Photos! Ladda ner appen på https://ente.com/invite och använd koden {referralCode}.",
   "@shareTextReferralInvite": {
     "placeholders": {
       "referralCode": {}
     }
   },
   "shareThisLink": "Länken ger åtkomst till objektet för alla som tar emot den. Du kan ta bort åtkomsten när som helst genom att radera länken.",
-  "shareWithNonenteUsers": "Dela med icke-Ente användare",
+  "shareWithNonenteUsers": "Dela med icke-Photos användare",
   "shareYourFeedbackHere": "Dela din återkoppling här",
   "@shareYourFeedbackHere": {
     "description": "Placeholder for optional account deletion feedback"
@@ -4105,7 +4105,7 @@
   "showQRAuthMessage": "Autentisera för att visa QR-kod",
   "showTextOnWidget": "Visa text på widget",
   "shuffle": "Blanda",
-  "sigInBackupReminder": "Ente kommer automatiskt säkerhetskopiera koder efter inloggning.\n\nVi rekommenderar fortfarande att exportera koder som en extra säkerhetskopia.",
+  "sigInBackupReminder": "Photos kommer automatiskt säkerhetskopiera koder efter inloggning.\n\nVi rekommenderar fortfarande att exportera koder som en extra säkerhetskopia.",
   "signInToBackup": "Logga in för att säkerhetskopiera dina koder",
   "signOutFromOtherDevices": "Logga ut från andra enheter",
   "@signOutFromOtherDevices": {
@@ -4139,13 +4139,13 @@
   "@singleFileDeleteFromDevice": {
     "description": "Delete confirmation message for a single item that exists only on the device."
   },
-  "singleFileInBothLocalAndRemote": "Objektet finns både på enheten och i Ente.",
+  "singleFileInBothLocalAndRemote": "Objektet finns både på enheten och i Photos.",
   "@singleFileInBothLocalAndRemote": {
-    "description": "Delete confirmation message for a single item that exists both on the device and in Ente."
+    "description": "Delete confirmation message for a single item that exists both on the device and in Photos."
   },
   "singleFileInRemoteOnly": "Objektet tas bort från alla album. Du kan återställa det från papperskorgen.",
   "@singleFileInRemoteOnly": {
-    "description": "Delete confirmation message for a single item that exists only in Ente."
+    "description": "Delete confirmation message for a single item that exists only in Photos."
   },
   "skip": "Hoppa över",
   "skippedFiles": "Överhoppade filer",
@@ -4157,9 +4157,9 @@
   "socialNotifications": "Gilla-markeringar och kommentarer",
   "socialNotificationsExplanation": "Gilla-markeringar på dina foton och kommentarer på album som du ingår i",
   "someoneSharingAlbumsWithYouShouldSeeTheSameId": "Någon som delar album med dig bör se samma ID på deras enhet.",
-  "someSelectedFilesBackedUpToEnte": "Dessa objekt finns både på enheten och i Ente.",
+  "someSelectedFilesBackedUpToEnte": "Dessa objekt finns både på enheten och i Photos.",
   "@someSelectedFilesBackedUpToEnte": {
-    "description": "Delete confirmation message for selected items that exist both on the device and in Ente."
+    "description": "Delete confirmation message for selected items that exist both on the device and in Photos."
   },
   "somethingWentWrong": "Något gick fel",
   "somethingWentWrongMessage": "Något gick fel, vänligen försök igen",
@@ -4264,7 +4264,7 @@
   "@strongStrength": {
     "description": "Strong password strength label"
   },
-  "subAlreadyLinkedErrMessage": "Ditt {id} är redan kopplat till ett annat Ente-konto.\nKontakta supporten om du vill använda ditt {id} med det här kontot.",
+  "subAlreadyLinkedErrMessage": "Ditt {id} är redan kopplat till ett annat Photos-konto.\nKontakta supporten om du vill använda ditt {id} med det här kontot.",
   "@subAlreadyLinkedErrMessage": {
     "placeholders": {
       "id": {}
@@ -4365,7 +4365,7 @@
   "@thisEmailIsAlreadyInUse": {
     "description": "Error message when email is already in use"
   },
-  "thisHelpsUsImproveEnte": "Det här hjälper oss förbättra Ente",
+  "thisHelpsUsImproveEnte": "Det här hjälper oss förbättra Photos",
   "@thisHelpsUsImproveEnte": {
     "description": "Subtitle under account deletion reason prompt"
   },
@@ -4483,7 +4483,7 @@
     }
   },
   "trustedContacts": "Betrodda kontakter",
-  "trustedContactsEmptyDescription": "Utse en annan Ente-användare till betrodd kontakt för att återställa ditt konto",
+  "trustedContactsEmptyDescription": "Utse en annan Photos-användare till betrodd kontakt för att återställa ditt konto",
   "trustedContactStatusAccepted": "Accepterad",
   "@trustedContactStatusAccepted": {
     "description": "Short status label shown for an accepted trusted contact"
@@ -4645,7 +4645,7 @@
   "@uploadStorageLimitErrorTitle": {
     "description": "Title shown when uploads fail due to running out of storage"
   },
-  "uploadSubscriptionExpiredErrorBody": "Ditt Ente Photos-abonnemang har gått ut. Förnya abonnemanget för att fortsätta ladda upp.",
+  "uploadSubscriptionExpiredErrorBody": "Ditt Photos-abonnemang har gått ut. Förnya abonnemanget för att fortsätta ladda upp.",
   "@uploadSubscriptionExpiredErrorBody": {
     "description": "Body shown when uploads fail because the Photos subscription is expired"
   },
@@ -5037,7 +5037,7 @@
       }
     }
   },
-  "noEnteAccountWithThisEmail": "Det finns inget Ente-konto med den här e-postadressen.",
+  "noEnteAccountWithThisEmail": "Det finns inget Photos-konto med den här e-postadressen.",
   "shareALinkInline": "Dela en länk.",
   "personAlreadyHasAccess": "Den här personen har redan åtkomst.",
   "removePersonTitle": "Ta bort {name}?",
@@ -5073,5 +5073,5 @@
     }
   },
   "notEnoughStorageTitle": "Otillräckligt lagringsutrymme",
-  "notEnoughStorageBody": "Du har inte tillräckligt med ledigt utrymme i Ente för att lägga till nya foton. Frigör utrymme eller uppgradera för att fortsätta lägga till."
+  "notEnoughStorageBody": "Du har inte tillräckligt med ledigt utrymme i Photos för att lägga till nya foton. Frigör utrymme eller uppgradera för att fortsätta lägga till."
 }

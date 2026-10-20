@@ -110,7 +110,7 @@ class _WrappedRewindBannerButtonState extends State<WrappedRewindBannerButton> {
                           children: [
                             Flexible(
                               child: Text(
-                                "Ente Rewind 2025",
+                                "Photos Rewind 2025",
                                 style: textTheme.h3Bold.copyWith(
                                   fontSize:
                                       (textTheme.h3Bold.fontSize ?? 24) + 2,
@@ -168,7 +168,7 @@ class _WrappedRewindBannerButtonState extends State<WrappedRewindBannerButton> {
     final WrappedEntryState currentState = wrappedService.state;
     final WrappedResult? result = currentState.result;
     if (result == null || result.cards.isEmpty) {
-      showShortToast(context, "Ente Rewind isn't ready yet");
+      showShortToast(context, "Photos Rewind isn't ready yet");
       return;
     }
     Navigator.of(context).push(

@@ -30,7 +30,7 @@ import { registerStreamProtocol } from "./main/stream";
 import { wait } from "./main/utils/common";
 import { isDev } from "./main/utils/electron";
 
-const rendererURL = "ente://app";
+const rendererURL = "photos://app";
 
 // Closing normally hides the window so exports and folder watches keep running.
 // Quit paths set this flag to close it for real.
@@ -51,17 +51,17 @@ const main = () => {
 
     initLogging();
     logStartupBanner();
-    registerForEnteLinks();
+    registerForAppLinks();
 
     // Electron keeps the last privileged-scheme registration. This must follow
-    // next-electron-server's registration so both "ente" and "stream" survive.
+    // next-electron-server's registration so both "photos" and "stream" survive.
     setupRendererServer();
     registerPrivilegedSchemes();
 
-    const handleOpenEnteURLEnsuringWindow = (url: string) => {
+    const handleOpenAppURLEnsuringWindow = (url: string) => {
         log.info(`Attempting to handle request to open URL: ${url}`);
-        if (mainWindow) handleEnteLinks(mainWindow, url);
-        else setTimeout(() => handleOpenEnteURLEnsuringWindow(url), 1000);
+        if (mainWindow) handleAppLinks(mainWindow, url);
+        else setTimeout(() => handleOpenAppURLEnsuringWindow(url), 1000);
     };
 
     app.on("second-instance", (_, argv: string[]) => {
@@ -72,8 +72,8 @@ const main = () => {
         }
 
         // Chromium may reorder or insert arguments, so the URL has no fixed index.
-        const url = argv.find((arg) => arg.startsWith("ente://app"));
-        if (url) handleOpenEnteURLEnsuringWindow(url);
+        const url = argv.find((arg) => arg.startsWith("photos://app"));
+        if (url) handleOpenAppURLEnsuringWindow(url);
     });
 
     void app.whenReady().then(() => {
@@ -113,12 +113,12 @@ const main = () => {
         allowWindowClose();
     });
 
-    app.on("open-url", (_, url) => handleOpenEnteURLEnsuringWindow(url));
+    app.on("open-url", (_, url) => handleOpenAppURLEnsuringWindow(url));
 };
 
 const logStartupBanner = () => {
     const version = isDev ? "dev" : app.getVersion();
-    log.info(`Starting ente-photos-desktop ${version}`);
+    log.info(`Starting photos-desktop ${version}`);
 
     const platform = process.platform;
     const osRelease = os.release();
@@ -131,7 +131,7 @@ const setupRendererServer = () => serveNextAt(rendererURL, { port: 3008 });
 const registerPrivilegedSchemes = () => {
     protocol.registerSchemesAsPrivileged([
         {
-            scheme: "ente",
+            scheme: "photos",
             privileges: {
                 standard: true,
                 secure: true,
@@ -147,11 +147,10 @@ const registerPrivilegedSchemes = () => {
     ]);
 };
 
-const registerForEnteLinks = () => app.setAsDefaultProtocolClient("ente");
+const registerForAppLinks = () => app.setAsDefaultProtocolClient("photos");
 
-const handleEnteLinks = (mainWindow: BrowserWindow, url: string) => {
-    // Deep links and the bundled renderer deliberately share the ente:// scheme.
-    mainWindow.webContents.send("openEnteURL", url);
+const handleAppLinks = (mainWindow: BrowserWindow, url: string) => {
+    mainWindow.webContents.send("openAppURL", url);
 };
 
 const attachProcessHandlers = () => {
@@ -380,7 +379,7 @@ const setupTrayItem = (mainWindow: BrowserWindow) => {
     );
     const trayIcon = nativeImage.createFromPath(trayImgPath);
     const tray = new Tray(trayIcon);
-    tray.setToolTip("Ente Photos");
+    tray.setToolTip("Photos");
     tray.setContextMenu(createTrayContextMenu(mainWindow));
     if (process.platform === "linux") {
         tray.on("click", () => {

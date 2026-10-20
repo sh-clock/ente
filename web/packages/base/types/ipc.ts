@@ -45,7 +45,7 @@ export interface Electron {
         themeMode: ThemeMode,
         isFileViewerOpen: boolean,
     ) => void;
-    onOpenEnteURL: (cb: ((url: string) => void) | undefined) => void;
+    onOpenAppURL: (cb: ((url: string) => void) | undefined) => void;
     lastShownChangelogVersion: () => Promise<number | undefined>;
     setLastShownChangelogVersion: (version: number) => Promise<void>;
     isAutoLaunchEnabled: () => Promise<boolean>;

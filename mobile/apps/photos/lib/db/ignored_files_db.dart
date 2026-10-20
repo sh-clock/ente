@@ -5,7 +5,7 @@ import 'package:photos/db/common/base.dart';
 import 'package:photos/models/ignored_file.dart';
 import 'package:sqlite_async/sqlite_async.dart';
 
-// Prevent files deleted from Ente from being reuploaded without user action.
+// Prevent files deleted from Photos from being reuploaded without user action.
 class IgnoredFilesDB with SqlDbBase {
   static const _databaseName = "ente.ignored_files.db";
   static final Logger _logger = Logger("IgnoredFilesDB");

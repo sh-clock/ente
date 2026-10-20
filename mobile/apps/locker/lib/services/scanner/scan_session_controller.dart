@@ -224,7 +224,7 @@ class ScanSessionController extends ChangeNotifier {
         ),
       );
     }
-    final bytes = const PdfWriter(creator: 'Ente Locker').build(specs);
+    final bytes = const PdfWriter(creator: 'Locker').build(specs);
     final tmp = await getTemporaryDirectory();
     final dir = await Directory(
       p.join(tmp.path, 'document_scan'),

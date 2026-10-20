@@ -9,7 +9,7 @@ import 'package:ente_components/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 
-// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Ente-Visual-Design?node-id=4809-7992&m=dev
+// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Photos-Visual-Design?node-id=4809-7992&m=dev
 class _BottomSheetHeaderComponent extends StatelessWidget {
   const _BottomSheetHeaderComponent({
     this.title,
@@ -88,7 +88,7 @@ class _BottomSheetHeaderComponent extends StatelessWidget {
   }
 }
 
-// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Ente-Visual-Design?node-id=4809-8027&m=dev
+// Figma: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Photos-Visual-Design?node-id=4809-8027&m=dev
 class BottomSheetComponent extends StatelessWidget {
   const BottomSheetComponent({
     super.key,
@@ -135,7 +135,7 @@ class BottomSheetComponent extends StatelessWidget {
   final double? actionsTopSpacing;
   final Color? backgroundColor;
 
-  // Source: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Ente-Visual-Design?node-id=4809-8027&m=dev
+  // Source: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Photos-Visual-Design?node-id=4809-8027&m=dev
   final BorderSide? borderSide;
 
   final bool isKeyboardAware;

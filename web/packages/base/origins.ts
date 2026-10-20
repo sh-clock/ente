@@ -31,6 +31,6 @@ export const customAPIHost = async () => {
     return origin ? new URL(origin).host : undefined;
 };
 
-// Custom deployments bypass Ente's uploader worker.
+// Custom deployments bypass Photos uploader worker.
 export const uploaderOrigin = async () =>
     (await customAPIOrigin()) ?? "https://uploader.ente.com";

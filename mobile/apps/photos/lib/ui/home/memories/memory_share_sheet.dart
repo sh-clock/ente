@@ -243,7 +243,7 @@ class _MemoryShareSelectionSheetState
 }
 
 // The reference sheet is 634px on the 812px Share memory viewport.
-// Source: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Ente-Visual-Design?node-id=18629-312441&m=dev
+// Source: https://www.figma.com/design/BuBNPPytxlVnqfmCUW0mgz/Photos-Visual-Design?node-id=18629-312441&m=dev
 const double _figmaSheetHeightRatio = 634 / 812;
 
 class _MemoryShareSheetHeader extends StatelessWidget {

@@ -26,9 +26,9 @@ class Network {
     final version = packageInfo.version;
     String packageName = packageInfo.packageName;
 
-    // Linux reports ente_auth; Windows reports Ente Auth.
+    // Linux reports ente_auth; Windows reports Photos.
     if (Platform.isWindows || Platform.isLinux) {
-      if (packageName == 'ente_auth' || packageName == 'Ente Auth') {
+      if (packageName == 'ente_auth' || packageName == 'Photos') {
         packageName = 'io.ente.auth';
       }
     }
