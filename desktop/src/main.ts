@@ -24,7 +24,6 @@ import autoLauncher from "./main/services/auto-launcher";
 import { shouldHideDockIcon } from "./main/services/store";
 import { createWatcher } from "./main/services/watch";
 import {
-    localBackendOrigin,
     startLocalBackendIfNeeded,
 } from "./main/services/local-backend";
 import { userPreferences } from "./main/stores/user-preferences";

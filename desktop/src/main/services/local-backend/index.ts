@@ -22,7 +22,7 @@ export const startLocalBackendIfNeeded = async (
     backend = await startLocalBackend({
         dataDir: path.join(userDataDir, "local-vault"),
         port: Number(process.env.PHOTOS_LOCAL_BACKEND_PORT ?? defaultLocalBackendPort),
-        log,
+        ...(log !== undefined ? { log } : {}),
     });
     return backend;
 };

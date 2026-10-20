@@ -12,7 +12,11 @@ import {
     savedLocalUser,
     saveKeyAttributes,
 } from "ente-accounts/services/accounts-db";
-import { encryptBox, generateKey, generateKeyPair } from "ente-accounts/services/crypto";
+import {
+    encryptBox,
+    generateKey,
+    generateKeyPair,
+} from "ente-accounts/services/crypto";
 import type { KeyAttributes } from "ente-accounts/services/user";
 import { isDesktop } from "ente-base/app";
 import log from "ente-base/log";
@@ -24,9 +28,13 @@ import {
     updateSessionFromElectronSafeStorageIfNeeded,
 } from "ente-new/photos/services/account-keys";
 
-// Browser (non-desktop) fallback store for the vault master key. The desktop
-// app persists it via OS safeStorage instead (see
-// saveMasterKeyInSessionAndSafeStore).
+// Fallback store for the vault master key.
+//
+// The desktop app persists the key via OS safeStorage (the preferred path).
+// When safeStorage is unavailable (e.g. Linux without a keyring service), the
+// key is kept in this local store instead - a vault that silently loses its
+// key on restart is strictly worse than a weaker-at-rest fallback, and the
+// recovery key (Settings -> Account) provides an independent recovery path.
 const masterKeyStore = localforage.createInstance({
     name: "photos-local-vault",
     storeName: "keys",
@@ -35,15 +43,30 @@ const masterKeyStore = localforage.createInstance({
 const LOCAL_VAULT_USER_ID = 1;
 const LOCAL_VAULT_EMAIL = "local@vault";
 
-const saveMasterKeyLocally = async (masterKey: string) => {
-    if (!isDesktop) await masterKeyStore.setItem("masterKey", masterKey);
+const safeStorageRoundTrips = async (masterKey: string) => {
+    if (!isDesktop) return false;
+    try {
+        const stored = await globalThis.electron?.masterKeyFromSafeStorage();
+        return stored === masterKey;
+    } catch {
+        return false;
+    }
 };
 
-const readMasterKeyLocally = async (): Promise<string | undefined> => {
-    if (!isDesktop) {
-        return (await masterKeyStore.getItem<string>("masterKey")) ?? undefined;
+const saveMasterKeyLocally = async (masterKey: string) => {
+    // Keep a fallback copy whenever OS safeStorage cannot round-trip the key
+    // (e.g. Linux without a usable keyring backend). A vault that loses its
+    // key on restart is strictly worse than this weaker-at-rest fallback.
+    if (!(await safeStorageRoundTrips(masterKey))) {
+        await masterKeyStore.setItem("masterKey", masterKey);
     }
-    return undefined;
+};
+
+const readMasterKeyLocally = async (): Promise<string | undefined> =>
+    (await masterKeyStore.getItem<string>("masterKey")) ?? undefined;
+
+const clearMasterKeyLocally = async () => {
+    await masterKeyStore.removeItem("masterKey");
 };
 
 const generateVaultKeyAttributes = async (
@@ -53,6 +76,12 @@ const generateVaultKeyAttributes = async (
     const encryptedSecretKey = await encryptBox(privateKey, masterKey);
     const recoveryKey = await generateKey();
     const encryptedRecoveryKey = await encryptBox(recoveryKey, masterKey);
+    // The master key sealed with the recovery key, so that the vault can be
+    // recovered with it (Settings -> Account -> Recovery key).
+    const masterKeyEncryptedWithRecoveryKey = await encryptBox(
+        masterKey,
+        recoveryKey,
+    );
     return {
         // Placeholder kek fields: there is no password yet. Regenerated when
         // the password-based vault bootstrap lands.
@@ -64,8 +93,9 @@ const generateVaultKeyAttributes = async (
         publicKey,
         encryptedSecretKey: encryptedSecretKey.encryptedData,
         secretKeyDecryptionNonce: encryptedSecretKey.nonce,
-        masterKeyEncryptedWithRecoveryKey: undefined,
-        masterKeyDecryptionNonce: undefined,
+        masterKeyEncryptedWithRecoveryKey:
+            masterKeyEncryptedWithRecoveryKey.encryptedData,
+        masterKeyDecryptionNonce: masterKeyEncryptedWithRecoveryKey.nonce,
         recoveryKeyEncryptedWithMasterKey: encryptedRecoveryKey.encryptedData,
         recoveryKeyDecryptionNonce: encryptedRecoveryKey.nonce,
     };
@@ -85,13 +115,17 @@ export const ensureLocalVault = async () => {
         await updateSessionFromElectronSafeStorageIfNeeded();
         if (!haveMasterKeyInSession()) {
             const masterKey = await readMasterKeyLocally();
-            if (masterKey) await saveMasterKeyInSessionAndSafeStore(masterKey);
+            if (masterKey)
+                await saveMasterKeyInSessionAndSafeStore(masterKey);
         }
         if (haveMasterKeyInSession()) return;
-        // The vault exists but its master key is unrecoverable (e.g. OS
-        // safeStorage was unavailable when it was created). A vault without
-        // its key is unusable, so regenerate it from scratch.
-        log.warn("Local vault master key unrecoverable; regenerating vault");
+        // The vault exists but its master key is unrecoverable (both OS
+        // safeStorage and the fallback store lost it). A vault without its
+        // key is unusable, so regenerate it from scratch; the old vault's
+        // data remains on disk in case its recovery key is found later.
+        log.error(
+            "Local vault master key unrecoverable; regenerating vault (the previous vault's data remains on disk and can be restored with its recovery key)",
+        );
     }
 
     // First run (or regeneration): create the vault.
@@ -105,6 +139,7 @@ export const ensureLocalVault = async () => {
     });
     saveKeyAttributes(keyAttributes);
     saveAuthToken(token);
-    await saveMasterKeyLocally(masterKey);
+    await clearMasterKeyLocally();
     await saveMasterKeyInSessionAndSafeStore(masterKey);
+    await saveMasterKeyLocally(masterKey);
 };

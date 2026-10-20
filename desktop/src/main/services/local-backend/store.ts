@@ -197,6 +197,10 @@ export class LocalVaultStore {
         return this.state.userEntities[type];
     }
 
+    userEntityTypes(): string[] {
+        return Object.keys(this.state.userEntities);
+    }
+
     get fileData(): LocalVaultState["fileData"] {
         return this.state.fileData;
     }

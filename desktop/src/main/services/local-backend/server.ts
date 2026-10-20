@@ -420,6 +420,8 @@ const handle = async (
                 updationTime: store.nowMicros(),
             });
         }
+        const addCollection = collectionByID(store, collectionID);
+        if (addCollection) addCollection.updationTime = store.nowMicros();
         store.markDirty();
         sendJSON(res, 200, {});
         return;
@@ -446,6 +448,9 @@ const handle = async (
                 trashItem.updatedAt = store.nowMicros();
             }
         }
+        const restoreCollection = collectionByID(store, collectionID);
+        if (restoreCollection)
+            restoreCollection.updationTime = store.nowMicros();
         store.markDirty();
         sendJSON(res, 200, {});
         return;
@@ -472,6 +477,10 @@ const handle = async (
             file.keyDecryptionNonce = item.keyDecryptionNonce;
             file.updationTime = store.nowMicros();
         }
+        for (const cid of [fromCollectionID, toCollectionID]) {
+            const c = collectionByID(store, cid);
+            if (c) c.updationTime = store.nowMicros();
+        }
         store.markDirty();
         sendJSON(res, 200, {});
         return;
@@ -488,6 +497,8 @@ const handle = async (
             file.isDeleted = true;
             file.updationTime = store.nowMicros();
         }
+        const removeCollection = collectionByID(store, collectionID);
+        if (removeCollection) removeCollection.updationTime = store.nowMicros();
         store.markDirty();
         sendJSON(res, 200, {});
         return;
@@ -554,6 +565,10 @@ const handle = async (
                 : {}),
         };
         store.files.push(file);
+        // Museum semantics: adding files to a collection advances its
+        // updationTime so that clients re-diff the collection.
+        const collection = collectionByID(store, file.collectionID);
+        if (collection) collection.updationTime = store.nowMicros();
         store.markDirty();
         sendJSON(res, 200, file);
         return;
@@ -590,16 +605,18 @@ const handle = async (
         const fileIDs: number[] = (body.fileIDs ?? []).map(Number);
         const updatedAt = store.nowMicros();
         const deleteBy = updatedAt + trashRetentionMicros;
+        const trashedCollectionIDs = new Set<number>();
         for (const id of fileIDs) {
             const file = store.files.find((f) => f.id === id && !f.isDeleted);
             if (!file) continue;
             store.addTombstone(file.collectionID, file.id, store.nowMicros());
+            trashedCollectionIDs.add(file.collectionID);
             file.isDeleted = true;
             file.updationTime = store.nowMicros();
             // A fresh row per trash entry (re-trashing restores first).
-            store.trash = store.trash.filter(
-                (t) => t.file.id !== file.id,
-            );
+            for (let i = store.trash.length - 1; i >= 0; i--) {
+                if (store.trash[i]!.file.id === file.id) store.trash.splice(i, 1);
+            }
             store.trash.push({
                 file: { ...file },
                 isDeleted: false,
@@ -607,6 +624,10 @@ const handle = async (
                 updatedAt,
                 deleteBy,
             });
+        }
+        for (const cid of trashedCollectionIDs) {
+            const c = collectionByID(store, cid);
+            if (c) c.updationTime = store.nowMicros();
         }
         store.markDirty();
         sendJSON(res, 200, {});
@@ -961,8 +982,10 @@ const handle = async (
 
     if (method === "DELETE" && pathname === "/user-entity/entity") {
         const id = url.searchParams.get("id") ?? "";
-        for (const type of Object.keys(store.userEntities)) {
-            const entity = store.userEntities[type]!.find((e) => e.id === id);
+        for (const type of store.userEntityTypes()) {
+            const entity = store
+                .userEntities(type)
+                .find((e) => e.id === id);
             if (entity) {
                 entity.isDeleted = true;
                 entity.encryptedData = null;
@@ -1006,7 +1029,7 @@ const parsePartURL = (uploadURL: string): { key: string; part?: number } => {
         const u = new URL(uploadURL);
         const key = decodeURIComponent(u.pathname.replace(/^\/blobs\//, ""));
         const part = u.searchParams.get("part");
-        return { key, part: part ? Number(part) : undefined };
+        return part ? { key, part: Number(part) } : { key };
     } catch {
         return { key: uploadURL.replace(/[^a-zA-Z0-9_.-]/g, "") };
     }
@@ -1040,9 +1063,9 @@ const completeFromXML = (
     store.completeMultipartBlob(key, partNumbers);
 };
 
-const deleteTrashItems = async (
+const deleteTrashItems = (
     store: LocalVaultStore,
-    predicate: (t: { isDeleted: boolean }) => boolean,
+    predicate: (t: { isDeleted: boolean; file: { id: number } }) => boolean,
 ) => {
     for (const item of store.trash) {
         if (predicate(item) && !item.isDeleted) {
