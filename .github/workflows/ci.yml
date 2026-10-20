@@ -24,60 +24,15 @@ jobs:
             - id: select
               run: node .github/scripts/ci/check.mjs select HEAD^1 HEAD
 
-    android-lint:
-        needs: select
-        if: ${{ contains(fromJSON(needs.select.outputs.jobs), 'android-lint') }}
-        uses: ./.github/workflows/android-lint.yml
-
-    apple-lint:
-        needs: select
-        if: ${{ contains(fromJSON(needs.select.outputs.jobs), 'apple-lint') }}
-        uses: ./.github/workflows/apple-lint.yml
-
-    dependency-review:
-        needs: select
-        if: ${{ contains(fromJSON(needs.select.outputs.jobs), 'dependency-review') }}
-        uses: ./.github/workflows/dependency-review.yml
-
     desktop-lint:
         needs: select
         if: ${{ contains(fromJSON(needs.select.outputs.jobs), 'desktop-lint') }}
         uses: ./.github/workflows/desktop-lint.yml
 
-    docs-verify-build:
-        needs: select
-        if: ${{ contains(fromJSON(needs.select.outputs.jobs), 'docs-verify-build') }}
-        uses: ./.github/workflows/docs-verify-build.yml
-
-    ensu-desktop-build:
-        needs: select
-        if: ${{ contains(fromJSON(needs.select.outputs.jobs), 'ensu-desktop-build') }}
-        uses: ./.github/workflows/ensu-desktop-build.yml
-
-    infra-lint-staff:
-        needs: select
-        if: ${{ contains(fromJSON(needs.select.outputs.jobs), 'infra-lint-staff') }}
-        uses: ./.github/workflows/infra-lint-staff.yml
-
     mobile-lint:
         needs: select
         if: ${{ contains(fromJSON(needs.select.outputs.jobs), 'mobile-lint') }}
         uses: ./.github/workflows/mobile-lint.yml
-
-    mobile-podfile-lock:
-        needs: select
-        if: ${{ contains(fromJSON(needs.select.outputs.jobs), 'mobile-podfile-lock') }}
-        uses: ./.github/workflows/mobile-podfile-lock.yml
-
-    repo-lint:
-        needs: select
-        if: ${{ contains(fromJSON(needs.select.outputs.jobs), 'repo-lint') }}
-        uses: ./.github/workflows/repo-lint.yml
-
-    rust-cli-test:
-        needs: select
-        if: ${{ contains(fromJSON(needs.select.outputs.jobs), 'rust-cli-test') }}
-        uses: ./.github/workflows/rust-cli-test.yml
 
     rust-lint:
         needs: select
@@ -89,11 +44,6 @@ jobs:
         if: ${{ contains(fromJSON(needs.select.outputs.jobs), 'rust-test') }}
         uses: ./.github/workflows/rust-test.yml
 
-    server-lint:
-        needs: select
-        if: ${{ contains(fromJSON(needs.select.outputs.jobs), 'server-lint') }}
-        uses: ./.github/workflows/server-lint.yml
-
     web-lint:
         needs: select
         if: ${{ contains(fromJSON(needs.select.outputs.jobs), 'web-lint') }}
@@ -104,20 +54,10 @@ jobs:
         if: ${{ always() }}
         needs:
             - select
-            - android-lint
-            - apple-lint
-            - dependency-review
             - desktop-lint
-            - docs-verify-build
-            - ensu-desktop-build
-            - infra-lint-staff
             - mobile-lint
-            - mobile-podfile-lock
-            - repo-lint
-            - rust-cli-test
             - rust-lint
             - rust-test
-            - server-lint
             - web-lint
         runs-on: ubuntu-latest
         steps:

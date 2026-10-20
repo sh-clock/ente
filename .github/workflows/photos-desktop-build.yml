@@ -1,6 +1,5 @@
 name: "Build (Photos desktop)"
 
-# See .github/docs/app-release.md
 
 on:
     push:

@@ -1,6 +1,5 @@
 name: "Build (Locker)"
 
-# See .github/docs/app-release.md
 
 on:
     push:
@@ -210,89 +209,8 @@ jobs:
                   whatsNewDirectory: mobile/apps/locker/whatsnew
                   mappingFile: mobile/apps/locker/build/app/outputs/mapping/playstoreRelease/mapping.txt
 
-    build-ios:
-        needs: build-metadata
-        if: needs.build-metadata.outputs.should_build == 'true'
-        runs-on: macos-latest
-        environment:
-            name: production
-        env:
-            BUILD_NUMBER: ${{ needs.build-metadata.outputs.build_number }}
-            RELEASE_VERSION: ${{ needs.build-metadata.outputs.release_version }}
-
-        defaults:
-            run:
-                working-directory: mobile/apps/locker
-
-        steps:
-            - name: Checkout
-              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-              with:
-                  ref: ${{ needs.build-metadata.outputs.commit_sha }}
-
-            - name: Install Flutter
-              uses: ./.github/actions/setup-flutter
-
-            - name: Set build version
-              run: node ../../../.github/scripts/flutter-version.mjs locker set-build "${RELEASE_VERSION}" "${BUILD_NUMBER}"
-
-            - run: flutter pub get --enforce-lockfile
-
-            - name: Set up Rive iOS binaries
-              run: dart run rive_native:setup --clean --platform ios
-
-            - run: cargo codegen frb locker
-              working-directory: rust
-
-            - name: Install iOS pods
-              run: pod install --deployment
-              working-directory: mobile/apps/locker/ios
-
-            - name: Import Apple Distribution certificate
-              uses: Apple-Actions/import-codesign-certs@77ba2a2a8f5cfc8c405ebf3159f767c323e238f9 # v7.1.0
-              with:
-                  p12-file-base64: ${{ secrets.APPLE_DISTRIBUTION_CERT_BASE64 }}
-                  p12-password: ${{ secrets.APPLE_DISTRIBUTION_CERT_PASSWORD }}
-
-            - name: Archive and upload Locker to TestFlight
-              env:
-                  ASC_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
-                  ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
-                  ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
-                  APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-              run: |
-                  key_path="${RUNNER_TEMP}/AuthKey_${ASC_KEY_ID}.p8"
-                  printf '%s' "${ASC_API_KEY_BASE64}" | base64 --decode > "${key_path}"
-
-                  xcodebuild archive \
-                      -workspace ios/Runner.xcworkspace \
-                      -scheme Runner \
-                      -configuration Release \
-                      -destination 'generic/platform=iOS' \
-                      -archivePath build/ios/archive/Runner.xcarchive \
-                      -allowProvisioningUpdates \
-                      -authenticationKeyPath "${key_path}" \
-                      -authenticationKeyID "${ASC_KEY_ID}" \
-                      -authenticationKeyIssuerID "${ASC_ISSUER_ID}" \
-                      CODE_SIGN_STYLE=Manual \
-                      CODE_SIGN_IDENTITY="Apple Distribution" \
-                      DEVELOPMENT_TEAM="${APPLE_TEAM_ID}" \
-                      APP_STORE_PROFILE_SPECIFIER="Locker App Store" \
-                      SHARE_EXTENSION_APP_STORE_PROFILE_SPECIFIER="Locker Share Extension App Store" \
-                      MARKETING_VERSION="${RELEASE_VERSION}" \
-                      CURRENT_PROJECT_VERSION="${BUILD_NUMBER}"
-
-                  xcodebuild -exportArchive \
-                      -archivePath build/ios/archive/Runner.xcarchive \
-                      -exportPath build/ios/export \
-                      -exportOptionsPlist scripts/ExportOptions-AppStore-CI.plist \
-                      -allowProvisioningUpdates \
-                      -authenticationKeyPath "${key_path}" \
-                      -authenticationKeyID "${ASC_KEY_ID}" \
-                      -authenticationKeyIssuerID "${ASC_ISSUER_ID}"
-
     finish-build:
-        needs: [build-metadata, build-android, build-ios]
+        needs: [build-metadata, build-android]
         if: needs.build-metadata.outputs.should_build == 'true'
         runs-on: ubuntu-latest
         environment:
