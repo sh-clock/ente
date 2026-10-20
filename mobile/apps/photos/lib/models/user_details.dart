@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import "package:photos/gateways/billing/models/subscription.dart";
-import "package:photos/gateways/storage_bonus/models/bonus.dart";
 
 enum FamilyMemberStatus {
   self("SELF"),
@@ -27,35 +25,26 @@ enum FamilyMemberStatus {
   }
 }
 
+/// Offline standalone app: subscription / storage-bonus data that used to be
+/// fetched from the billing server has been removed. The class is kept for
+/// the locally cached details (email, usage) and legacy cached JSON.
 class UserDetails {
   final String email;
   final int usage;
   final int fileCount;
-  final int storageBonus;
-  final int sharedCollectionsCount;
-  final Subscription subscription;
   final FamilyData? familyData;
   final ProfileData? profileData;
-  final BonusData? bonusData;
 
   const UserDetails(
     this.email,
     this.usage,
     this.fileCount,
-    this.storageBonus,
-    this.sharedCollectionsCount,
-    this.subscription,
     this.familyData,
     this.profileData,
-    this.bonusData,
   );
 
   bool isPartOfFamily() {
     return familyData?.members?.isNotEmpty ?? false;
-  }
-
-  bool hasPaidAddon() {
-    return bonusData?.getAddOnBonuses().isNotEmpty ?? false;
   }
 
   FamilyMember? currentFamilyMember() {
@@ -98,9 +87,10 @@ class UserDetails {
     return max(getTotalStorage() - getFamilyOrPersonalUsage(), 0);
   }
 
+  // No subscription in the offline app: only a family plan (legacy cached
+  // data) can grant storage.
   int getTotalStorage() {
-    return (isPartOfFamily() ? familyData!.storage : subscription.storage) +
-        storageBonus;
+    return isPartOfFamily() ? familyData!.storage : 0;
   }
 
   int? familyMemberStorageLimit() {
@@ -111,22 +101,13 @@ class UserDetails {
     return null;
   }
 
-  int getPlanPlusAddonStorage() {
-    return (isPartOfFamily() ? familyData!.storage : subscription.storage) +
-        bonusData!.totalAddOnBonus();
-  }
-
   factory UserDetails.fromMap(Map<String, dynamic> map) {
     return UserDetails(
       map['email'] as String,
       map['usage'] as int,
       (map['fileCount'] ?? 0) as int,
-      (map['storageBonus'] ?? 0) as int,
-      (map['sharedCollectionsCount'] ?? 0) as int,
-      Subscription.fromMap(map['subscription']),
       map['familyData'] != null ? FamilyData.fromMap(map['familyData']) : null,
       ProfileData.fromJson(map['profileData']),
-      BonusData.fromJson(map['bonusData']),
     );
   }
 
@@ -135,12 +116,8 @@ class UserDetails {
       'email': email,
       'usage': usage,
       'fileCount': fileCount,
-      'storageBonus': storageBonus,
-      'sharedCollectionsCount': sharedCollectionsCount,
-      'subscription': subscription.toMap(),
       'familyData': familyData?.toMap(),
       'profileData': profileData?.toJson(),
-      'bonusData': bonusData?.toJson(),
     };
   }
 

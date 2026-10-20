@@ -4,8 +4,6 @@ import "dart:io";
 
 import 'package:backup_exclusion/backup_exclusion.dart';
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:ente_account_deletion/account_deletion.dart';
-import 'package:ente_contacts/contacts.dart';
 import "package:ente_crypto/ente_crypto.dart";
 import 'package:ente_lock_screen/lock_screen_host.dart';
 import 'package:ente_pure_utils/ente_pure_utils.dart';
@@ -20,16 +18,13 @@ import 'package:photos/core/cache/image_cache.dart';
 import 'package:photos/core/cache/thumbnail_in_memory_cache.dart';
 import 'package:photos/core/cache/video_cache_manager.dart';
 import 'package:photos/core/constants.dart';
-import 'package:photos/core/error-reporting/super_logging.dart';
 import 'package:photos/core/errors.dart';
 import 'package:photos/core/event_bus.dart';
 import 'package:photos/db/collections_db.dart';
 import 'package:photos/db/files_db.dart';
 import "package:photos/db/gallery_downloads_db.dart";
 import "package:photos/db/memories_db.dart";
-import "package:photos/db/memory_shares_db.dart";
 import "package:photos/db/ml/db.dart";
-import "package:photos/db/social_db.dart";
 import 'package:photos/db/trash_db.dart';
 import 'package:photos/db/upload_locks_db.dart';
 import "package:photos/events/app_mode_changed_event.dart";
@@ -49,18 +44,15 @@ import "package:photos/services/machine_learning/face_ml/person/person_service.d
 import "package:photos/services/machine_learning/ml_run_control.dart";
 import "package:photos/services/machine_learning/ml_service.dart";
 import "package:photos/services/machine_learning/similar_images_service.dart";
-import "package:photos/services/memory_share_service.dart";
 import "package:photos/services/notification_service.dart";
-import 'package:photos/services/photos_contacts_service.dart';
 import 'package:photos/services/search_service.dart';
 import 'package:photos/services/sync/sync_service.dart';
 import 'package:photos/services/video_preview_service.dart';
 import 'package:photos/utils/validator_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import "package:tuple/tuple.dart";
-import 'package:uuid/uuid.dart';
 
-class Configuration implements LockScreenHost, AccountDeletionHost {
+class Configuration implements LockScreenHost {
   Configuration._privateConstructor();
 
   static final Configuration instance = Configuration._privateConstructor();
@@ -140,7 +132,6 @@ class Configuration implements LockScreenHost, AccountDeletionHost {
         }
         await _migrateSecurityStorageToFirstUnlock();
       }
-      SuperLogging.setUserID(await _getOrCreateAnonymousUserID()).ignore();
       _logger.info('User ID: ${getUserID()}');
     } catch (e, s) {
       _logger.severe("Configuration init failed", e, s);
@@ -232,19 +223,9 @@ class Configuration implements LockScreenHost, AccountDeletionHost {
     await GalleryDownloadsDB.instance.clearTable();
     await CollectionsDB.instance.clearTable();
     await MemoriesDB.instance.clearTable();
-    await MemorySharesDB.instance.clearTable();
     await MLDataDB.instance.clearTable();
     await UploadLocksDB.instance.clearTable();
     await TrashDB.instance.clearTable();
-    try {
-      await PhotosContactsService.instance.close().timeout(
-        const Duration(seconds: 5),
-      );
-    } catch (e) {
-      _logger.warning("Failed to close contacts service", e);
-    }
-    await ContactsDatabase().clearTable();
-    await SocialDB.instance.clearAllData();
 
     ThumbnailInMemoryLruCache.clearAll();
     FileLruCache.clearAll();
@@ -264,7 +245,6 @@ class Configuration implements LockScreenHost, AccountDeletionHost {
     await SimilarImagesService.instance.clearCache();
     await IgnoredFilesService.instance.reset();
     unawaited(HomeWidgetService.instance.clearWidget(autoLogout));
-    MemoryShareService.instance.clearCache();
 
     try {
       await magicCacheService.clearMagicCache();
@@ -302,11 +282,6 @@ class Configuration implements LockScreenHost, AccountDeletionHost {
         smartAlbumsService.clearCache();
       } catch (e) {
         _logger.info("SmartAlbumsService not initialized", e);
-      }
-      try {
-        billingService.clearCache();
-      } catch (e) {
-        _logger.info("BillingService not initialized", e);
       }
       Bus.instance.fire(UserLoggedOutEvent());
     } else {
@@ -570,16 +545,6 @@ class Configuration implements LockScreenHost, AccountDeletionHost {
     }
   }
 
-  @override
-  String decryptDeleteChallenge(String encryptedChallenge) {
-    final challenge = CryptoUtil.openSealSync(
-      CryptoUtil.base642bin(encryptedChallenge),
-      CryptoUtil.base642bin(getKeyAttributes()!.publicKey),
-      getSecretKey()!,
-    );
-    return utf8.decode(challenge);
-  }
-
   Future<void> setKey(String? key) async {
     _key = key;
     if (key == null) {
@@ -661,13 +626,5 @@ class Configuration implements LockScreenHost, AccountDeletionHost {
       await _preferences.setBool(hasMigratedSecureStorageKey, true);
     }
     _logger.info("(for debugging) Migration check complete");
-  }
-
-  Future<String> _getOrCreateAnonymousUserID() async {
-    if (!_preferences.containsKey(anonymousUserIDKey)) {
-      //ignore: prefer_const_constructors
-      await _preferences.setString(anonymousUserIDKey, Uuid().v4());
-    }
-    return _preferences.getString(anonymousUserIDKey)!;
   }
 }

@@ -8,22 +8,16 @@ fail() {
     exit 1
 }
 
-remove_direct_dependencies() {
-    local count
-    count=$(rg -c "^  (firebase_core|firebase_messaging|in_app_purchase|in_app_purchase_storekit):" pubspec.yaml || true)
-    [[ "$count" == "4" ]] || fail "expected four restricted dependencies in pubspec.yaml"
-    perl -0pi -e 's/^  (firebase_core|firebase_messaging|in_app_purchase|in_app_purchase_storekit):[^\n]*\n//mg' pubspec.yaml
-}
+# The standalone offline build no longer ships Firebase, in-app purchases,
+# Google services, remote push, or the Play install referrer, so the
+# historical pubspec-stripping and fdroid/overlay copy steps are no longer
+# needed: the main source tree is fdroid-clean by construction.
 
 remove_playstore_sources() {
     ../../packages/install_source/scripts/prepare_fdroid_source.sh
     sed -i.bak '/com.google.gms.google-services/d' android/app/build.gradle
-    rm android/app/build.gradle.bak
+    rm -f android/app/build.gradle.bak
     rm -f android/app/google-services.json
-}
-
-copy_fdroid_overlay() {
-    cp -R fdroid/overlay/lib/. lib/
 }
 
 assert_fdroid_source() {
@@ -40,7 +34,5 @@ assert_fdroid_source() {
     fi
 }
 
-remove_direct_dependencies
 remove_playstore_sources
-copy_fdroid_overlay
 assert_fdroid_source

@@ -34,16 +34,10 @@ dependencies:
   dotted_border: 3.1.0
   email_validator: 3.0.0
   encrypt: 5.0.3
-  ente_account_deletion:
-    path: ../../packages/account_deletion
   ente_background_manager:
     path: plugins/ente_background_manager
-  ente_cast:
-    path: plugins/ente_cast
   ente_components:
     path: ../../packages/ente_components
-  ente_contacts:
-    path: ../../packages/contacts
   ente_crypto:
     path: plugins/ente_crypto
   ente_crypto_api:
@@ -93,8 +87,6 @@ dependencies:
       ref: 15afc08775a75fe9c12de3366fa99e39bf171ccc
   figma_squircle: 0.6.3
   file_saver: 0.3.1
-  firebase_core: 3.15.1
-  firebase_messaging: 15.2.9
   flutter:
     sdk: flutter
   flutter_animate: 4.5.2
@@ -130,8 +122,6 @@ dependencies:
   http: 1.6.0
   hugeicons: 1.1.7
   image: 4.7.0
-  in_app_purchase: 3.3.0
-  in_app_purchase_storekit: 0.4.11+1
   intl: 0.20.3
   just_audio: 0.10.5
   latlong2: 0.9.1
@@ -163,14 +153,12 @@ dependencies:
     path: ../../packages/native_video_editor
   native_video_player: 4.0.1
   package_info_plus: 8.3.1
-  password_strength: 0.2.0
   path: 1.9.1
   path_provider: 2.1.5
   path_provider_foundation: 2.6.0
   permission_handler: 12.0.1
   photo_manager: 3.11.0
   photo_manager_image_provider: 2.2.0
-  pinput: 5.0.2
   pointycastle: 3.9.1
   pro_image_editor: 13.3.1
   protobuf: 4.2.0
@@ -181,8 +169,6 @@ dependencies:
       ref: 2cea396843cd3ab1b5ec4334be4233864637874e
   rive: 0.14.0-dev.13
   scrollable_positioned_list: 0.3.8
-  sentry: 9.6.0
-  sentry_flutter: 9.6.0
   share_plus: 12.0.0
   shared_preferences: 2.5.4
   sqlite3_flutter_libs: 0.5.41

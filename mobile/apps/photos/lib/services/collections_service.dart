@@ -6,7 +6,6 @@ import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:ente_crypto/ente_crypto.dart';
 import 'package:ente_pure_utils/ente_pure_utils.dart';
-import "package:ente_strings/ente_strings.dart";
 import "package:fast_base58/fast_base58.dart";
 import 'package:flutter/foundation.dart';
 import "package:flutter/material.dart";
@@ -18,16 +17,13 @@ import 'package:photos/core/event_bus.dart';
 import 'package:photos/db/collections_db.dart';
 import 'package:photos/db/device_files_db.dart';
 import 'package:photos/db/files_db.dart';
-import 'package:photos/db/social_db.dart';
 import 'package:photos/db/trash_db.dart';
 import 'package:photos/events/collection_updated_event.dart';
 import 'package:photos/events/contact_relationships_invalidated_event.dart';
 import 'package:photos/events/files_updated_event.dart';
 import 'package:photos/events/force_reload_home_gallery_event.dart';
 import 'package:photos/events/local_photos_updated_event.dart';
-import "package:photos/gateways/collections/collection_share_gateway.dart";
 import 'package:photos/gateways/collections/models/collection_file_item.dart';
-import "package:photos/gateways/collections/models/collection_share.dart";
 import 'package:photos/gateways/collections/models/create_request.dart';
 import "package:photos/gateways/collections/models/metadata.dart";
 import "package:photos/gateways/collections/models/public_url.dart";
@@ -41,31 +37,18 @@ import "package:photos/models/metadata/collection_magic.dart";
 import "package:photos/service_locator.dart";
 import 'package:photos/services/app_lifecycle_service.dart';
 import "package:photos/services/favorites_service.dart";
-import 'package:photos/services/memory_share_service.dart';
 import 'package:photos/services/sync/local_sync_service.dart';
 import 'package:photos/services/sync/remote_sync_service.dart';
 import "package:photos/settings/local_settings.dart";
-import "package:photos/src/rust/api/cast_api.dart";
-import "package:photos/utils/dialog_util.dart";
 import "package:photos/utils/file_key.dart";
 import 'package:shared_preferences/shared_preferences.dart';
 
-String? _resolvePublicAlbumAccessToken(Uri uri) {
-  final tokenFromQuery = uri.queryParameters["t"];
-  if (tokenFromQuery != null && tokenFromQuery.isNotEmpty) {
-    return tokenFromQuery;
-  }
-  return uri.pathSegments.firstWhereOrNull((segment) => segment.isNotEmpty);
-}
 
 class CollectionsService {
   static const _collectionSyncTimeKeyPrefix = "collection_sync_time_";
   static const _collectionsSyncTimeKey = "collections_sync_time_x";
 
   static const int kMaximumWriteAttempts = 5;
-  static const int _maxSocialCleanupRetries = 3;
-  static const int _collectionKeyLength = 32;
-  static const int _shareBatchSize = 10;
 
   final _logger = Logger("CollectionsService");
 
@@ -691,20 +674,6 @@ class CollectionsService {
     return SharedCollections(outgoing, incoming, quickLinks);
   }
 
-  Future<SharedCollectionsAndMemoryLinks>
-  getSharedCollectionsAndMemoryLinks() async {
-    final collections = await getSharedCollections();
-    try {
-      final memoryLinks = await MemoryShareService.instance.listMemoryShares();
-      return SharedCollectionsAndMemoryLinks(collections, memoryLinks);
-    } catch (e, s) {
-      _logger.severe("failed to load memory links", e, s);
-      final localMemoryLinks = await MemoryShareService.instance
-          .getLocalMemoryShares();
-      return SharedCollectionsAndMemoryLinks(collections, localMemoryLinks);
-    }
-  }
-
   Future<List<Collection>> getCollectionForOnEnteSection() async {
     final bool hasFavorites = FavoritesService.instance.hasFavorites();
     final int? userID = _config.getUserID();
@@ -811,258 +780,6 @@ class CollectionsService {
         User(id: userID, email: "unknown@unknown.com");
   }
 
-  Future<List<User>> getSharees(int collectionID) async {
-    final sharees = await collectionShareGateway.getSharees(collectionID);
-    _logger.info(sharees.toString());
-    return sharees;
-  }
-
-  Future<List<User>> refreshSharees(int collectionID) async {
-    final sharees = await getSharees(collectionID);
-    final collection = _collectionIDToCollections[collectionID];
-    if (collection != null) {
-      _cacheSharees(collection, sharees);
-    }
-    return sharees;
-  }
-
-  void _cacheSharees(Collection collection, List<User> sharees) {
-    final updatedCollection = collection.copyWith(sharees: sharees);
-    _collectionIDToCollections[collection.id] = updatedCollection;
-    Bus.instance.fire(ContactRelationshipsInvalidatedEvent());
-    unawaited(_db.insert([updatedCollection]));
-  }
-
-  PreparedCastPayload prepareCastPayloadForCollection(
-    Collection collection,
-    String publicKey,
-    String? pqPublicKey,
-  ) {
-    return prepareCastPayload(
-      publicKey: publicKey,
-      pqPublicKey: pqPublicKey,
-      collectionId: collection.id,
-      collectionKey: CryptoUtil.bin2base64(getCollectionKey(collection.id)),
-    );
-  }
-
-  Future<List<User>> share(
-    int collectionID,
-    String email,
-    String publicKey,
-    CollectionParticipantRole role,
-  ) async {
-    final encryptedKey = CryptoUtil.sealSync(
-      getCollectionKey(collectionID),
-      CryptoUtil.base642bin(publicKey),
-    );
-    try {
-      final sharees = await collectionShareGateway.share(
-        collectionID: collectionID,
-        email: email,
-        encryptedKey: CryptoUtil.bin2base64(encryptedKey),
-        role: role.toStringVal(),
-      );
-      _cacheSharees(_collectionIDToCollections[collectionID]!, sharees);
-      RemoteSyncService.instance.sync(silently: true).ignore();
-      return sharees;
-    } on DioException catch (e) {
-      if (e.response?.statusCode == 402) {
-        throw SharingNotPermittedForFreeAccountsError();
-      }
-      rethrow;
-    }
-  }
-
-  Future<List<User>> shareBatch(
-    int collectionID,
-    Map<String, String> publicKeys,
-    CollectionParticipantRole role,
-  ) async {
-    var sharees = List<User>.from(
-      _collectionIDToCollections[collectionID]!.sharees,
-    );
-    final collectionKey = getCollectionKey(collectionID);
-    final shareRole = role.toStringVal();
-    try {
-      for (final batch in publicKeys.entries.toList().chunks(_shareBatchSize)) {
-        final encryptedKeys = <String, String>{};
-        for (final entry in batch) {
-          final encryptedKey = CryptoUtil.sealSync(
-            collectionKey,
-            CryptoUtil.base642bin(entry.value),
-          );
-          encryptedKeys[entry.key] = CryptoUtil.bin2base64(encryptedKey);
-        }
-
-        sharees = await collectionShareGateway.shareBatch(
-          collectionID: collectionID,
-          encryptedKeys: encryptedKeys,
-          role: shareRole,
-        );
-        _cacheSharees(_collectionIDToCollections[collectionID]!, sharees);
-        RemoteSyncService.instance.sync(silently: true).ignore();
-      }
-      return sharees;
-    } on DioException catch (error) {
-      if (error.response?.statusCode == 402) {
-        throw SharingNotPermittedForFreeAccountsError();
-      }
-      rethrow;
-    }
-  }
-
-  Future<List<User>> unshare(int collectionID, String email) async {
-    try {
-      final sharees = await collectionShareGateway.unshare(
-        collectionID: collectionID,
-        email: email,
-      );
-      _cacheSharees(_collectionIDToCollections[collectionID]!, sharees);
-      RemoteSyncService.instance.sync(silently: true).ignore();
-      return sharees;
-    } catch (e) {
-      _logger.severe(e);
-      rethrow;
-    }
-  }
-
-  Future<Map<int, CollectionShareStatus>> shareBulk({
-    required int recipientUserID,
-    required String recipientEmail,
-    required String publicKey,
-    required Map<int, CollectionParticipantRole> roles,
-    required CollectionShareSource source,
-  }) async {
-    final recipientPublicKey = CryptoUtil.base642bin(publicKey);
-    final items = <BulkCollectionShareItem>[];
-    for (final entry in roles.entries) {
-      final encryptedKey = CryptoUtil.sealSync(
-        getCollectionKey(entry.key),
-        recipientPublicKey,
-      );
-      items.add(
-        BulkCollectionShareItem(
-          collectionID: entry.key,
-          encryptedKey: CryptoUtil.bin2base64(encryptedKey),
-          role: entry.value.toStringVal(),
-        ),
-      );
-    }
-    try {
-      final results = await collectionShareGateway.shareBulk(
-        recipientUserID: recipientUserID,
-        recipientEmail: recipientEmail,
-        source: source,
-        collections: items,
-      );
-      _cacheBulkShares(
-        results,
-        recipientUserID: recipientUserID,
-        recipientEmail: recipientEmail,
-        roles: roles,
-      );
-      RemoteSyncService.instance.sync(silently: true).ignore();
-      return {for (final result in results) result.collectionID: result.status};
-    } on DioException catch (e) {
-      if (e.response?.statusCode == 402) {
-        throw SharingNotPermittedForFreeAccountsError();
-      }
-      if (e.response?.data?['code'] == 'RECIPIENT_IDENTITY_MISMATCH') {
-        throw RecipientIdentityMismatchError();
-      }
-      if (e.response?.data?['code'] ==
-          'AUTOMATIC_SHARE_RECIPIENT_NOT_ELIGIBLE') {
-        throw AutomaticShareRecipientNotEligibleError();
-      }
-      rethrow;
-    }
-  }
-
-  Future<Map<int, CollectionShareStatus>> unshareBulk({
-    required int recipientUserID,
-    required List<int> collectionIDs,
-    required CollectionShareSource source,
-  }) async {
-    final results = await collectionShareGateway.unshareBulk(
-      recipientUserID: recipientUserID,
-      source: source,
-      collectionIDs: collectionIDs,
-    );
-    _cacheBulkUnshares(results, recipientUserID);
-    RemoteSyncService.instance.sync(silently: true).ignore();
-    return {for (final result in results) result.collectionID: result.status};
-  }
-
-  void _cacheBulkShares(
-    List<CollectionShareResult> results, {
-    required int recipientUserID,
-    required String recipientEmail,
-    required Map<int, CollectionParticipantRole> roles,
-  }) {
-    final updates = <Collection>[];
-    for (final result in results) {
-      if (result.status != CollectionShareStatus.shared) {
-        continue;
-      }
-      final collection = _collectionIDToCollections[result.collectionID];
-      final role = roles[result.collectionID];
-      if (collection == null || role == null) {
-        continue;
-      }
-      final sharees =
-          collection.sharees
-              .where((user) => user.id != recipientUserID)
-              .toList()
-            ..add(
-              User(
-                id: recipientUserID,
-                email: recipientEmail,
-                role: role.toStringVal(),
-              ),
-            );
-      updates.add(collection.copyWith(sharees: sharees));
-    }
-    _cacheBulkShareUpdates(updates);
-  }
-
-  void _cacheBulkUnshares(
-    List<CollectionShareResult> results,
-    int recipientUserID,
-  ) {
-    final updates = <Collection>[];
-    for (final result in results) {
-      if (result.status != CollectionShareStatus.unshared &&
-          result.status != CollectionShareStatus.alreadyUnshared &&
-          result.status != CollectionShareStatus.notShared) {
-        continue;
-      }
-      final collection = _collectionIDToCollections[result.collectionID];
-      if (collection == null) {
-        continue;
-      }
-      updates.add(
-        collection.copyWith(
-          sharees: collection.sharees
-              .where((user) => user.id != recipientUserID)
-              .toList(),
-        ),
-      );
-    }
-    _cacheBulkShareUpdates(updates);
-  }
-
-  void _cacheBulkShareUpdates(List<Collection> updates) {
-    if (updates.isEmpty) {
-      return;
-    }
-    for (final collection in updates) {
-      _collectionIDToCollections[collection.id] = collection;
-    }
-    Bus.instance.fire(ContactRelationshipsInvalidatedEvent());
-    unawaited(_db.insert(updates));
-  }
-
   Future<void> trashNonEmptyCollection(Collection collection) async {
     try {
       await _turnOffDeviceFolderSync(collection);
@@ -1131,7 +848,6 @@ class CollectionsService {
 
   Future<void> _handleCollectionDeletion(Collection collection) async {
     await _filesDB.deleteCollection(collection.id);
-    await _cleanupSocialData(collection.id);
     final deletedCollection = collection.copyWith(isDeleted: true);
     unawaited(_db.insert([deletedCollection]));
     _collectionIDToCollections[collection.id] = deletedCollection;
@@ -1148,28 +864,9 @@ class CollectionsService {
     LocalSyncService.instance.syncAll().ignore();
   }
 
-  Future<void> _cleanupSocialData(int collectionID, {int attempt = 0}) async {
-    try {
-      await SocialDB.instance.deleteCollectionData(collectionID);
-    } catch (e, s) {
-      if (attempt < _maxSocialCleanupRetries) {
-        final backoff = Duration(
-          milliseconds: 100 * pow(2, attempt + 1).toInt(),
-        );
-        _logger.info(
-          'Failed to cleanup social data for $collectionID (${e.runtimeType}), '
-          'retrying (attempt ${attempt + 1}/$_maxSocialCleanupRetries) in ${backoff.inMilliseconds}ms',
-        );
-        await Future.delayed(backoff);
-        return _cleanupSocialData(collectionID, attempt: attempt + 1);
-      }
-      _logger.severe(
-        'Failed to cleanup social data for $collectionID after $_maxSocialCleanupRetries retries',
-        e,
-        s,
-      );
-    }
-  }
+  // Social data (feed/comments) was removed with the offline build; there is
+  // nothing to clean up when a collection is deleted.
+  Future<void> _cleanupSocialData(int collectionID) async {}
 
   Uint8List getCollectionKey(int collectionID) {
     if (!_cachedKeys.containsKey(collectionID)) {
@@ -1497,80 +1194,6 @@ class CollectionsService {
     }
   }
 
-  Future<void> createShareUrl(
-    Collection collection, {
-    bool enableCollect = false,
-    bool enableJoin = false,
-  }) async {
-    try {
-      final publicUrl = await collectionShareGateway.createShareUrl(
-        collectionID: collection.id,
-        enableCollect: enableCollect,
-        enableJoin: enableJoin,
-      );
-      collection.publicURLs.add(publicUrl);
-      await _db.insert(List.from([collection]));
-      _collectionIDToCollections[collection.id] = collection;
-      Bus.instance.fire(
-        CollectionUpdatedEvent(collection.id, <EnteFile>[], "shareUrL"),
-      );
-    } on DioException catch (e) {
-      if (e.response?.statusCode == 402) {
-        throw SharingNotPermittedForFreeAccountsError();
-      }
-      rethrow;
-    } catch (e, s) {
-      _logger.severe("failed to rename collection", e, s);
-      rethrow;
-    }
-  }
-
-  Future<void> updateShareUrl(
-    Collection collection,
-    Map<String, dynamic> prop,
-  ) async {
-    try {
-      final publicUrl = await collectionShareGateway.updateShareUrl(
-        collectionID: collection.id,
-        props: prop,
-      );
-      collection.publicURLs.clear();
-      collection.publicURLs.add(publicUrl);
-      await _db.insert(List.from([collection]));
-      _collectionIDToCollections[collection.id] = collection;
-      Bus.instance.fire(
-        CollectionUpdatedEvent(collection.id, <EnteFile>[], "updateUrl"),
-      );
-    } on DioException catch (e) {
-      if (e.response?.statusCode == 402) {
-        throw SharingNotPermittedForFreeAccountsError();
-      }
-      if (e.response?.statusCode == 403 &&
-          e.response?.data?['code'] == 'LINK_EDIT_NOT_ALLOWED') {
-        throw LinkEditNotAllowedError();
-      }
-      rethrow;
-    } catch (e, s) {
-      _logger.severe("failed to update ShareUrl", e, s);
-      rethrow;
-    }
-  }
-
-  Future<void> disableShareUrl(Collection collection) async {
-    try {
-      await collectionShareGateway.deleteShareUrl(collection.id);
-      collection.publicURLs.clear();
-      await _db.insert(List.from([collection]));
-      _collectionIDToCollections[collection.id] = collection;
-      Bus.instance.fire(
-        CollectionUpdatedEvent(collection.id, <EnteFile>[], "disableShareUrl"),
-      );
-    } on DioException catch (e) {
-      _logger.info(e);
-      rethrow;
-    }
-  }
-
   Future<List<Collection>> _fetchCollections(int sinceTime) async {
     try {
       final response = await collectionsGateway.getAll(
@@ -1654,172 +1277,6 @@ class CollectionsService {
     } catch (e, s) {
       _logger.warning("Failed to reject delete suggestions", e, s);
       rethrow;
-    }
-  }
-
-  Uint8List _decodePublicCollectionKey(String albumKey) {
-    if (albumKey.isEmpty) {
-      throw const FormatException("Missing public collection key");
-    }
-    final collectionKey = Uint8List.fromList(Base58Decode(albumKey));
-    if (collectionKey.length != _collectionKeyLength) {
-      throw const FormatException("Invalid public collection key length");
-    }
-    return collectionKey;
-  }
-
-  Future<void> _decryptPublicCollectionFields(
-    Collection collection,
-    Map<String, dynamic> collectionData,
-    Uint8List collectionKey,
-  ) async {
-    collection.setName(
-      _decryptCollectionNameWithKey(collection, collectionKey),
-    );
-    if (collectionData['pubMagicMetadata'] != null) {
-      final utfEncodedMmd = await CryptoUtil.decryptChaCha(
-        CryptoUtil.base642bin(collectionData['pubMagicMetadata']['data']),
-        collectionKey,
-        CryptoUtil.base642bin(collectionData['pubMagicMetadata']['header']),
-      );
-      collection.mMdPubEncodedJson = utf8.decode(utfEncodedMmd);
-      collection.mMbPubVersion = collectionData['pubMagicMetadata']['version'];
-      collection.pubMagicMetadata = CollectionPubMagicMetadata.fromEncodedJson(
-        collection.mMdPubEncodedJson ?? '{}',
-      );
-    }
-  }
-
-  void _clearPublicCollectionState(int collectionID) {
-    _cachedPublicAlbumToken.remove(collectionID);
-    _cachedPublicAlbumJWT.remove(collectionID);
-    _cachedPublicCollectionID.removeWhere((id) => id == collectionID);
-    _cachedPublicAlbumKey.remove(collectionID);
-    _cachedPublicCollectionKeys.remove(collectionID);
-  }
-
-  Future<Collection?> getCollectionFromPublicLink(
-    BuildContext context,
-    Uri uri,
-  ) async {
-    final String? authToken = _resolvePublicAlbumAccessToken(uri);
-    final String albumKey = uri.fragment;
-    try {
-      final responseData = await collectionShareGateway.getPublicCollectionInfo(
-        authToken!,
-      );
-
-      final collectionData = responseData["collection"];
-      final Collection collection = Collection.fromMap(collectionData);
-      final existingCollection = getCollectionByID(collection.id);
-      final currentUserID = _config.getUserID() ?? -1;
-      final shouldUseAuthenticatedKey =
-          collection.isOwner(currentUserID) ||
-          (existingCollection != null && !existingCollection.isDeleted);
-
-      if (shouldUseAuthenticatedKey) {
-        _clearPublicCollectionState(collection.id);
-        final keySourceCollection =
-            existingCollection != null && !existingCollection.isDeleted
-            ? existingCollection
-            : collection;
-        final collectionKey = _getAndCacheDecryptedKey(
-          keySourceCollection,
-          source: "publicLinkExistingCollection",
-        );
-        await _decryptPublicCollectionFields(
-          collection,
-          collectionData,
-          collectionKey,
-        );
-        return collection;
-      }
-
-      final collectionKey = _decodePublicCollectionKey(albumKey);
-      await _decryptPublicCollectionFields(
-        collection,
-        collectionData,
-        collectionKey,
-      );
-      _cachedPublicCollectionKeys[collection.id] = collectionKey;
-      _cachedPublicAlbumToken[collection.id] = authToken;
-      _cachedPublicCollectionID.removeWhere((id) => id == collection.id);
-      _cachedPublicCollectionID.add(collection.id);
-      _cachedPublicAlbumKey[collection.id] = albumKey;
-      _cachedPublicAlbumJWT.remove(collection.id);
-      return collection;
-    } on PublicCollectionInfoExpiredException catch (e, s) {
-      _logger.warning("Public collection link expired", e, s);
-      if (!context.mounted) return null;
-      await showInfoDialog(
-        context,
-        title: context.strings.linkExpired,
-        body: context.strings.theLinkYouAreTryingToAccessHasExpired,
-      );
-      return null;
-    } on PublicCollectionDeviceLimitExceededException catch (e, s) {
-      _logger.warning("Public collection link device limit reached", e, s);
-      if (!context.mounted) return null;
-      await showErrorDialog(
-        context,
-        context.strings.canNotOpenTitle,
-        context.strings.linkRequestLimitExceeded,
-      );
-      return null;
-    } on PublicCollectionRateLimitedException catch (e, s) {
-      _logger.warning("Public collection link request rate limited", e, s);
-      if (!context.mounted) return null;
-      await showErrorDialog(
-        context,
-        context.strings.canNotOpenTitle,
-        context.strings.pleaseTryAgain,
-      );
-      return null;
-    } on PublicCollectionInfoUnavailableException catch (e, s) {
-      _logger.warning("Public collection link is unavailable", e, s);
-      if (!context.mounted) return null;
-      await showErrorDialog(
-        context,
-        context.strings.canNotOpenTitle,
-        context.strings.canNotOpenBody,
-      );
-      return null;
-    } catch (e, s) {
-      _logger.warning("Failed to fetch public collection", e, s);
-      _logger.severe("Failed to fetch public collection");
-      if (context.mounted) {
-        await showGenericErrorDialog(context: context, error: e);
-      }
-      rethrow;
-    }
-  }
-
-  Future<bool> verifyPublicCollectionPassword(
-    BuildContext context,
-    String passwordHash,
-    int collectionID,
-  ) async {
-    final authToken = getSharedPublicAlbumToken(collectionID);
-    if (authToken == null) {
-      _logger.warning("Auth token not found for collection $collectionID");
-      return false;
-    }
-    try {
-      final jwtToken = await collectionShareGateway.verifyPublicPassword(
-        authToken: authToken,
-        passwordHash: passwordHash,
-      );
-      await setPublicAlbumTokenJWT(collectionID, jwtToken);
-      return true;
-    } catch (e) {
-      _logger.warning("Failed to verify public collection password $e");
-      if (!context.mounted) return false;
-      await showErrorDialog(
-        context,
-        context.strings.incorrectPasswordTitle,
-        context.strings.pleaseTryAgain,
-      );
-      return false;
     }
   }
 
