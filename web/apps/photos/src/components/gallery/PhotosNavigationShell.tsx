@@ -18,7 +18,7 @@ import {
     useMediaQuery,
     useTheme,
 } from "@mui/material";
-import { EnteLogo, EnteLogoBox } from "ente-base/components/EnteLogo";
+import { PhotosWordmark, PhotosWordmarkBox } from "ente-base/components/PhotosWordmark";
 import type { ButtonishProps } from "ente-base/components/mui";
 import { FocusVisibleButton } from "ente-base/components/mui/FocusVisibleButton";
 import { NavbarBase } from "ente-base/components/Navbar";
@@ -285,7 +285,7 @@ const NormalHeaderContents: React.FC<{
                     </SvgIcon>
                 </FocusVisibleButton>
             </Tooltip>
-            <EnteLogoBox
+            <PhotosWordmarkBox
                 sx={{
                     position: "absolute",
                     left: "50%",
@@ -294,8 +294,8 @@ const NormalHeaderContents: React.FC<{
                     "& svg": { height: { xs: "18px", sm: "20px" } },
                 }}
             >
-                <EnteLogo height={15} />
-            </EnteLogoBox>
+                <PhotosWordmark height={15} />
+            </PhotosWordmarkBox>
             <Box sx={{ flex: 1 }} />
         </Box>
     );

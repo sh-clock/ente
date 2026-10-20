@@ -9,7 +9,7 @@ import {
     setupTwoFactorFinish,
 } from "ente-accounts/services/user";
 import { CenteredFill } from "ente-base/components/containers";
-import { EnteLogo } from "ente-base/components/EnteLogo";
+import { PhotosWordmark } from "ente-base/components/PhotosWordmark";
 import { LinkButton } from "ente-base/components/LinkButton";
 import { ActivityIndicator } from "ente-base/components/mui/ActivityIndicator";
 import { FocusVisibleButton } from "ente-base/components/mui/FocusVisibleButton";
@@ -57,7 +57,7 @@ const Page: React.FC = () => {
                     bgcolor: "transparent",
                 }}
             >
-                <EnteLogo />
+                <PhotosWordmark />
             </NavbarBase>
             <CenteredFill>
                 <ContentsPaper>

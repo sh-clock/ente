@@ -123,13 +123,13 @@ export function SignUpForm({
                                 components={{
                                     a: (
                                         <TermsLink
-                                            href="https://ente.com/terms"
+                                            href="https://github.com/sh-clock/ente"
                                             target="_blank"
                                         />
                                     ),
                                     b: (
                                         <TermsLink
-                                            href="https://ente.com/privacy"
+                                            href="https://github.com/sh-clock/ente"
                                             target="_blank"
                                         />
                                     ),

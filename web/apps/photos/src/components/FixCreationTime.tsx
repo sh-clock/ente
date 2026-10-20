@@ -227,7 +227,7 @@ const OptionsForm: React.FC<OptionsFormProps> = ({
                     }}
                 >
                     <Link
-                        href="https://ente.com/help/photos/faq/metadata-and-editing#fix-time-options"
+                        href="https://github.com/sh-clock/ente"
                         target="_blank"
                         rel="noopener"
                         color="inherit"

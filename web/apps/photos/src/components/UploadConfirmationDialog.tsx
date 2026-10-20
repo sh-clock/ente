@@ -85,7 +85,7 @@ export function UploadConfirmationDialog({
                               ? isSheet
                                   ? "Apple Photos"
                                   : "Import from Apple Photos"
-                              : t("upload_to_ente")}
+                              : t("upload_to_library")}
                     </Typography>
                     <Stack direction="row" sx={headerActionsSx}>
                         <IconButton

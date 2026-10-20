@@ -499,7 +499,7 @@ function ImportHelp(): React.JSX.Element {
             }}
         >
             <Link
-                href="https://ente.com/help/photos/migration/#import-your-photos-into-ente"
+                href="https://github.com/sh-clock/ente"
                 target="_blank"
                 rel="noopener"
                 sx={{

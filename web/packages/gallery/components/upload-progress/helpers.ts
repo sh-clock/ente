@@ -15,7 +15,7 @@ import type { UploadProgressContextT } from "./context";
 export const finishedTypeReasonKeys: Partial<
     Record<FinishedUploadType, string>
 > = {
-    alreadyUploaded: "upload_reason_already_on_ente",
+    alreadyUploaded: "upload_reason_already_in_library",
     partnerShared: "upload_reason_shared_by_partner",
     largerThanAvailableStorage: "upload_reason_not_enough_storage",
     tooLarge: "upload_reason_file_too_large",

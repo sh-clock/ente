@@ -697,7 +697,7 @@ export const ImageEditorOverlay: React.FC<ImageEditorOverlayProps> = ({
                     <RowButton
                         disabled={!transformationPerformed && !coloursAdjusted}
                         startIcon={<CloudUploadIcon />}
-                        label={t("save_a_copy_to_ente")}
+                        label={t("save_a_copy")}
                         onClick={saveCopyToEnte}
                     />
                 </RowButtonGroup>

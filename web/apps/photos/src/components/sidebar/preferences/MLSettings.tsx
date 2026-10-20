@@ -105,7 +105,7 @@ const EnableML: React.FC<EnableMLProps> = ({
     showMagicSearchHint,
 }) => {
     const moreDetails = () =>
-        openURL("https://ente.com/help/photos/features/machine-learning");
+        openURL("https://github.com/sh-clock/ente");
 
     return (
         <Stack sx={{ gap: 3, py: 1, px: 2 }}>
@@ -177,7 +177,7 @@ export const FaceConsent: React.FC<FaceConsentProps> = ({
     const privacyPolicyLink = (
         <Link
             target="_blank"
-            href="https://ente.com/privacy#8-biometric-information-privacy-policy"
+            href="https://github.com/sh-clock/ente"
             underline="always"
             sx={{ color: "inherit", textDecorationColor: "inherit" }}
         />

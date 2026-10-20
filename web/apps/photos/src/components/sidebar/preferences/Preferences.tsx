@@ -490,14 +490,14 @@ const AdvancedSettings: React.FC<NestedSidebarDrawerVisibilityProps> = ({
                 </Stack>
                 {electron && (
                     <RowCard
-                        title={t("open_ente_on_startup")}
+                        title={t("open_on_startup")}
                         endIcon={
                             <EnteSwitch
                                 checked={isAutoLaunchEnabled}
                                 onChange={toggleAutoLaunch}
                                 slotProps={{
                                     input: {
-                                        "aria-label": t("open_ente_on_startup"),
+                                        "aria-label": t("open_on_startup"),
                                     },
                                 }}
                             />

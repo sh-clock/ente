@@ -154,8 +154,8 @@ export function TakeoutOptions({
                     <Link
                         href={
                             provider == "apple"
-                                ? "https://ente.com/help/photos/faq/migration/#can-i-import-apple-photos-via-desktop"
-                                : "https://ente.com/help/photos/migration/from-google-photos/"
+                                ? "https://github.com/sh-clock/ente"
+                                : "https://github.com/sh-clock/ente"
                         }
                         target="_blank"
                         rel="noopener"

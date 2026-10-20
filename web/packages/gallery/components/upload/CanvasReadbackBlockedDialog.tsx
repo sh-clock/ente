@@ -35,7 +35,7 @@ export const CanvasReadbackBlockedDialog: React.FC<
                     <Subtitle>
                         {t("canvas_blocked_upload_failed_description")}{" "}
                         <HelpLink
-                            href="https://ente.com/help/photos/faq/troubleshooting#thumbnails"
+                            href="https://github.com/sh-clock/ente"
                             target="_blank"
                             rel="noopener"
                         >

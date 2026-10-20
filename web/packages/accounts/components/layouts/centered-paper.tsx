@@ -1,6 +1,6 @@
 import { Paper, Stack, styled, Typography } from "@mui/material";
 import { CenteredFill } from "ente-base/components/containers";
-import { EnteLogo } from "ente-base/components/EnteLogo";
+import { PhotosWordmark } from "ente-base/components/PhotosWordmark";
 import { NavbarBase } from "ente-base/components/Navbar";
 
 export const AccountsPageContents: React.FC<React.PropsWithChildren> = ({
@@ -20,7 +20,7 @@ export const AccountsPageContents: React.FC<React.PropsWithChildren> = ({
                 bgcolor: "transparent",
             }}
         >
-            <EnteLogo />
+            <PhotosWordmark />
         </NavbarBase>
         <CenteredFill
             sx={[

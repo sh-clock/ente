@@ -74,7 +74,6 @@ export interface FileViewerPhotoSwipeCoreOptions<
     dataSource: FileViewerPhotoSwipeDataSource;
     haveUser: boolean;
     isPublicAlbum?: boolean;
-    publicAlbumLogoHTML?: string;
     delegate: FileViewerPhotoSwipeDelegate<T>;
     onClose: () => void;
     onAnnotate: (file: EnteFile, itemData: ItemData) => T;
@@ -100,7 +99,6 @@ export class FileViewerPhotoSwipe<
         autoPlayMutedVideos = false,
         haveUser,
         isPublicAlbum,
-        publicAlbumLogoHTML,
         showFullscreenButton,
         disableEscapeClose,
         disableGestureClose,
@@ -1046,19 +1044,6 @@ export class FileViewerPhotoSwipe<
                     });
                 },
             });
-
-            if (isPublicAlbum && publicAlbumLogoHTML) {
-                ui.registerElement({
-                    name: "ente-logo",
-                    order: 5,
-                    isButton: true,
-                    title: "Ente",
-                    html: publicAlbumLogoHTML,
-                    onClick: () => {
-                        window.open("https://ente.com", "_blank", "noopener");
-                    },
-                });
-            }
 
             ui.registerElement({
                 name: "live",

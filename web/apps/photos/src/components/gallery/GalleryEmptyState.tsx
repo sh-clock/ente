@@ -1,5 +1,5 @@
 import { Paper, Stack, styled, Typography } from "@mui/material";
-import { EnteLogo } from "ente-base/components/EnteLogo";
+import { PhotosWordmark } from "ente-base/components/PhotosWordmark";
 import { t } from "i18next";
 import React from "react";
 import { Trans } from "react-i18next";
@@ -50,7 +50,7 @@ export function GalleryEmptyState(): React.JSX.Element {
             >
                 <NonDraggableImage
                     alt=""
-                    src="/images/empty-state/ente_empty_state_figma.svg"
+                    src="/images/empty-state/gallery-empty-state.svg"
                 />
 
                 <Stack
@@ -87,8 +87,8 @@ export function GalleryEmptyState(): React.JSX.Element {
                         }}
                     >
                         <Trans
-                            i18nKey="welcome_to_ente_title"
-                            components={{ a: <EnteLogo /> }}
+                            i18nKey="welcome_title"
+                            components={{ a: <PhotosWordmark /> }}
                         />
                     </Typography>
                     <Typography

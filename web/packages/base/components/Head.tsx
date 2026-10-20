@@ -22,15 +22,15 @@ const AlbumsFontPreloads: React.FC = () => (
 
 const albumsPreviewTitle = "Photos, shared with you";
 const albumsPreviewDescription = "Tap to view on Photos";
-const albumsPreviewImage = "https://albums.ente.com/images/preview.png";
+const albumsPreviewImage = "/images/preview.png";
 const photosPreviewDescription =
     "Store and share your photos with absolute privacy.";
-const photosPreviewImage = "https://photos.ente.com/images/preview.png";
+const photosPreviewImage = "/images/preview.png";
 
 export const CustomHead: React.FC<React.PropsWithChildren<CustomHeadProps>> = ({
     title,
     children,
-    description = "Photos - end-to-end encrypted cloud with open-source apps",
+    description = "Photos - your photos, stored privately on your own device",
     viewportContent = "width=device-width, initial-scale=1",
 }) => (
     <Head>
@@ -111,11 +111,11 @@ const CustomHeadShareStatic: React.FC = () => (
         />
         <meta
             property="og:image"
-            content="https://share.ente.com/images/preview.png"
+            content="/images/preview.png"
         />
         <meta
             name="twitter:image"
-            content="https://share.ente.com/images/preview.png"
+            content="/images/preview.png"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="referrer" content="strict-origin-when-cross-origin" />

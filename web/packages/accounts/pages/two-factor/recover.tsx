@@ -48,9 +48,9 @@ const Page: React.FC<RecoverPageProps> = ({ twoFactorType = "totp" }) => {
                     <Trans
                         i18nKey={"no_two_factor_recovery_key_message"}
                         components={{
-                            a: <Link href="mailto:support@ente.com" />,
+                            a: <Link href="https://github.com/sh-clock/ente/issues" />,
                         }}
-                        values={{ emailID: "support@ente.com" }}
+                        values={{ emailID: "github.com/sh-clock/ente/issues" }}
                     />
                 ),
                 continue: { color: "secondary", ...(dialogContinue ?? {}) },

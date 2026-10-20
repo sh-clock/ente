@@ -166,11 +166,11 @@ const sidebarActions = (): SidebarAction[] => {
         },
         {
             id: "preferences.openOnStartup",
-            label: t("open_ente_on_startup"),
+            label: t("open_on_startup"),
             path: [
                 preferencesCategory,
                 t("advanced"),
-                t("open_ente_on_startup"),
+                t("open_on_startup"),
             ],
             keywords: ["open", "startup", "launch", "auto launch"],
             available: () => isDesktop,
@@ -191,8 +191,8 @@ const sidebarActions = (): SidebarAction[] => {
         },
         {
             id: "help.helpCenter",
-            label: t("ente_help"),
-            path: [helpCategory, t("ente_help")],
+            label: t("help_center"),
+            path: [helpCategory, t("help_center")],
             keywords: ["help", "docs"],
         },
         {
@@ -304,7 +304,6 @@ export const performSidebarAction = async (
             return Promise.resolve();
 
         case "help.helpCenter":
-        case "help.blog":
         case "help.requestFeature":
         case "help.support":
         case "help.viewLogs":

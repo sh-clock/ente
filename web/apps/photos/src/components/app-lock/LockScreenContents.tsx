@@ -3,7 +3,7 @@ import { AppLockLogoutConfirmation } from "@/components/app-lock/AppLockFeedback
 import { AppLockPrompt } from "@/components/app-lock/AppLockPrompt";
 import ErrorOutlinedIcon from "@mui/icons-material/ErrorOutlined";
 import { Box, Modal, Stack, Typography } from "@mui/material";
-import { EnteLogo } from "ente-base/components/EnteLogo";
+import { PhotosWordmark } from "ente-base/components/PhotosWordmark";
 import { FocusVisibleButton } from "ente-base/components/mui/FocusVisibleButton";
 import { useBaseContext } from "ente-base/context";
 import { t } from "i18next";
@@ -62,7 +62,7 @@ const LockScreenHeader = ({
             p: 3,
         }}
     >
-        <EnteLogo />
+        <PhotosWordmark />
         {showLogoutButton && (
             <FocusVisibleButton
                 variant="text"

@@ -1,7 +1,7 @@
 import { Tick02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { GlobalStyles, keyframes, styled } from "@mui/material";
-import { EnteLogo } from "ente-base/components/EnteLogo";
+import { PhotosWordmark } from "ente-base/components/PhotosWordmark";
 import type React from "react";
 import {
     authAboveMobileMediaQuery,
@@ -131,7 +131,7 @@ function BrandPanel({
             $wideGamutPrimary={presentationConfig.wideGamutPrimary}
         >
             <Wordmark size={size}>
-                <EnteLogo />
+                <PhotosWordmark />
             </Wordmark>
             <PanelCopy size={size}>
                 <PanelHeadline size={size}>{brand.headline}</PanelHeadline>

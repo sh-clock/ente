@@ -9,7 +9,7 @@ import log from "ente-base/log";
 import { savedLogs } from "ente-base/log-web";
 import { saveStringAsFile } from "ente-base/utils/web";
 import type { SidebarActionID } from "ente-new/photos/services/search/types";
-import { initiateEmail, openURL } from "ente-new/photos/utils/web";
+import { openURL } from "ente-new/photos/utils/web";
 import { t } from "i18next";
 import React, { useCallback, useEffect, useState } from "react";
 import { Trans } from "react-i18next";
@@ -17,7 +17,6 @@ import { Trans } from "react-i18next";
 export type HelpAction = Extract<
     SidebarActionID,
     | "help.helpCenter"
-    | "help.blog"
     | "help.requestFeature"
     | "help.support"
     | "help.viewLogs"
@@ -48,19 +47,17 @@ export const Help: React.FC<HelpProps> = ({
     };
 
     const handleHelp = useCallback(
-        () => openURL("https://ente.com/help/photos/"),
+        () => openURL("https://github.com/sh-clock/ente"),
         [],
     );
 
-    const handleBlog = useCallback(() => openURL("https://ente.com/blog/"), []);
-
     const handleRequestFeature = useCallback(
-        () => openURL("https://github.com/ente/ente/discussions"),
+        () => openURL("https://github.com/sh-clock/ente/issues"),
         [],
     );
 
     const handleSupport = useCallback(
-        () => initiateEmail("support@ente.com"),
+        () => openURL("https://github.com/sh-clock/ente/issues"),
         [],
     );
 
@@ -70,7 +67,7 @@ export const Help: React.FC<HelpProps> = ({
         if (electron) {
             await electron.openLogDirectory();
         } else {
-            saveStringAsFile(savedLogs(), `ente-web-logs-${Date.now()}.txt`);
+            saveStringAsFile(savedLogs(), `photos-web-logs-${Date.now()}.txt`);
         }
     }, []);
 
@@ -90,9 +87,6 @@ export const Help: React.FC<HelpProps> = ({
             case "help.helpCenter":
                 handleHelp();
                 break;
-            case "help.blog":
-                handleBlog();
-                break;
             case "help.requestFeature":
                 handleRequestFeature();
                 break;
@@ -106,7 +100,6 @@ export const Help: React.FC<HelpProps> = ({
         onActionHandled?.();
     }, [
         confirmViewLogs,
-        handleBlog,
         handleHelp,
         handleRequestFeature,
         handleSupport,
@@ -125,22 +118,17 @@ export const Help: React.FC<HelpProps> = ({
             <Stack sx={{ px: 2, py: 1, gap: 1 }}>
                 <RowCard
                     title="Help centre"
-                    subtitle="ente.com/help/photos"
+                    subtitle="github.com/sh-clock/ente"
                     onClick={handleHelp}
                 />
                 <RowCard
-                    title={t("blog")}
-                    subtitle="ente.com/blog"
-                    onClick={handleBlog}
-                />
-                <RowCard
                     title="Request a feature"
-                    subtitle="github.com/ente/ente"
+                    subtitle="github.com/sh-clock/ente/issues"
                     onClick={handleRequestFeature}
                 />
                 <RowCard
                     title={t("support")}
-                    subtitle="support@ente.com"
+                    subtitle="github.com/sh-clock/ente/issues"
                     onClick={handleSupport}
                 />
                 <RowCard

@@ -3,7 +3,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import type { AddToAlbumPhase } from "@/components/AlbumAddedNotification";
 import { AlbumAddedNotification } from "@/components/AlbumAddedNotification";
-import { AuthenticateUser } from "@/components/AuthenticateUser";
 import {
     CollectionSelector,
     type CollectionSelectorAttributes,
@@ -256,11 +255,8 @@ const Page: React.FC = () => {
     const { show: showFixCreationTime, props: fixCreationTimeVisibilityProps } =
         useModalVisibility();
     const {
-        show: showAuthenticateUser,
-        props: authenticateUserVisibilityProps,
+        show: showAlbumNameInput, props: albumNameInputVisibilityProps,
     } = useModalVisibility();
-    const { show: showAlbumNameInput, props: albumNameInputVisibilityProps } =
-        useModalVisibility();
     const { show: showEditLocation, props: editLocationVisibilityProps } =
         useModalVisibility();
     const {
@@ -292,42 +288,14 @@ const Page: React.FC = () => {
         albumName?: string;
     }>({ open: false, phase: "processing" });
 
-    const onAuthenticateCallback = useRef<
-        ((didAuthenticate: boolean) => void) | undefined
-    >(undefined);
-
-    const authenticateUserWithPasswordModal = useCallback(
-        () =>
-            new Promise<boolean>((resolve) => {
-                onAuthenticateCallback.current = resolve;
-                showAuthenticateUser();
-            }),
-        [],
-    );
-
     const authenticateUser = useCallback(async () => {
-        if (!isDesktop) return authenticateUserWithPasswordModal();
-
-        const reauthResult = await reauthenticateWithAppLock();
-        if (reauthResult === "authenticated") return true;
-        if (reauthResult === "cancelled") return false;
-
-        return authenticateUserWithPasswordModal();
-    }, [authenticateUserWithPasswordModal]);
-
-    const handleCloseAuthenticateUser = useCallback(() => {
-        authenticateUserVisibilityProps.onClose();
-        if (onAuthenticateCallback.current) {
-            onAuthenticateCallback.current(false);
-            onAuthenticateCallback.current = undefined;
+        // Offline app: there is no remote account password to verify against.
+        // Only the app lock (if enabled) gates access to sensitive actions.
+        if (isDesktop) {
+            const reauthResult = await reauthenticateWithAppLock();
+            if (reauthResult === "cancelled") return false;
         }
-    }, [authenticateUserVisibilityProps.onClose]);
-
-    const handleAuthenticate = useCallback(() => {
-        if (onAuthenticateCallback.current) {
-            onAuthenticateCallback.current(true);
-            onAuthenticateCallback.current = undefined;
-        }
+        return true;
     }, []);
 
     const handleSidebarClose = useCallback(() => {
@@ -654,7 +622,6 @@ const Page: React.FC = () => {
             openCollectionSelector ||
             sidebarVisibilityProps.open ||
             fixCreationTimeVisibilityProps.open ||
-            authenticateUserVisibilityProps.open ||
             albumNameInputVisibilityProps.open ||
             editAlbumDetailsVisibilityProps.open ||
             isFileViewerOpen ||
@@ -2035,11 +2002,6 @@ const Page: React.FC = () => {
                     onSubmit={handleEditAlbumDetails}
                 />
             )}
-            <AuthenticateUser
-                open={authenticateUserVisibilityProps.open}
-                onClose={handleCloseAuthenticateUser}
-                onAuthenticate={handleAuthenticate}
-            />
             <SingleInputDialog
                 {...albumNameInputVisibilityProps}
                 variant="v2"
