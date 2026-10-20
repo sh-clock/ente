@@ -5,11 +5,6 @@ const int thumbnailQuality = 50;
 const int thumbnailLargeSize = 512;
 const int compressedThumbnailResolution = 1080;
 const int thumbnailDataLimit = 100 * 1024;
-const String sentryDSN =
-    "https://2235e5c99219488ea93da34b9ac1cb68@sentry.ente.io/4";
-const String sentryDebugDSN =
-    "https://ca5e686dd7f149d9bf94e620564cceba@sentry.ente.io/3";
-const String sentryTunnel = "https://sentry-reporter.ente.com";
 const String githubDiscussionsUrl = "https://github.com/ente/ente/discussions";
 const int microSecondsInDay = 86400000000;
 const int android11SDKINT = 30;
@@ -37,15 +32,18 @@ const mnemonicKeyWordCount = 24;
 
 const dragSensitivity = 8;
 
-const supportEmail = 'support@ente.com';
+const supportEmail = 'support@sh-clock.local';
 
 const multipartPartSize = 20 * 1024 * 1024;
 
-const kDefaultProductionEndpoint = 'https://api.ente.com';
-const kLegacyProductionEndpoint = 'https://api.ente.io';
-const kUploadProxyEndpoint = 'https://uploader.ente.com';
+// Neutralized endpoints: this build is a standalone local gallery with no
+// ente account backend. Pointed at an unroutable address so that nothing
+// leaks to ente servers; a future protocol worker will set its own origin.
+const kDefaultProductionEndpoint = 'https://127.0.0.1:1';
+const kLegacyProductionEndpoint = 'https://127.0.0.1:1';
+const kUploadProxyEndpoint = 'https://127.0.0.1:1';
 const kPhotosWebDomain = 'photos.ente.com';
-const kFamilyUrl = 'https://family.ente.io';
+const kFamilyUrl = 'https://127.0.0.1:1';
 
 const int intMaxValue = 9223372036854775807;
 

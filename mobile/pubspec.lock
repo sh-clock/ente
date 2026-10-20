@@ -121,14 +121,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.2"
-  auto_size_text:
-    dependency: transitive
-    description:
-      name: auto_size_text
-      sha256: "3f5261cd3fb5f2a9ab4e2fc3fba84fd9fcaac8821f20a1d4e71f557521b22599"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0"
   barcode:
     dependency: transitive
     description:
@@ -137,14 +129,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.9"
-  base32:
-    dependency: transitive
-    description:
-      name: base32
-      sha256: ddad4ebfedf93d4500818ed8e61443b734ffe7cf8a45c668c9b34ef6adde02e2
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.3"
   bidi:
     dependency: transitive
     description:
@@ -313,14 +297,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.2"
-  clipboard:
-    dependency: transitive
-    description:
-      name: clipboard
-      sha256: "2ec38f0e59878008ceca0ab122e4bfde98847f88ef0f83331362ba4521f565a9"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.3"
   clock:
     dependency: transitive
     description:
@@ -362,14 +338,6 @@ packages:
       url: "https://github.com/ente/computer.git"
     source: git
     version: "3.2.1"
-  confetti:
-    dependency: transitive
-    description:
-      name: confetti
-      sha256: "79376a99648efbc3f23582f5784ced0fe239922bd1a0fb41f582051eba750751"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.8.0"
   connectivity_plus:
     dependency: transitive
     description:
@@ -546,14 +514,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
-  dropdown_button2:
-    dependency: transitive
-    description:
-      name: dropdown_button2
-      sha256: b0fe8d49a030315e9eef6c7ac84ca964250155a6224d491c1365061bc974a9e1
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.9"
   email_validator:
     dependency: transitive
     description:
@@ -801,14 +761,6 @@ packages:
       url: "https://github.com/Baseflow/flutter_cache_manager.git"
     source: git
     version: "3.4.1"
-  flutter_context_menu:
-    dependency: transitive
-    description:
-      name: flutter_context_menu
-      sha256: "5e9c62a5937aba135e3787711b04c73b78729a9751c6c71c2bece4ed9a480d76"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.4"
   flutter_displaymode:
     dependency: transitive
     description:
@@ -1092,14 +1044,6 @@ packages:
       url: "https://github.com/ente/flutter_sodium"
     source: git
     version: "0.2.0"
-  flutter_speed_dial:
-    dependency: transitive
-    description:
-      name: flutter_speed_dial
-      sha256: "698a037274a66dbae8697c265440e6acb6ab6cae9ac5f95c749e7944d8f28d41"
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.0.0"
   flutter_spinkit:
     dependency: transitive
     description:
@@ -1195,14 +1139,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.3"
-  gradient_borders:
-    dependency: transitive
-    description:
-      name: gradient_borders
-      sha256: b1cd969552c83f458ff755aa68e13a0327d09f06c3f42f471b423b01427f21f8
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
   graphs:
     dependency: transitive
     description:
@@ -1219,22 +1155,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
-  hashlib:
-    dependency: transitive
-    description:
-      name: hashlib
-      sha256: f547a6273fa2bba211e903f32b234a6a7097aca1d218d2391f40021d25e7f200
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.24.0"
-  hashlib_codecs:
-    dependency: transitive
-    description:
-      name: hashlib_codecs
-      sha256: "8cea9ccafcfeaa7324d2ae52c61c69f7ff71f4237507a018caab31b9e416e3b1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.6.0"
   hex:
     dependency: transitive
     description:
@@ -1656,14 +1576,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
-  menu_base:
-    dependency: transitive
-    description:
-      name: menu_base
-      sha256: "820368014a171bd1241030278e6c2617354f492f5c703d7b7d4570a6b8b84405"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.1"
   mesh_gradient:
     dependency: transitive
     description:
@@ -1882,14 +1794,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.3"
-  otp:
-    dependency: transitive
-    description:
-      name: otp
-      sha256: "998e73b5cd831a13fa654cf2cbb169d027f74b4928853ff26aa9311ead66ed7c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.2.0"
   package_config:
     dependency: transitive
     description:
@@ -2187,14 +2091,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.2"
-  qr_flutter:
-    dependency: transitive
-    description:
-      name: qr_flutter
-      sha256: "5095f0fc6e3f71d08adef8feccc8cea4f12eec18a2e31c2e8d82cb6019f4b097"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.1.0"
   quiver:
     dependency: transitive
     description:
@@ -2252,22 +2148,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.28.0"
-  saf_stream:
-    dependency: transitive
-    description:
-      name: saf_stream
-      sha256: "6fa5179bf5c8f5f99b183286df6236b23de33c1e874d69ce1fe565a63f95f62b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
-  saf_util:
-    dependency: transitive
-    description:
-      name: saf_util
-      sha256: "0cf5fc462fc7e466e1d5608dd5a331d88d6dd6c7b01f62a305aaf469bf3309ea"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   safe_local_storage:
     dependency: transitive
     description:
@@ -2444,14 +2324,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-  shortid:
-    dependency: transitive
-    description:
-      name: shortid
-      sha256: d0b40e3dbb50497dad107e19c54ca7de0d1a274eb9b4404991e443dadb9ebedb
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.2"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -2609,22 +2481,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.12.1"
-  steam_totp:
-    dependency: transitive
-    description:
-      name: steam_totp
-      sha256: f47163df9be533024cecb97ca9bb1f29bb5575409a22fe4acdd9d70288d38d0d
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.2"
-  step_progress_indicator:
-    dependency: transitive
-    description:
-      name: step_progress_indicator
-      sha256: b51bb1fcfc78454359f0658c5a2c21548c3825ebf76e826308e9ca10f383bbb8
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.2"
   stream_channel:
     dependency: transitive
     description:
@@ -2713,14 +2569,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.10.1"
-  tray_manager:
-    dependency: transitive
-    description:
-      name: tray_manager
-      sha256: c5fd83b0ae4d80be6eaedfad87aaefab8787b333b8ebd064b0e442a81006035b
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.2"
   tuple:
     dependency: transitive
     description:

@@ -659,7 +659,7 @@ class LocalSettings {
       return _cachedAppMode!;
     }
 
-    _cachedAppMode = AppMode.enteGallery;
+    _cachedAppMode = AppMode.localGallery;
     return _cachedAppMode!;
   }
 
@@ -678,7 +678,7 @@ class LocalSettings {
   }
 
   bool get isLocalGalleryOnboardingPending =>
-      _prefs.getBool(_kLocalGalleryOnboardingPending) ?? false;
+      _prefs.getBool(_kLocalGalleryOnboardingPending) ?? true;
 
   Future<void> setLocalGalleryOnboardingPending(bool value) async {
     await _prefs.setBool(_kLocalGalleryOnboardingPending, value);
