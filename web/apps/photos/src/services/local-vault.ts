@@ -1,7 +1,7 @@
 // Local vault bootstrap.
 //
 // Temporary bridge: the app runs fully offline with an auto-generated local
-// vault instead of an ente account login. This will later be replaced by the
+// vault instead of a hosted account login. This will later be replaced by the
 // clock protocol's password-derived vault (PASSWORD -> KEK -> master key),
 // at which point the placeholder kek fields below become real.
 //

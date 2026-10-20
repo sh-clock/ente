@@ -20,7 +20,6 @@ import {
     uploadManager,
 } from "@/services/upload-manager";
 import watcher from "@/services/watch";
-import DiscFullIcon from "@mui/icons-material/DiscFull";
 import { Dialog, type DialogProps } from "@mui/material";
 import type { LocalUser } from "ente-accounts/services/user";
 import { isDesktop } from "ente-base/app";
@@ -66,11 +65,7 @@ import {
     tryParseTakeoutAlbumNameMetadataJSON,
     type ParsedMetadataJSON,
 } from "ente-gallery/services/upload/metadata-json";
-import {
-    sessionExpiredErrorMessage,
-    storageLimitExceededErrorMessage,
-    subscriptionExpiredErrorMessage,
-} from "ente-gallery/services/upload/upload-service";
+import { sessionExpiredErrorMessage } from "ente-gallery/services/upload/upload-service";
 import { hasReliableCanvasReadback } from "ente-gallery/utils/upload/canvas-integrity";
 import { CollectionSubType, type Collection } from "ente-media/collection";
 import type { EnteFile } from "ente-media/file";
@@ -90,7 +85,6 @@ import {
     savedNormalCollections,
     savedOrCreateUserUncategorizedCollection,
 } from "ente-new/photos/services/collection";
-import { redirectToCustomerPortal } from "ente-new/photos/services/user-details";
 import { usePhotosAppContext } from "ente-new/photos/types/context";
 import { firstNonEmpty } from "ente-utils/array";
 import { t } from "i18next";
@@ -114,7 +108,6 @@ interface UploadProps {
     ) => void;
     onCloseCollectionSelector?: () => void;
     onUploadFile: (file: EnteFile) => void;
-    onShowPlanSelector?: () => void;
     onShowSessionExpiredDialog: () => void;
     isInHiddenSection?: boolean;
 }
@@ -186,7 +179,6 @@ export const Upload: React.FC<UploadProps> = ({
     onOpenCollectionSelector,
     onCloseCollectionSelector,
     onUploadFile,
-    onShowPlanSelector,
     onShowSessionExpiredDialog,
     ...props
 }) => {
@@ -1110,26 +1102,6 @@ export const Upload: React.FC<UploadProps> = ({
         switch (e instanceof Error && e.message) {
             case sessionExpiredErrorMessage:
                 onShowSessionExpiredDialog();
-                break;
-            case subscriptionExpiredErrorMessage:
-                showNotification({
-                    color: "critical",
-                    captionFirst: true,
-                    caption: t("subscription_expired"),
-                    title: t("renew_now"),
-                    onClick: () =>
-                        void redirectToCustomerPortal().catch(onGenericError),
-                });
-                break;
-            case storageLimitExceededErrorMessage:
-                showNotification({
-                    color: "critical",
-                    captionFirst: true,
-                    caption: t("storage_quota_exceeded"),
-                    title: t("upgrade_now"),
-                    onClick: onShowPlanSelector,
-                    startIcon: <DiscFullIcon />,
-                });
                 break;
             default:
                 showNotification({

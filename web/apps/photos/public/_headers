@@ -5,7 +5,7 @@
     X-Download-Options: noopen
     X-Frame-Options: deny
     X-XSS-Protection: 1; mode=block
-    Content-Security-Policy: default-src 'self'; img-src 'self' blob: data: https://*.openstreetmap.org https://*.stadiamaps.com; media-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-eval' blob:; manifest-src 'self'; child-src 'self' blob:; object-src 'none'; connect-src 'self' data: blob: https://*.stadiamaps.com; base-uri 'self'; form-action 'none';
+    Content-Security-Policy: default-src 'self'; img-src 'self' blob: data: https://*.openstreetmap.org; media-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-eval' blob:; manifest-src 'self'; child-src 'self' blob:; object-src 'none'; connect-src 'self' data: blob: https://*.openstreetmap.org; base-uri 'self'; form-action 'none';
 
 
 /images/favicon.png

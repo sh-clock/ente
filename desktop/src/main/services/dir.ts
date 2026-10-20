@@ -31,7 +31,7 @@ export const openDirectory = async (dirPath: string) => {
 
 export const openLogDirectory = () => openDirectory(logDirectoryPath());
 
-// macOS: ~/Library/Logs/ente/ente.log (production)
-// Linux: ~/.config/ente/logs/ente.log
-// Windows: %USERPROFILE%\AppData\Roaming\ente\logs\ente.log
+// macOS: ~/Library/Logs/Photos/photos.log (production)
+// Linux: ~/.config/Photos/logs/photos.log
+// Windows: %USERPROFILE%\AppData\Roaming\Photos\logs\photos.log
 const logDirectoryPath = () => app.getPath("logs");

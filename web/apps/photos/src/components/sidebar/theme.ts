@@ -55,7 +55,7 @@ export const sidebarStyles = (theme: Theme): CSSObject => {
             "--mui-palette-secondary-dark": "#0A0A0A",
         }),
         fontFamily: inter,
-        "& .MuiTypography-h3:not([data-sidebar-subscription] *)": {
+        "& .MuiTypography-h3": {
             fontSize: "18px",
             lineHeight: "24px",
         },
@@ -94,7 +94,7 @@ export const sidebarStyles = (theme: Theme): CSSObject => {
                     theme.colorSchemes.dark?.palette.stroke.faint,
             }),
         },
-        "& .ente-chevron-right:not([data-sidebar-subscription] *)": {
+        "& .ente-chevron-right": {
             color: "#969696",
         },
     };

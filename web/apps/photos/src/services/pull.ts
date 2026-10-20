@@ -57,7 +57,7 @@ export const pullFiles = async (opts?: PullFilesOpts) => {
         // does this by providing onDidUpdateCollectionFiles), but still needs
         // fixing instead of a hidden gotcha. Fix is simple, just uncomment, but
         // that can be done once the exportService can be imported here in the
-        // ente-new package.
+        // shared photos package.
         //
         // exportService.onLocalFilesUpdated();
         opts?.onDidUpdateCollectionFiles();

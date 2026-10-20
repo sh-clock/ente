@@ -7,8 +7,8 @@ import log from "../log";
 import { markClosableZip, openZip } from "../services/zip";
 import { writeStream } from "./stream";
 
-const enteTempDirPath = async () => {
-    const result = path.join(app.getPath("temp"), "ente");
+const photosTempDirPath = async () => {
+    const result = path.join(app.getPath("temp"), "photos");
     await fs.mkdir(result, { recursive: true });
     return result;
 };
@@ -37,7 +37,7 @@ export const imageInputExtension = (
 export const makeTempFilePath = async (extension?: string) => {
     if (extension && !isValidExtension(extension))
         throw new Error("Invalid temporary file extension");
-    const tempDir = await enteTempDirPath();
+    const tempDir = await photosTempDirPath();
     const suffix = extension ? "." + extension : "";
     let result: string;
     do {
@@ -47,7 +47,7 @@ export const makeTempFilePath = async (extension?: string) => {
 };
 
 export const deleteTempFile = async (tempFilePath: string) => {
-    const tempDir = await enteTempDirPath();
+    const tempDir = await photosTempDirPath();
     if (!tempFilePath.startsWith(tempDir))
         throw new Error(`Attempting to delete a non-temp file ${tempFilePath}`);
     await fs.rm(tempFilePath, { force: true });

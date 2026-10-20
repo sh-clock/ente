@@ -110,16 +110,6 @@ const onMainWindowBlur = (cb: (() => void) | undefined) => {
 const setTitleBarOverlay = (themeMode: ThemeMode, isFileViewerOpen: boolean) =>
     ipcRenderer.send("setTitleBarOverlay", themeMode, isFileViewerOpen);
 
-const onOpenAppURL = (cb: ((url: string) => void) | undefined) => {
-    ipcRenderer.removeAllListeners("openAppURL");
-    if (cb) ipcRenderer.on("openAppURL", (_, url: string) => cb(url));
-};
-
-const updateAndRestart = () => ipcRenderer.send("updateAndRestart");
-
-const updateOnNextRestart = (version: string) =>
-    ipcRenderer.send("updateOnNextRestart", version);
-
 const fsExists = (path: string) => ipcRenderer.invoke("fsExists", path);
 
 const fsMkdirIfNeeded = (dirPath: string) =>
@@ -285,10 +275,6 @@ contextBridge.exposeInMainWorld("electron", {
     onMainWindowFocus,
     onMainWindowBlur,
     setTitleBarOverlay,
-    onOpenAppURL,
-
-    updateAndRestart,
-    updateOnNextRestart,
 
     fs: {
         exists: fsExists,

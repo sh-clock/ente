@@ -6,7 +6,10 @@ class AutoLauncher {
 
     constructor() {
         if (process.platform != "darwin") {
-            this.autoLaunch = new AutoLaunch({ name: "ente", isHidden: true });
+            this.autoLaunch = new AutoLaunch({
+                name: "Photos",
+                isHidden: true,
+            });
         }
     }
 

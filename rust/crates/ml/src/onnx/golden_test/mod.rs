@@ -384,7 +384,7 @@ mod tests {
         const CANONICAL: &str = "yolov5s_face_640_640_static_b1.onnx";
         assert!(matches_model_file(CANONICAL, CANONICAL));
         assert!(matches_model_file(
-            "models_ente_com_yolov5s_face_640_640_static_b1_onnx",
+            "models_sh_clock_dev_yolov5s_face_640_640_static_b1_onnx",
             CANONICAL
         ));
         assert!(matches_model_file(
@@ -393,11 +393,11 @@ mod tests {
         ));
 
         assert!(!matches_model_file(
-            "models_ente_com_mobileclip_s2_image_gelu_opset20_onnx",
+            "models_sh_clock_dev_mobileclip_s2_image_gelu_opset20_onnx",
             CANONICAL
         ));
         assert!(!matches_model_file(
-            "models_ente_com_xyolov5s_face_640_640_static_b1_onnx",
+            "models_sh_clock_dev_xyolov5s_face_640_640_static_b1_onnx",
             CANONICAL
         ));
     }
@@ -406,7 +406,7 @@ mod tests {
     fn committed_entries_are_unambiguous_for_app_sanitized_names() {
         for entry in GOLDEN_ENTRIES {
             let device_name = format!(
-                "models_ente_com_{}",
+                "models_sh_clock_dev_{}",
                 super::sanitize_file_name(entry.model_file)
             );
             let matching = GOLDEN_ENTRIES

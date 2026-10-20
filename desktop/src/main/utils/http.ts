@@ -1,4 +1,4 @@
-export const clientPackageName = "io.ente.photos.desktop";
+export const clientPackageName = "com.shclock.photos.desktop";
 
 // Utility processes cannot import Electron's app module, so callers supply the version.
 export const publicRequestHeaders = (desktopAppVersion: string) => ({

@@ -1,10 +1,9 @@
-## Desktop app for Ente Photos
+## Photos desktop
 
-The sweetness of Ente Photos, right on your computer. Linux, Windows and macOS.
+The Photos desktop app: a standalone, offline photo library for Linux, Windows
+and macOS, backed by a local vault (no servers, no accounts).
 
-You can [**download** a pre-built binary from releases](https://github.com/ente/photos-desktop/releases/latest).
-
-To know more about Ente, see [our main README](../README.md) or visit [ente.com](https://ente.com).
+This is a fork; see the [main README](../README.md) for details.
 
 ## Building from source
 

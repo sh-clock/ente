@@ -13,7 +13,7 @@ export const logStartupBanner = (userID?: number) => {
 
     const sha = buildEnvGitSHA;
     const buildID = isDevBuild ? "dev " : sha ? `git ${sha} ` : "";
-    log.info(`Starting ente-${appName}-web ${buildID}uid ${userID ?? 0}`);
+    log.info(`Starting ${appName}-web ${buildID}uid ${userID ?? 0}`);
 };
 
 export const logUnhandledErrorsAndRejections = (attach: boolean) => {

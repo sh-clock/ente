@@ -12,7 +12,7 @@ export const clearStores = () => {
     watchStore.clear();
 };
 
-// macOS Keychain entry: "ente Safe Storage".
+// macOS Keychain entry: "Photos Safe Storage".
 export const saveMasterKeyInSafeStorage = (masterKey: string) => {
     const encryptedKeyBuffer = safeStorage.encryptString(masterKey);
     const encryptedKey = Buffer.from(encryptedKeyBuffer).toString("base64");

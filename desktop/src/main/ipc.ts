@@ -99,8 +99,8 @@ const parsePersistedAppLockConfig = (
 
 const rendererOrigin = "photos://app";
 
-// The preload bridge remains exposed while the window visits Stripe, so every
-// privileged handler must verify that its caller is our renderer.
+// The preload bridge stays exposed to anything loaded in the app's window, so
+// every privileged handler must verify that its caller is our renderer.
 const ensureTrustedIPCSender = (
     channel: string,
     event: IpcMainEvent | IpcMainInvokeEvent,
@@ -184,9 +184,6 @@ export const attachIPCHandlers = () => {
     );
 
     handle("promptDeviceLock", (_, reason: string) => promptDeviceLock(reason));
-
-
-
 
     handle("fsExists", (_, path: string) => fsExists(path));
 

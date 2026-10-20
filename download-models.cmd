@@ -2,7 +2,10 @@
 REM ============================================================================
 REM download-models.cmd - fetch all ML model assets for Photos
 REM
-REM Sources: models.ente.com (the current upstream host).
+REM Source: your own R2 bucket placeholder. The upstream host was
+REM models.ente.com; this fork no longer downloads from ente. Upload the
+REM models once (see RE-HOSTING below) and keep BASE pointing at your bucket.
+REM
 REM Sizes and SHA-256 checksums are pinned to match the app's catalog:
 REM   rust/crates/ml/src/assets.rs      (face + CLIP + pets)
 REM   rust/crates/ml/src/ocr/assets.rs  (PaddleOCR PP-OCRv5)
@@ -10,16 +13,19 @@ REM   rust/crates/ml/src/scan/mod.rs    (document segmentation)
 REM
 REM RE-HOSTING: upload everything under .\models\ to your R2 bucket keeping
 REM the same relative paths, then change BASE below to your bucket URL.
-REM The app-side base URL lives in rust/crates/ml/src/assets.rs (search for
-REM "models.ente.com"). After you flip it, this same script doubles as the
-REM downloader for your bucket.
+REM The app-side URLs live in the rust files listed above (they currently
+REM point at models.ente.com and must be flipped to the same bucket).
+REM After you flip them, this same script doubles as the downloader for
+REM your bucket.
 REM
 REM Requires: curl + PowerShell (both ship with Windows 10+).
 REM ============================================================================
 
 setlocal enabledelayedexpansion
 
-set "BASE=https://models.ente.com"
+REM TODO: replace with your own R2 bucket URL (e.g. https://pub-xxxx.r2.dev
+REM or a custom domain) once the models have been uploaded there.
+set "BASE=https://models.sh-clock.dev"
 set "OUT=%~dp0models"
 
 echo Base URL : %BASE%
@@ -60,7 +66,8 @@ call :get PP-OCRv5\ppocrv5_dict.txt d1979e9f794c464c0d2e0b70a7fe14dd978e9dc644c0
 if errorlevel 1 goto :fail
 
 REM -------------------------------------------------- document scanning ----
-call :get document_segmentation_opt.onnx "" ""
+REM sha256/size match rust/crates/ml/src/scan/mod.rs (SEGMENTATION_MODEL_SHA256).
+call :get document_segmentation_opt.onnx 5ddcb87c70cb7674189e6fc148e84a490ca65b282276534210255a777d48a808 5085426
 if errorlevel 1 goto :fail
 
 REM --------------------------------------------------------------- pets ------
@@ -83,7 +90,8 @@ echo.
 echo All models downloaded and verified into %OUT%
 echo Upload this folder to your R2 bucket, then flip the base URL:
 echo   - this script: BASE=...
-echo   - app: rust/crates/ml/src/assets.rs (^"models.ente.com^")
+echo   - app (rust, read-only catalog): rust/crates/ml/src/assets.rs,
+echo     rust/crates/ml/src/ocr/assets.rs, rust/crates/ml/src/scan/mod.rs
 echo.
 exit /b 0
 
@@ -91,8 +99,10 @@ exit /b 0
 set "FILE=%~1"
 set "SHA=%~2"
 set "SIZE=%~3"
+REM URLs need forward slashes even though local paths use backslashes.
+set "FILEURL=%FILE:\=/%"
 echo [%FILE%]
-curl -fL --retry 3 -o "%OUT%\%FILE%" "%BASE%/%FILE%"
+curl -fL --retry 3 -o "%OUT%\%FILE%" "%BASE%/%FILEURL%"
 if errorlevel 1 (
     echo   FAILED to download %FILE%
     exit /b 1

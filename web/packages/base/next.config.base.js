@@ -47,53 +47,12 @@ const gitSHA = (() => {
 
 const appName = path.basename(process.cwd());
 
-const isDesktop = process.env._ENTE_IS_DESKTOP ? "1" : "";
+const isDesktop = process.env._PHOTOS_IS_DESKTOP ? "1" : "";
 
 const desktopAppVersion = isDesktop
     ? JSON.parse(fs.readFileSync("../../../desktop/package.json", "utf-8"))
           .version
     : undefined;
-
-if (process.env.NEXT_PUBLIC_ENTE_ACCOUNTS_URL) {
-    console.log(
-        "The NEXT_PUBLIC_ENTE_ACCOUNTS_URL environment variable is not supported.",
-    );
-    console.log("Use apps.accounts in the museum configuration instead.");
-    process.exit(1);
-}
-
-if (process.env.NEXT_PUBLIC_ENTE_FAMILY_URL) {
-    console.log(
-        "The NEXT_PUBLIC_ENTE_FAMILY_URL environment variable is not supported.",
-    );
-    console.log("Use apps.family in the museum configuration instead.");
-    process.exit(1);
-}
-
-if (process.env.NEXT_PUBLIC_ENTE_ALBUMS_ENDPOINT) {
-    console.log(
-        "The NEXT_PUBLIC_ENTE_ALBUMS_ENDPOINT environment variable is not used anymore and is ignored.",
-    );
-    console.log("Use apps.public-albums in the museum configuration instead.");
-}
-
-if (process.env.NEXT_PUBLIC_ENTE_PHOTOS_ENDPOINT) {
-    console.log(
-        "The NEXT_PUBLIC_ENTE_PHOTOS_ENDPOINT environment variable is not used anymore and is ignored.",
-    );
-    console.log(
-        "It only affected client-side handoffs; public link behavior is configured through Museum.",
-    );
-}
-
-if (process.env.NEXT_PUBLIC_ENTE_SHARE_ENDPOINT) {
-    console.log(
-        "The NEXT_PUBLIC_ENTE_SHARE_ENDPOINT environment variable is not used anymore and is ignored.",
-    );
-    console.log(
-        "It only affected link preview metadata; public link behavior is configured through Museum.",
-    );
-}
 
 /** @type {import("next").NextConfig} */
 const nextConfig = {

@@ -42,7 +42,7 @@ fn model_asset(model: Model) -> Asset {
             .iter()
             .map(|file| AssetFile {
                 name: file.name.to_string(),
-                url: format!("https://models.ente.com/{}", file.name),
+                url: format!("https://models.sh-clock.dev/{}", file.name),
                 size: file.size,
                 sha256: file.sha256.to_string(),
             })
@@ -543,7 +543,7 @@ mod tests {
             fs::write(path, b"retired").unwrap();
         }
         let preserved = [
-            root.path().join("models_ente_com_memory_music_mp3"),
+            root.path().join("models_sh_clock_dev_memory_music_mp3"),
             legacy_mobile_paths(root.path(), "mobilefacenet_portable_static_b1.onnx")[0].clone(),
             root.path().join("models/det_fixed_v1/det_fixed_v1.onnx"),
         ];

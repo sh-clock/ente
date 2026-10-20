@@ -52,29 +52,18 @@ const main = () => {
 
     initLogging();
     logStartupBanner();
-    registerForAppLinks();
 
     // Electron keeps the last privileged-scheme registration. This must follow
     // next-electron-server's registration so both "photos" and "stream" survive.
     setupRendererServer();
     registerPrivilegedSchemes();
 
-    const handleOpenAppURLEnsuringWindow = (url: string) => {
-        log.info(`Attempting to handle request to open URL: ${url}`);
-        if (mainWindow) handleAppLinks(mainWindow, url);
-        else setTimeout(() => handleOpenAppURLEnsuringWindow(url), 1000);
-    };
-
-    app.on("second-instance", (_, argv: string[]) => {
+    app.on("second-instance", () => {
         if (mainWindow) {
             mainWindow.show();
             if (mainWindow.isMinimized()) mainWindow.restore();
             mainWindow.focus();
         }
-
-        // Chromium may reorder or insert arguments, so the URL has no fixed index.
-        const url = argv.find((arg) => arg.startsWith("photos://app"));
-        if (url) handleOpenAppURLEnsuringWindow(url);
     });
 
     void app.whenReady().then(() => {
@@ -116,8 +105,6 @@ const main = () => {
         if (mainWindow) saveWindowBounds(mainWindow);
         allowWindowClose();
     });
-
-    app.on("open-url", (_, url) => handleOpenAppURLEnsuringWindow(url));
 };
 
 const logStartupBanner = () => {
@@ -149,12 +136,6 @@ const registerPrivilegedSchemes = () => {
             privileges: { supportFetchAPI: true, corsEnabled: true },
         },
     ]);
-};
-
-const registerForAppLinks = () => app.setAsDefaultProtocolClient("photos");
-
-const handleAppLinks = (mainWindow: BrowserWindow, url: string) => {
-    mainWindow.webContents.send("openAppURL", url);
 };
 
 const attachProcessHandlers = () => {
@@ -301,8 +282,6 @@ const allowExternalLinks = (webContents: WebContents) =>
         }
     });
 
-// Electron hides Stripe's beforeunload dialog, leaving an invisible modal that
-// wedges navigation and quit. Recreate the browser prompt ourselves.
 const setupTrayItem = (mainWindow: BrowserWindow) => {
     const iconName =
         process.platform == "darwin"

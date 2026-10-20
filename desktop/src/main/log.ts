@@ -3,7 +3,7 @@ import util from "node:util";
 import { isDev } from "./utils/electron";
 
 export const initLogging = () => {
-    log.transports.file.fileName = "ente.log";
+    log.transports.file.fileName = "photos.log";
     log.transports.file.maxSize = 50 * 1024 * 1024;
     log.transports.file.format = "[{y}-{m}-{d}T{h}:{i}:{s}{z}] {text}";
 

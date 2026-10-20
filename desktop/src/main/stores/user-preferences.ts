@@ -3,8 +3,6 @@ import type { ThemeMode } from "../../types/ipc";
 
 interface UserPreferences {
     hideDockIcon?: boolean;
-    skipAppVersion?: string;
-    muteUpdateNotificationVersion?: string;
     lastShownChangelogVersion?: number;
     windowBounds?: { x: number; y: number; width: number; height: number };
     isWindowMaximized?: boolean;
@@ -13,8 +11,6 @@ interface UserPreferences {
 
 const userPreferencesSchema: Schema<UserPreferences> = {
     hideDockIcon: { type: "boolean" },
-    skipAppVersion: { type: "string" },
-    muteUpdateNotificationVersion: { type: "string" },
     lastShownChangelogVersion: { type: "number" },
     windowBounds: {
         properties: {

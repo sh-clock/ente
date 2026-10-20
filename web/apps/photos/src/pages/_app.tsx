@@ -99,23 +99,11 @@ const App: React.FC<PhotosAppProps> = ({ Component, pageProps }) => {
         const electron = globalThis.electron;
         if (!electron) return undefined;
 
-        const handleOpenAppURL = (url: string) => {
-            if (url.startsWith("photos://app")) {
-                void router.push(url);
-            } else {
-                log.info(`Ignoring unhandled open request for URL ${url}`);
-            }
-        };
-
         if (isMLSupported) initML();
         if (isHLSGenerationSupported) void initVideoProcessing();
 
-        electron.onOpenAppURL(handleOpenAppURL);
-
-        return () => {
-            electron.onOpenAppURL(undefined);
-        };
-    }, [router, showMiniDialog, showNotification]);
+        return () => {};
+    }, [showMiniDialog, showNotification]);
 
     useEffect(() => {
         if (isDesktop) void resumeExportsIfNeeded();

@@ -19,7 +19,7 @@ struct OcrModelFile {
 const DETECTION: OcrModelFile = OcrModelFile {
     key: "ppocrv5_det_fixed_v1",
     name: "det.onnx",
-    url: "https://models.ente.com/det_fixed_v1.onnx",
+    url: "https://models.sh-clock.dev/det_fixed_v1.onnx",
     size: 5_548_458,
     sha256: "f655f119225b579fa8c3cbf64f6bb7cf56a26c9dc211706a25234d70a543ec8c",
 };
@@ -27,7 +27,7 @@ const DETECTION: OcrModelFile = OcrModelFile {
 const CLASSIFICATION: OcrModelFile = OcrModelFile {
     key: "ppocrv5_cls_fixed_v1",
     name: "cls.onnx",
-    url: "https://models.ente.com/cls_fixed_v1.onnx",
+    url: "https://models.sh-clock.dev/cls_fixed_v1.onnx",
     size: 590_475,
     sha256: "378d52a73263828d08d4dda37f1d0aac2e36cbd486fdc6351bf309d515610654",
 };
@@ -35,7 +35,7 @@ const CLASSIFICATION: OcrModelFile = OcrModelFile {
 const RECOGNITION: OcrModelFile = OcrModelFile {
     key: "ppocrv5_rec_fixed_v1",
     name: "rec.onnx",
-    url: "https://models.ente.com/rec_fixed_v1.onnx",
+    url: "https://models.sh-clock.dev/rec_fixed_v1.onnx",
     size: 17_031_601,
     sha256: "6dda4c0891af5a70c5b0f618b62588df7f3140616d1c560be5ec6496747b54fd",
 };
@@ -43,7 +43,7 @@ const RECOGNITION: OcrModelFile = OcrModelFile {
 const DICTIONARY: OcrModelFile = OcrModelFile {
     key: "ppocrv5_dict",
     name: "ppocrv5_dict.txt",
-    url: "https://models.ente.com/PP-OCRv5/ppocrv5_dict.txt",
+    url: "https://models.sh-clock.dev/PP-OCRv5/ppocrv5_dict.txt",
     size: 74_012,
     sha256: "d1979e9f794c464c0d2e0b70a7fe14dd978e9dc644c0e71f14158cdf8342af1b",
 };
