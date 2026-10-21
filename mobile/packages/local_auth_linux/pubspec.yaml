@@ -1,5 +1,5 @@
 name: local_auth_linux
-description: Linux implementation of the local_auth plugin for Ente.
+description: Linux implementation of the local_auth plugin.
 
 resolution: workspace
 environment:

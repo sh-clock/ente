@@ -1,5 +1,5 @@
 name: ente_screen_brightness
-description: Application-level screen dimming for Ente Flutter apps
+description: Application-level screen dimming for the Photos Flutter apps
 
 resolution: workspace
 environment:

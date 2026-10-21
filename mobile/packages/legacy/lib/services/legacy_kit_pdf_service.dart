@@ -21,7 +21,9 @@ class LegacyKitPdfService {
   static const String _outfitMediumAsset = "$_fontRoot/Outfit-Medium.ttf";
   static const String _outfitSemiBoldAsset = "$_fontRoot/Outfit-SemiBold.ttf";
 
-  static const String _supportEmail = "support@ente.com";
+  // Fork: debrand - inert placeholder address (nothing is deliverable
+  // from the standalone build).
+  static const String _supportEmail = "support@sh-clock.local";
   static const int _sheetsNeededToRecover = 2;
   static const String _emphasisSlot = "\uFFFC";
 
@@ -60,7 +62,7 @@ class LegacyKitPdfService {
   static String displayRecoveryUrl(String recoveryUrl) {
     final normalized = recoveryUrl.trim().replaceFirst(RegExp(r"/+$"), "");
     if (normalized.isEmpty) {
-      return "legacy.ente.com";
+      return "legacy.sh-clock.dev";
     }
     return normalized.replaceFirst(RegExp(r"^https?://"), "");
   }
@@ -105,10 +107,10 @@ class LegacyKitPdfService {
   pw.Document _document() {
     return pw.Document(
       title: "Photos Legacy Kit",
-      author: "ente",
-      creator: "ente locker",
+      author: "Photos",
+      creator: "Photos",
       subject: "Photos Legacy Kit recovery sheet",
-      producer: "ente locker",
+      producer: "Photos",
     );
   }
 
@@ -556,7 +558,7 @@ class LegacyKitPdfService {
             top: 0,
             child: enteLogoSvg == null
                 ? pw.Text(
-                    "ente",
+                    "Photos",
                     style: pw.TextStyle(
                       color: _dark,
                       fontSize: 18,

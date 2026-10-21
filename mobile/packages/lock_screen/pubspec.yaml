@@ -1,5 +1,5 @@
 name: ente_lock_screen
-description: A Flutter package containing lock screen UI components and services for Ente apps
+description: A Flutter package containing lock screen UI components and services for the Photos mobile apps
 
 resolution: workspace
 environment:

@@ -1,5 +1,5 @@
 name: ente_vision
-description: Apple Vision text recognition for Ente Photos
+description: Apple Vision text recognition for Photos
 
 resolution: workspace
 environment:

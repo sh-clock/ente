@@ -1,5 +1,5 @@
 name: ente_base
-description: A base Flutter package containing shared models and types for ente apps
+description: A base Flutter package containing shared models and types for the Photos mobile apps
 
 resolution: workspace
 environment:

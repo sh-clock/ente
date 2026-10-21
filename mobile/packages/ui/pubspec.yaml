@@ -1,5 +1,5 @@
 name: ente_ui
-description: A Flutter package containing shared UI components, themes, and utilities for Ente apps
+description: A Flutter package containing shared UI components, themes, and utilities for the Photos mobile apps
 
 resolution: workspace
 environment:

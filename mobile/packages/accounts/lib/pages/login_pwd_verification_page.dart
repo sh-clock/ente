@@ -213,7 +213,7 @@ class _LoginPasswordVerificationPageState
       ],
     );
     if (result == true && context.mounted) {
-      await sendLogs(context, "support@ente.com", postShare: () {});
+      await sendLogs(context, "support@sh-clock.local", postShare: () {});
     }
   }
 

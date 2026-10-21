@@ -1186,7 +1186,7 @@ class _WrappedViewerPageState extends State<WrappedViewerPage>
     try {
       _logger.fine("Configuring audio session for music");
       await _ensureAudioSessionConfigured();
-      const String assetPath = "assets/ente_rewind_2025_music.mp3";
+      const String assetPath = "assets/rewind_2025_music.mp3";
       _logger.fine("Setting music asset: $assetPath");
       await _audioPlayer.setAsset(assetPath, preload: true);
       _logger.fine("Music asset loaded, configuring player");

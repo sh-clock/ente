@@ -67,14 +67,14 @@ class _CollageCreatorPageState extends State<CollageCreatorPage> {
       );
       _logger.info('Size after compression = ${compressedBytes.length}');
       final fileName =
-          "ente_collage_" +
+          "photos_collage_" +
           DateTime.now().microsecondsSinceEpoch.toString() +
           ".jpeg";
       final newAsset = await (PhotoManager.editor
           .saveImage(
             compressedBytes,
             filename: fileName,
-            relativePath: "ente Collages",
+            relativePath: "Photos Collages",
           )
           .onError((err, st) async {
             return await (PhotoManager.editor.saveImage(
@@ -82,7 +82,7 @@ class _CollageCreatorPageState extends State<CollageCreatorPage> {
               filename: fileName,
             ));
           }));
-      final newFile = fileFromAsset("ente Collages", newAsset);
+      final newFile = fileFromAsset("Photos Collages", newAsset);
       SyncService.instance.sync().ignore();
       if (!mounted) return;
       showShortToast(context, context.strings.collageSaved);

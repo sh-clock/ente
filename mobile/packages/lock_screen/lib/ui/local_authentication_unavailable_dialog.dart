@@ -5,8 +5,9 @@ import 'package:ente_ui/utils/toast_util.dart';
 import 'package:ente_utils/platform_util.dart';
 import 'package:flutter/material.dart';
 
-const linuxSystemAuthGuideUrl =
-    'https://ente.com/help/auth/troubleshooting/linux-system-auth';
+// Fork: debrand — the hosted guide is gone; the fork's repository is
+// the neutral target.
+const linuxSystemAuthGuideUrl = 'https://github.com/sh-clock/ente';
 
 bool shouldShowLinuxSystemAuthSetupGuide(
   LocalAuthenticationUnavailableException exception,

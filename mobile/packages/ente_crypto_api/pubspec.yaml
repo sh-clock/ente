@@ -1,5 +1,5 @@
 name: ente_crypto_api
-description: Shared crypto abstraction layer for Ente apps.
+description: Shared crypto abstraction layer for the Photos mobile apps.
 
 resolution: workspace
 environment:

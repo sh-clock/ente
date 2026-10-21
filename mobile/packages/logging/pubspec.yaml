@@ -1,5 +1,5 @@
 name: ente_logging
-description: A Flutter package for logging functionality across ente apps
+description: A Flutter package for logging functionality across the Photos mobile apps
 
 resolution: workspace
 environment:

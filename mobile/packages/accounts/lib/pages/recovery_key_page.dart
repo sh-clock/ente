@@ -56,7 +56,7 @@ class _RecoveryKeyPageState extends State<RecoveryKeyPage> {
   void initState() {
     super.initState();
     _recoveryKeyFile = io.File(
-      "${widget.config.getTempDirectory()}ente-recovery-key.txt",
+      "${widget.config.getTempDirectory()}recovery-key.txt",
     );
   }
 

@@ -1,5 +1,5 @@
 name: ente_panorama_viewer
-description: First-party equirectangular panorama viewer for Ente Photos.
+description: First-party equirectangular panorama viewer for Photos.
 
 resolution: workspace
 environment:

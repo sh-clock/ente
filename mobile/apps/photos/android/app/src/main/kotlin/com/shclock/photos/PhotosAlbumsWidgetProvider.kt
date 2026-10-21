@@ -17,9 +17,15 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 @Serializable
-data class MemoryFileData(val title: String?, val subText: String?, val generatedId: Int?)
+data class AlbumsFileData(
+        val title: String?,
+        val subText: String?,
+        val generatedId: Int?,
+        val mainKey: String?,
+        val uploadedFileID: Int? = null
+)
 
-class EnteMemoryWidgetProvider : HomeWidgetProvider() {
+class PhotosAlbumsWidgetProvider : HomeWidgetProvider() {
         override fun onUpdate(
                 context: Context,
                 appWidgetManager: AppWidgetManager,
@@ -28,18 +34,18 @@ class EnteMemoryWidgetProvider : HomeWidgetProvider() {
         ) {
                 appWidgetIds.forEach { widgetId ->
                         val views =
-                                RemoteViews(context.packageName, R.layout.memory_widget_layout)
+                                RemoteViews(context.packageName, R.layout.albums_widget_layout)
                                         .apply {
-                                                val totalMemories =
-                                                        widgetData.getInt("totalMemories", 0)
+                                                val totalAlbums =
+                                                        widgetData.getInt("totalAlbums", 0)
                                                 var randomNumber = -1
                                                 var imagePath: String? = null
-                                                if (totalMemories > 0) {
+                                                if (totalAlbums > 0) {
                                                         randomNumber =
-                                                                (0 until totalMemories!!).random()
+                                                                (0 until totalAlbums!!).random()
                                                         imagePath =
                                                                 widgetData.getString(
-                                                                        "memory_widget_" +
+                                                                        "albums_widget_" +
                                                                                 randomNumber,
                                                                         null
                                                                 )
@@ -49,21 +55,22 @@ class EnteMemoryWidgetProvider : HomeWidgetProvider() {
                                                 if (existingImagePath != null) {
                                                         val data =
                                                                 widgetData.getString(
-                                                                        "memory_widget_${randomNumber}_data",
+                                                                        "albums_widget_${randomNumber}_data",
                                                                         null
                                                                 )
-                                                        val decoded: MemoryFileData? =
+                                                        val decoded: AlbumsFileData? =
                                                                 data?.let {
                                                                         Json.decodeFromString<
-                                                                                MemoryFileData>(it)
+                                                                                AlbumsFileData>(it)
                                                                 }
                                                         val title = decoded?.title
                                                         val subText = decoded?.subText
                                                         val generatedId = decoded?.generatedId
+                                                        val mainKey = decoded?.mainKey
 
                                                         val deepLinkUri =
                                                                 Uri.parse(
-                                                                        "memorywidget://message?generatedId=${generatedId}&homeWidget"
+                                                                        "albumwidget://message?generatedId=${generatedId}&mainKey=${mainKey}&homeWidget"
                                                                 )
 
                                                         val pendingIntent =
@@ -79,7 +86,7 @@ class EnteMemoryWidgetProvider : HomeWidgetProvider() {
                                                         )
 
                                                         Log.d(
-                                                                "EnteMemoryWidgetProvider",
+                                                                "PhotosAlbumsWidgetProvider",
                                                                 "Image exists: $existingImagePath"
                                                         )
                                                         val hideFlags =
@@ -88,7 +95,7 @@ class EnteMemoryWidgetProvider : HomeWidgetProvider() {
                                                                         0
                                                                 )
                                                         val hideText =
-                                                                (hideFlags and (1 shl 0)) != 0
+                                                                (hideFlags and (1 shl 1)) != 0
                                                         val textVisibility =
                                                                 if (hideText) View.GONE
                                                                 else View.VISIBLE
@@ -136,7 +143,7 @@ class EnteMemoryWidgetProvider : HomeWidgetProvider() {
                                                 } else {
                                                         val deepLinkUri =
                                                                 Uri.parse(
-                                                                        "memorywidget://configure?homeWidget"
+                                                                        "albumwidget://configure?homeWidget"
                                                                 )
                                                         val pendingIntent =
                                                                 HomeWidgetLaunchIntent.getActivity(
@@ -150,7 +157,7 @@ class EnteMemoryWidgetProvider : HomeWidgetProvider() {
                                                         )
 
                                                         Log.d(
-                                                                "EnteMemoryWidgetProvider",
+                                                                "PhotosAlbumsWidgetProvider",
                                                                 "Image doesn't exists"
                                                         )
                                                         setViewVisibility(
@@ -169,18 +176,18 @@ class EnteMemoryWidgetProvider : HomeWidgetProvider() {
                                                                 R.id.widget_overlay,
                                                                 View.GONE
                                                         )
-                                                        setViewVisibility(
-                                                                R.id.widget_placeholder,
-                                                                View.VISIBLE
-                                                        )
-                                                        setViewVisibility(
-                                                                R.id.widget_placeholder_title,
-                                                                View.VISIBLE
-                                                        )
-                                                        setViewVisibility(
-                                                                R.id.widget_placeholder_text,
-                                                                View.VISIBLE
-                                                        )
+                                                         setViewVisibility(
+                                                                 R.id.widget_placeholder,
+                                                                 View.VISIBLE
+                                                         )
+                                                         setViewVisibility(
+                                                                 R.id.widget_placeholder_title,
+                                                                 View.VISIBLE
+                                                         )
+                                                         setViewVisibility(
+                                                                 R.id.widget_placeholder_text,
+                                                                 View.VISIBLE
+                                                         )
                                                         setViewVisibility(
                                                                 R.id.widget_placeholder_container,
                                                                 View.VISIBLE
@@ -189,8 +196,7 @@ class EnteMemoryWidgetProvider : HomeWidgetProvider() {
                                                         val drawable =
                                                                 ContextCompat.getDrawable(
                                                                         context,
-                                                                        R.drawable
-                                                                                .ic_memories_widget
+                                                                        R.drawable.ic_albums_widget
                                                                 )
                                                         val bitmap =
                                                                 (drawable as BitmapDrawable).bitmap

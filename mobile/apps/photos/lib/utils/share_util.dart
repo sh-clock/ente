@@ -193,7 +193,7 @@ Future<List<EnteFile>> convertIncomingSharedMediaToFile(
               "/" +
               sharedLocalId,
         );
-        if (media.path.contains("io.ente.photos")) {
+        if (media.path.contains("com.shclock.photos")) {
           _logger.info("delete original file in path ${ioFile.path}");
           ioFile.deleteSync();
         }

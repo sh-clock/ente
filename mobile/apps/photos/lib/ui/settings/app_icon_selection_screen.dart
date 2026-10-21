@@ -13,8 +13,8 @@ enum AppIcon {
   iconDark("Dark", "IconDark", "assets/launcher_icon/icon-dark.png"),
   iconOG("OG", "IconOG", "assets/launcher_icon/icon-og.png"),
   iconDuckyHuggingE(
-    "Ducky",
-    "IconDuckyHuggingE",
+    "Sky",
+    "IconSky",
     "assets/launcher_icon/icon-ducky-hugging-e.png",
   );
 

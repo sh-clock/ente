@@ -5,7 +5,8 @@ const int thumbnailQuality = 50;
 const int thumbnailLargeSize = 512;
 const int compressedThumbnailResolution = 1080;
 const int thumbnailDataLimit = 100 * 1024;
-const String githubDiscussionsUrl = "https://github.com/ente/ente/discussions";
+const String githubDiscussionsUrl =
+    "https://github.com/sh-clock/ente/discussions";
 const int microSecondsInDay = 86400000000;
 const int android11SDKINT = 30;
 const int android12SDKINT = 31;
@@ -42,7 +43,6 @@ const multipartPartSize = 20 * 1024 * 1024;
 const kDefaultProductionEndpoint = 'https://127.0.0.1:1';
 const kLegacyProductionEndpoint = 'https://127.0.0.1:1';
 const kUploadProxyEndpoint = 'https://127.0.0.1:1';
-const kPhotosWebDomain = 'photos.ente.com';
 const kFamilyUrl = 'https://127.0.0.1:1';
 
 const int intMaxValue = 9223372036854775807;

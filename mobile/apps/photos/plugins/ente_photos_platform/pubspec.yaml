@@ -1,5 +1,5 @@
 name: ente_photos_platform
-description: App-scoped native platform capabilities for Ente Photos
+description: App-scoped native platform capabilities for Photos
 
 resolution: workspace
 environment:

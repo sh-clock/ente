@@ -260,9 +260,9 @@ class NotificationService {
     String title,
     String message, {
     int? id,
-    String channelID = "io.ente.photos",
-    String channelName = "ente",
-    String payload = "ente://home",
+    String channelID = "com.shclock.photos",
+    String channelName = "Photos",
+    String payload = "photos://home",
   }) async {
     await _ensurePluginInitialized();
     _logger.info(
@@ -271,7 +271,7 @@ class NotificationService {
     final androidSpecs = AndroidNotificationDetails(
       channelID,
       channelName,
-      channelDescription: 'ente alerts',
+      channelDescription: 'Photos alerts',
       importance: Importance.max,
       priority: Priority.high,
       icon: 'notification_icon',
@@ -296,7 +296,7 @@ class NotificationService {
     String message,
   ) async {
     await _ensurePluginInitialized();
-    const channelID = "io.ente.photos.background.debug";
+    const channelID = "com.shclock.photos.background.debug";
     const androidSpecs = AndroidNotificationDetails(
       channelID,
       "Background debug",
@@ -315,7 +315,7 @@ class NotificationService {
       title,
       message,
       const NotificationDetails(android: androidSpecs, iOS: iosSpecs),
-      payload: "ente://home",
+      payload: "photos://home",
     );
   }
 
@@ -323,9 +323,9 @@ class NotificationService {
     String title, {
     String? message,
     required int id,
-    String channelID = "io.ente.photos",
-    String channelName = "ente",
-    String payload = "ente://home",
+    String channelID = "com.shclock.photos",
+    String channelName = "Photos",
+    String payload = "photos://home",
     required DateTime dateTime,
     Duration? timeoutDurationAndroid,
     bool logSchedule = true,
@@ -341,7 +341,7 @@ class NotificationService {
       final androidSpecs = AndroidNotificationDetails(
         channelID,
         channelName,
-        channelDescription: 'ente alerts',
+        channelDescription: 'Photos alerts',
         importance: Importance.max,
         priority: Priority.high,
         category: AndroidNotificationCategory.reminder,

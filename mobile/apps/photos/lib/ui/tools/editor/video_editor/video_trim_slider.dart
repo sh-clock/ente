@@ -256,7 +256,7 @@ class _VideoTrimSliderState extends State<VideoTrimSlider> {
     if (!mounted || _requestId != requestId) return;
 
     final directory = await Directory.systemTemp.createTemp(
-      'ente-video-timeline-',
+      'photos-video-timeline-',
     );
     if (!mounted || _requestId != requestId) {
       await directory.delete(recursive: true);

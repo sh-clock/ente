@@ -1,5 +1,5 @@
 name: ente_configuration
-description: A Flutter package for shared configuration across ente apps
+description: A Flutter package for shared configuration across the Photos mobile apps
 
 resolution: workspace
 environment:

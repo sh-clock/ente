@@ -9,6 +9,10 @@ import "package:photos/service_locator.dart";
 import "package:photos/services/remote_assets_service.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
+// SELF_HOSTING: ente static-asset CDN, same seam class as
+// models.ente.com (documented external dependency, no SLA). Used at
+// runtime to fetch the memory-lane background-music manifest; re-host
+// by pointing _manifestURL at your own mirror.
 const _manifestURL = "https://music.ente.com/tracks.json";
 const _manifestPreferenceKey = "memory_music_manifest";
 

@@ -333,7 +333,7 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
     required GlobalKey<LinearProgressDialogState> dialogKey,
   }) => _runExportWithRetry(
     label: 'Native',
-    outputPrefix: 'ente-native-export',
+    outputPrefix: 'photos-native-export',
     dialogKey: dialogKey,
     export: (outputPath) => NativeVideoExportService.exportVideo(
       controller: _controller!,
@@ -357,7 +357,7 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
     required GlobalKey<LinearProgressDialogState> dialogKey,
   }) => _runExportWithRetry(
     label: 'FFmpeg',
-    outputPrefix: 'ente-ffmpeg-export',
+    outputPrefix: 'photos-ffmpeg-export',
     dialogKey: dialogKey,
     export: (outputPath) => ExportService.exportVideo(
       controller: _controller!,

@@ -14,7 +14,6 @@ import "package:photos/ente_theme_data.dart";
 import "package:photos/events/account_configured_event.dart";
 import "package:photos/events/app_mode_changed_event.dart";
 import "package:photos/events/backup_folders_updated_event.dart";
-import "package:photos/events/christmas_banner_event.dart";
 import "package:photos/events/clear_and_unfocus_search_bar_event.dart";
 import "package:photos/events/homepage_swipe_to_select_in_progress_event.dart";
 import "package:photos/events/opened_settings_event.dart";
@@ -47,9 +46,6 @@ import "package:photos/ui/collections/collection_action_sheet.dart";
 import "package:photos/ui/components/buttons/button_widget.dart";
 import "package:photos/ui/components/models/button_type.dart";
 import "package:photos/ui/extents_page_view.dart";
-import "package:photos/ui/home/christmas/christmas_pull_animation.dart";
-import "package:photos/ui/home/christmas/christmas_utils.dart";
-import "package:photos/ui/home/christmas/snow_fall_overlay.dart";
 import "package:photos/ui/home/gallery_download_banner.dart";
 import "package:photos/ui/home/grant_permissions_widget.dart";
 import "package:photos/ui/home/header_widget.dart";
@@ -87,10 +83,6 @@ class _HomeWidgetState extends State<HomeWidget> {
   final PageController _pageController = PageController();
   int _selectedTabIndex = 0;
   final ValueNotifier<int> _selectedTabIndexNotifier = ValueNotifier<int>(0);
-  final ValueNotifier<double> _christmasPullOffsetNotifier =
-      ValueNotifier<double>(0);
-  final ValueNotifier<bool> _christmasPullReleasedNotifier =
-      ValueNotifier<bool>(false);
 
   // ignore: unused_field
   StreamSubscription? _intentDataStreamSubscription;
@@ -121,8 +113,6 @@ class _HomeWidgetState extends State<HomeWidget> {
   late StreamSubscription<AccountConfiguredEvent> _accountConfiguredEvent;
   late StreamSubscription<HomepageSwipeToSelectInProgressEvent>
   _homepageSwipeToSelectInProgressEventSubscription;
-  late StreamSubscription<ChristmasBannerEvent>
-  _christmasBannerEventSubscription;
   late StreamSubscription<AppModeChangedEvent> _appModeChangedEventSubscription;
 
   List<int> get _tabIndices => homeTabIndices;
@@ -294,13 +284,6 @@ class _HomeWidgetState extends State<HomeWidget> {
           _swipeToSelectInProgressNotifier.value = inProgress.isInProgress;
         });
 
-    _christmasBannerEventSubscription = Bus.instance
-        .on<ChristmasBannerEvent>()
-        .listen((_) {
-          if (mounted) {
-            setState(() {});
-          }
-        });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         _handleMissingRecoveryKey();
@@ -386,11 +369,8 @@ class _HomeWidgetState extends State<HomeWidget> {
     _shouldSearchTabSearchConsumeBackNotifier.dispose();
     _pageController.dispose();
     _homepageSwipeToSelectInProgressEventSubscription.cancel();
-    _christmasBannerEventSubscription.cancel();
     _swipeToSelectInProgressNotifier.dispose();
     _selectedTabIndexNotifier.dispose();
-    _christmasPullOffsetNotifier.dispose();
-    _christmasPullReleasedNotifier.dispose();
     super.dispose();
   }
 
@@ -646,35 +626,6 @@ class _HomeWidgetState extends State<HomeWidget> {
                   return _getBody(context);
                 },
               ),
-              if (isChristmasPeriod())
-                ValueListenableBuilder<double>(
-                  valueListenable: _christmasPullOffsetNotifier,
-                  builder: (context, pullOffset, child) {
-                    return ValueListenableBuilder<bool>(
-                      valueListenable: _christmasPullReleasedNotifier,
-                      builder: (context, isReleased, child) {
-                        if (pullOffset <= 0) {
-                          return const SizedBox.shrink();
-                        }
-                        return Positioned(
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          child: ChristmasPullOverlay(
-                            pullOffset: pullOffset,
-                            isReleased: isReleased,
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              if (isChristmasPeriod())
-                Positioned.fill(
-                  child: FadingSnowOverlay(
-                    pullOffsetNotifier: _christmasPullOffsetNotifier,
-                  ),
-                ),
             ],
           ),
 
@@ -819,47 +770,10 @@ class _HomeWidgetState extends State<HomeWidget> {
                   },
                 );
               },
-              child: NotificationListener<ScrollNotification>(
-                onNotification: (notification) {
-                  if (!isChristmasPeriod()) return false;
-
-                  if (notification.metrics.axis != Axis.vertical) return false;
-
-                  const double maxPullOffset = 200.0;
-
-                  if (notification is ScrollUpdateNotification) {
-                    final double pixels = notification.metrics.pixels;
-                    if (pixels < 0) {
-                      if (pixels < -maxPullOffset) {
-                        final scrollPosition = Scrollable.of(
-                          notification.context!,
-                        ).position;
-                        scrollPosition.correctBy(-maxPullOffset - pixels);
-                      }
-
-                      final double clampedOffset = (-pixels).clamp(
-                        0.0,
-                        maxPullOffset,
-                      );
-                      _christmasPullOffsetNotifier.value = clampedOffset;
-                      if (_christmasPullReleasedNotifier.value) {
-                        _christmasPullReleasedNotifier.value = false;
-                      }
-                    } else if (_christmasPullOffsetNotifier.value != 0) {
-                      _christmasPullOffsetNotifier.value = 0;
-                    }
-                  } else if (notification is ScrollEndNotification) {
-                    if (_christmasPullOffsetNotifier.value > 0) {
-                      _christmasPullReleasedNotifier.value = true;
-                    }
-                  }
-                  return false;
-                },
-                child: HomeGalleryWidget(
-                  header: const HeaderWidget(),
-                  footer: const SizedBox(height: 160),
-                  selectedFiles: _selectedFiles,
-                ),
+              child: HomeGalleryWidget(
+                header: const HeaderWidget(),
+                footer: const SizedBox(height: 160),
+                selectedFiles: _selectedFiles,
               ),
             );
           },

@@ -17,11 +17,14 @@ NetworkTileProvider get _tileProvider => NetworkTileProvider(
 );
 
 String get _userAgent {
+  // Fork: neutral UA for tile servers. Contact points at the fork's repo
+  // (no vendor email); keep it truthful — tiles are fetched by "Photos".
+  final contact = "https://github.com/sh-clock/ente";
   try {
     final version = ServiceLocator.instance.packageInfo.version;
-    return "Photos/$version (+https://ente.com; contact: team@ente.com)";
+    return "Photos/$version (+$contact)";
   } catch (_) {
-    return "Photos/unknown (+https://ente.com; contact: team@ente.com)";
+    return "Photos/unknown (+$contact)";
   }
 }
 

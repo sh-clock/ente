@@ -68,7 +68,10 @@ class RemoteFlags {
 
   static RemoteFlags defaultValue = RemoteFlags(
     enableStripe: Platform.isAndroid,
-    disableCFWorker: false,
+    // Fork: default true so the ente CF-worker hosts (files.ente.com,
+    // thumbnails.ente.com, public-albums.ente.com) are never selected; URLs
+    // are built from the configured (placeholder) API origin instead.
+    disableCFWorker: true,
     mapEnabled: false,
     faceSearchEnabled: false,
     recoveryKeyVerified: true,
@@ -76,6 +79,8 @@ class RemoteFlags {
     betaUser: kDebugMode,
     enableMobMultiPart: false,
     serverApiFlag: 0,
+    // Dead cloud-feature defaults (cast/embed/custom-domain need a server
+    // side); unreachable in the standalone build.
     castUrl: "https://cast.ente.com",
     customDomain: "",
     embedUrl: "https://embed.ente.com",

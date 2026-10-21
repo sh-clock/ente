@@ -15,7 +15,7 @@ internal object AdbDiagnostics {
             val directory = File(context.filesDir, "logs").canonicalFile
             val files = directory.listFiles()
             if (files == null) {
-                writer.println("Ente log directory is unavailable.")
+                writer.println("Photos log directory is unavailable.")
                 return
             }
             var remaining = 40 * 1024 * 1024
@@ -44,31 +44,31 @@ internal object AdbDiagnostics {
                     remaining -= bytes.size
                 }
             }
-            writer.println("=== End of Ente logs ===")
+            writer.println("=== End of Photos logs ===")
         } catch (error: IOException) {
-            writer.println("Could not read Ente logs: ${error.message}")
+            writer.println("Could not read Photos logs: ${error.message}")
         }
     }
 
     private fun canReadLogs(context: Context, writer: PrintWriter): Boolean {
         val prefs =
             context.getSharedPreferences(
-                EnteApplication.FLUTTER_SHARED_PREFERENCES,
+                PhotosApplication.FLUTTER_SHARED_PREFERENCES,
                 Context.MODE_PRIVATE,
             )
         val internalUser = runCatching {
-            !prefs.getBoolean(EnteApplication.INTERNAL_USER_DISABLED_KEY, false) &&
-                JSONObject(prefs.getString(EnteApplication.REMOTE_FLAGS_KEY, null) ?: "{}")
+            !prefs.getBoolean(PhotosApplication.INTERNAL_USER_DISABLED_KEY, false) &&
+                JSONObject(prefs.getString(PhotosApplication.REMOTE_FLAGS_KEY, null) ?: "{}")
                     .opt("internalUser") == true
         }
             .getOrDefault(false)
         if (!internalUser) {
-            writer.println("Ente logs are only available to internal users.")
+            writer.println("Photos logs are only available to internal users.")
             return false
         }
         val keyguard = context.getSystemService(KeyguardManager::class.java)
         if (keyguard == null || keyguard.isDeviceLocked || keyguard.isKeyguardLocked) {
-            writer.println("Unlock the device to read Ente logs.")
+            writer.println("Unlock the device to read Photos logs.")
             return false
         }
         return true

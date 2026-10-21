@@ -37,36 +37,13 @@ class SocialIconsRow extends StatelessWidget {
   }
 }
 
+// Fork: debrand — the ente community profiles (Discord, YouTube, X,
+// Mastodon, Reddit) were removed; the fork's repository is the only link.
 const _socialLinks = [
-  _SocialLink(
-    label: 'Discord',
-    icon: HugeIcons.strokeRoundedDiscord,
-    url: 'https://ente.com/discord',
-  ),
-  _SocialLink(
-    label: 'YouTube',
-    icon: HugeIcons.strokeRoundedYoutube,
-    url: 'https://www.youtube.com/@entestudio',
-  ),
   _SocialLink(
     label: 'GitHub',
     icon: HugeIcons.strokeRoundedGithub,
-    url: 'https://github.com/ente/ente',
-  ),
-  _SocialLink(
-    label: 'X',
-    icon: HugeIcons.strokeRoundedNewTwitter,
-    url: 'https://twitter.com/enteio',
-  ),
-  _SocialLink(
-    label: 'Mastodon',
-    icon: HugeIcons.strokeRoundedMastodon,
-    url: 'https://fosstodon.org/@ente',
-  ),
-  _SocialLink(
-    label: 'Reddit',
-    icon: HugeIcons.strokeRoundedReddit,
-    url: 'https://reddit.com/r/enteio',
+    url: 'https://github.com/sh-clock/ente',
   ),
 ];
 

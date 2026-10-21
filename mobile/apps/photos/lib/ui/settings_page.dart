@@ -1,8 +1,7 @@
 import "package:ente_components/ente_components.dart";
 import "package:ente_pure_utils/ente_pure_utils.dart";
 import "package:ente_strings/ente_strings.dart";
-import "package:ente_ui/components/settings/app_engagement_section.dart";
-import "package:ente_ui/components/settings/more_from_ente_footer.dart";
+import "package:ente_ui/components/settings/app_version_widget.dart";
 import "package:ente_ui/pages/settings_search_page.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
@@ -10,7 +9,6 @@ import "package:hugeicons/hugeicons.dart";
 import "package:photos/core/configuration.dart";
 import "package:photos/service_locator.dart";
 import "package:photos/services/account/user_service.dart";
-import "package:photos/services/review_service.dart";
 import "package:photos/ui/notification/toast.dart";
 import "package:photos/ui/notification/update/change_log_page.dart";
 import "package:photos/ui/settings/about/about_us_page.dart";
@@ -96,7 +94,10 @@ class _SettingsBody extends StatelessWidget {
               _buildFeaturesAndPlansCard(context),
               const SizedBox(height: 8),
             ],
-            AppEngagementSection(reviewUrl: ReviewService.url),
+            if (hasLoggedIn && !isLocalGalleryMode) ...[
+              const SizedBox(height: 8),
+              _buildLogoutCard(context),
+            ],
             const SizedBox(height: 8),
             _buildMenuItem(
               title: context.strings.helpAndSupport,
@@ -113,14 +114,10 @@ class _SettingsBody extends StatelessWidget {
                 await routeToPage(context, const AboutUsPage());
               },
             ),
-            if (hasLoggedIn && !isLocalGalleryMode) ...[
-              const SizedBox(height: 8),
-              _buildLogoutCard(context),
-            ],
-            MoreFromEnteFooter(
-              currentApp: ComponentApp.photos,
-              onVersionTap: () => showChangeLogSheet(context),
-            ),
+            // Fork: the ente cross-promo footer ("more from ente" app tiles,
+            // social/community icons, merchandise) was removed with the
+            // debrand; only the version row remains.
+            AppVersionWidget(onTap: () => showChangeLogSheet(context)),
             if (hasLoggedIn &&
                 !isLocalGalleryMode &&
                 (flagService.flags.internalUser || kDebugMode)) ...[

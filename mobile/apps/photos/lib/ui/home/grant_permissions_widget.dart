@@ -24,8 +24,7 @@ import "package:photos/ui/components/alert_bottom_sheet.dart";
 import "package:photos/ui/components/buttons/button_widget_v2.dart";
 import "package:photos/ui/notification/toast.dart";
 import "package:photos/utils/dialog_util.dart";
-import "package:rive/rive.dart" as rive;
-import "package:styled_text/styled_text.dart";
+import import "package:styled_text/styled_text.dart";
 
 class GrantPermissionsWidget extends StatefulWidget {
   const GrantPermissionsWidget({super.key, this.startWithoutAccount = false});
@@ -44,17 +43,11 @@ class _GrantPermissionsWidgetState extends State<GrantPermissionsWidget>
     const Duration(milliseconds: 500),
     leading: true,
   );
-  late final rive.FileLoader _permissionsAnimationLoader;
-
   static const double _logoWidth = 50;
 
   @override
   void initState() {
     super.initState();
-    _permissionsAnimationLoader = rive.FileLoader.fromAsset(
-      "assets/home_tab.riv",
-      riveFactory: rive.Factory.flutter,
-    );
     WidgetsBinding.instance.addObserver(this);
     unawaited(_enterLocalGalleryIfPermitted());
   }
@@ -62,7 +55,6 @@ class _GrantPermissionsWidgetState extends State<GrantPermissionsWidget>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _permissionsAnimationLoader.dispose();
     _onlyNewActionDebouncer.cancelDebounceTimer();
     super.dispose();
   }
@@ -220,17 +212,9 @@ class _GrantPermissionsWidgetState extends State<GrantPermissionsWidget>
   }
 
   Widget _buildPermissionsAnimation() {
-    return rive.RiveWidgetBuilder(
-      fileLoader: _permissionsAnimationLoader,
-      builder: (BuildContext context, rive.RiveState state) {
-        if (state is rive.RiveLoaded) {
-          return rive.RiveWidget(
-            controller: state.controller,
-            fit: rive.Fit.contain,
-          );
-        }
-        return const SizedBox.shrink();
-      },
+    return Image.asset(
+      "assets/backup_mode_ducky.png",
+      fit: BoxFit.contain,
     );
   }
 
@@ -527,7 +511,7 @@ class _GrantPermissionsWidgetState extends State<GrantPermissionsWidget>
                   builder: (BuildContext context) {
                     return WebPage(
                       context.strings.termsOfServicesTitle,
-                      "https://ente.com/terms",
+                      "https://github.com/sh-clock/ente",
                     );
                   },
                 ),
@@ -544,7 +528,7 @@ class _GrantPermissionsWidgetState extends State<GrantPermissionsWidget>
                   builder: (BuildContext context) {
                     return WebPage(
                       context.strings.privacyPolicyTitle,
-                      "https://ente.com/privacy",
+                      "https://github.com/sh-clock/ente",
                     );
                   },
                 ),

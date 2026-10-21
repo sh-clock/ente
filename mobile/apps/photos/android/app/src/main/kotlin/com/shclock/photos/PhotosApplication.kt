@@ -15,10 +15,10 @@ import io.ente.background.BackgroundManagerPlugin
 import org.json.JSONObject
 import kotlin.random.Random
 
-class EnteApplication : Application() {
+class PhotosApplication : Application() {
   override fun onCreate() {
     super.onCreate()
-    WorkmanagerDebug.setCurrent(EnteWorkmanagerDebugHandler())
+    WorkmanagerDebug.setCurrent(PhotosWorkmanagerDebugHandler())
     ForegroundHeartbeat.install(this)
     BackgroundManagerPlugin.install(this) {
       val prefs = getSharedPreferences(FLUTTER_SHARED_PREFERENCES, Context.MODE_PRIVATE)
@@ -36,11 +36,11 @@ class EnteApplication : Application() {
     const val INTERNAL_USER_DISABLED_KEY = "flutter.ls.internal_user_disabled"
     const val BG_DEBUG_NOTIFICATIONS_ENABLED_KEY =
       "flutter.ls.bg_debug_notifications_enabled"
-    const val TAG = "EnteApplication"
+    const val TAG = "PhotosApplication"
   }
 }
 
-private class EnteWorkmanagerDebugHandler : WorkmanagerDebug() {
+private class PhotosWorkmanagerDebugHandler : WorkmanagerDebug() {
   override fun onTaskStatusUpdate(
     context: Context,
     taskInfo: TaskDebugInfo,
@@ -49,7 +49,7 @@ private class EnteWorkmanagerDebugHandler : WorkmanagerDebug() {
   ) {
     if (status == TaskStatus.STARTED || status == TaskStatus.RETRYING) {
       context
-        .getSharedPreferences(EnteApplication.FLUTTER_SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        .getSharedPreferences(PhotosApplication.FLUTTER_SHARED_PREFERENCES, Context.MODE_PRIVATE)
         .edit { putLong("flutter.bg_task_start_${taskInfo.taskName}", taskInfo.startTime) }
     }
     if (!shouldEnableWorkmanagerDebugNotifications(context)) {
@@ -79,17 +79,17 @@ private class EnteWorkmanagerDebugHandler : WorkmanagerDebug() {
   private fun shouldEnableWorkmanagerDebugNotifications(context: Context): Boolean {
     val prefs =
       context.getSharedPreferences(
-        EnteApplication.FLUTTER_SHARED_PREFERENCES,
+        PhotosApplication.FLUTTER_SHARED_PREFERENCES,
         Context.MODE_PRIVATE,
       )
-    if (prefs.getBoolean(EnteApplication.INTERNAL_USER_DISABLED_KEY, false)) {
+    if (prefs.getBoolean(PhotosApplication.INTERNAL_USER_DISABLED_KEY, false)) {
       return false
     }
-    if (!prefs.getBoolean(EnteApplication.BG_DEBUG_NOTIFICATIONS_ENABLED_KEY, false)) {
+    if (!prefs.getBoolean(PhotosApplication.BG_DEBUG_NOTIFICATIONS_ENABLED_KEY, false)) {
       return false
     }
 
-    return isInternalUser(prefs.getString(EnteApplication.REMOTE_FLAGS_KEY, null))
+    return isInternalUser(prefs.getString(PhotosApplication.REMOTE_FLAGS_KEY, null))
   }
 
   private fun isInternalUser(remoteFlags: String?): Boolean {
@@ -101,7 +101,7 @@ private class EnteWorkmanagerDebugHandler : WorkmanagerDebug() {
       JSONObject(remoteFlags).optBoolean("internalUser", false)
     }.getOrElse {
       Log.w(
-        EnteApplication.TAG,
+        PhotosApplication.TAG,
         "Failed to parse remote flags for Workmanager debug handler",
         it,
       )

@@ -1,5 +1,5 @@
 name: ente_accounts
-description: A Flutter package containing account-related models, pages, and services for Ente apps
+description: A Flutter package containing account-related models, pages, and services for the Photos mobile apps
 
 resolution: workspace
 environment:

@@ -16,8 +16,8 @@ class MemoryHomeWidgetService {
   static const String SELECTED_ML_MEMORIES_KEY = "selectedMLMemoriesHW";
   static const String SELECTED_ON_THIS_DAY_MEMORIES_KEY =
       "selectedOnThisDayMemoriesHW";
-  static const String ANDROID_CLASS_NAME = "EnteMemoryWidgetProvider";
-  static const String IOS_CLASS_NAME = "EnteMemoryWidget";
+  static const String ANDROID_CLASS_NAME = "PhotosMemoryWidgetProvider";
+  static const String IOS_CLASS_NAME = "PhotosMemoryWidget";
   static const String MEMORY_STATUS_KEY = "memoryStatusKey.widget";
   static const String MEMORY_CHANGED_KEY = "memoryChanged.widget";
   static const String TOTAL_MEMORIES_KEY = "totalMemories";

@@ -13,6 +13,10 @@ enum FileUrlType {
   directDownload,
 }
 
+// Fork: the ente CF-worker hosts below are never contacted - the
+// disableCFWorker flag defaults to true and the default endpoint is a
+// placeholder, so these branches stay dead and URLs fall back to the
+// configured (unroutable) origin.
 class FileUrl {
   static Future<String?> tryGetV3Url(
     Dio dio,

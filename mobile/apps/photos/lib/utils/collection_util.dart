@@ -22,18 +22,18 @@ Future<void> requestPermissionToOpenLinksInApp(
     );
     if (choice!.action == ButtonAction.first) {
       final AndroidIntent intent;
-      if (packageName == 'io.ente.photos.independent') {
+      if (packageName == 'com.shclock.photos.independent') {
         intent = const AndroidIntent(
           action: 'android.settings.APP_OPEN_BY_DEFAULT_SETTINGS',
-          package: 'io.ente.photos.independent',
-          data: 'package:io.ente.photos.independent',
+          package: 'com.shclock.photos.independent',
+          data: 'package:com.shclock.photos.independent',
         );
         await intent.launch();
-      } else if (packageName == 'io.ente.photos.fdroid') {
+      } else if (packageName == 'com.shclock.photos.fdroid') {
         intent = const AndroidIntent(
           action: 'android.settings.APP_OPEN_BY_DEFAULT_SETTINGS',
-          package: 'io.ente.photos.fdroid',
-          data: 'package:io.ente.photos.fdroid',
+          package: 'com.shclock.photos.fdroid',
+          data: 'package:com.shclock.photos.fdroid',
         );
         await intent.launch();
       }

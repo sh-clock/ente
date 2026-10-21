@@ -177,7 +177,7 @@ class MLConsentDescription extends StatelessWidget {
         builder: (BuildContext context) {
           return WebPage(
             context.strings.privacyPolicyTitle,
-            "https://ente.com/privacy",
+            "https://github.com/sh-clock/ente",
           );
         },
       ),

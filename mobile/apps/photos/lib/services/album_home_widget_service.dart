@@ -31,8 +31,8 @@ enum _AlbumWidgetCacheUpdateReason { none, changed, stale }
 class AlbumHomeWidgetService {
   static const String SELECTED_ALBUMS_KEY = "selectedAlbumsHW";
   static const String ALBUMS_LAST_HASH_KEY = "albumsLastHash";
-  static const String ANDROID_CLASS_NAME = "EnteAlbumsWidgetProvider";
-  static const String IOS_CLASS_NAME = "EnteAlbumWidget";
+  static const String ANDROID_CLASS_NAME = "PhotosAlbumsWidgetProvider";
+  static const String IOS_CLASS_NAME = "PhotosAlbumWidget";
   static const String ALBUMS_CHANGED_KEY = "albumsChanged.widget";
   static const String ALBUMS_STATUS_KEY = "albumsStatusKey.widget";
   static const String ALBUMS_LAST_CACHE_REFRESH_TIME_KEY =

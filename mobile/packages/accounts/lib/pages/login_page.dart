@@ -197,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                                 PlatformUtil.openWebView(
                                   context,
                                   context.strings.termsOfServicesTitle,
-                                  "https://ente.com/terms",
+                                  "https://github.com/sh-clock/ente",
                                 ),
                             style: TextStyle(
                               decoration: TextDecoration.underline,
@@ -209,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                                 PlatformUtil.openWebView(
                                   context,
                                   context.strings.privacyPolicyTitle,
-                                  "https://ente.com/privacy",
+                                  "https://github.com/sh-clock/ente",
                                 ),
                             style: TextStyle(
                               decoration: TextDecoration.underline,

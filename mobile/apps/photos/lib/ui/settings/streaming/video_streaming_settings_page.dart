@@ -12,7 +12,7 @@ import "package:photos/services/video_preview_service.dart";
 import "package:photos/ui/common/web_page.dart";
 
 const helpUrl =
-    "https://ente.com/help/photos/features/utilities/video-streaming#related-faqs";
+    "https://github.com/sh-clock/ente";
 
 class VideoStreamingSettingsPage extends StatefulWidget {
   const VideoStreamingSettingsPage({super.key});

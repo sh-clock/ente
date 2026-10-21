@@ -8,7 +8,6 @@ import "package:logging/logging.dart";
 import "package:photos/core/constants.dart";
 import "package:photos/core/error-reporting/super_logging.dart";
 import "package:photos/service_locator.dart";
-import "package:photos/ui/common/web_page.dart";
 import "package:photos/ui/notification/toast.dart";
 import "package:photos/ui/settings/support/report_issue_page.dart";
 import "package:photos/utils/email_util.dart";
@@ -16,16 +15,9 @@ import "package:url_launcher/url_launcher_string.dart";
 
 class HelpSupportPage extends StatelessWidget {
   static final _logger = Logger("HelpSupportPage");
-  static const _helpUrl = "https://ente.com/help";
-  static const _photosFaqBaseUrl = "https://ente.com/help/photos/faq";
-  static const _searchAndDiscoveryFaqUrl =
-      "$_photosFaqBaseUrl/search-and-discovery";
-  static const _backupAndSyncFaqUrl = "$_photosFaqBaseUrl/backup-and-sync";
-  static const _sharingAndCollaborationFaqUrl =
-      "$_photosFaqBaseUrl/sharing-and-collaboration";
-  static const _storageAndPlansFaqUrl = "$_photosFaqBaseUrl/storage-and-plans";
-  static const _troubleshootingFaqUrl = "$_photosFaqBaseUrl/troubleshooting";
-
+  // Fork: the hosted help-center/FAQ pages were ente.com web properties and
+  // were removed with the debrand; support routes to the fork's repository
+  // (ask a question / request a feature) and the in-app issue reporter.
   const HelpSupportPage({super.key});
 
   @override
@@ -80,51 +72,6 @@ class HelpSupportPage extends StatelessWidget {
         ],
         SettingsLink(label: l10n.exportLogs, onTap: () => _exportLogs(context)),
         const SizedBox(height: 24),
-        _sectionTitle(context, l10n.browseHelpPages),
-        _buildHelpTopicItem(
-          context,
-          title: l10n.searchAndDiscovery,
-          subText: l10n.searchAndDiscoveryDesc,
-          icon: HugeIcons.strokeRoundedSearch01,
-          faqUrl: _searchAndDiscoveryFaqUrl,
-        ),
-        const SizedBox(height: 8),
-        _buildHelpTopicItem(
-          context,
-          title: l10n.backupAndSync,
-          subText: l10n.backupAndSyncDesc,
-          icon: HugeIcons.strokeRoundedCloudUpload,
-          faqUrl: _backupAndSyncFaqUrl,
-        ),
-        const SizedBox(height: 8),
-        _buildHelpTopicItem(
-          context,
-          title: l10n.sharingAndCollaboration,
-          subText: l10n.sharingAndCollaborationDesc,
-          icon: HugeIcons.strokeRoundedShare04,
-          faqUrl: _sharingAndCollaborationFaqUrl,
-        ),
-        const SizedBox(height: 8),
-        _buildHelpTopicItem(
-          context,
-          title: l10n.storageAndPlans,
-          subText: l10n.storageAndPlansDesc,
-          icon: HugeIcons.strokeRoundedDatabase,
-          faqUrl: _storageAndPlansFaqUrl,
-        ),
-        const SizedBox(height: 8),
-        _buildHelpTopicItem(
-          context,
-          title: l10n.troubleshooting,
-          subText: l10n.troubleshootingDesc,
-          icon: HugeIcons.strokeRoundedWrench01,
-          faqUrl: _troubleshootingFaqUrl,
-        ),
-        SettingsLink(
-          label: l10n.viewAllHelpTopics,
-          onTap: () => _openHelpPage(context, title: l10n.helpAndSupport),
-        ),
-        const SizedBox(height: 24),
       ],
     );
   }
@@ -136,39 +83,6 @@ class HelpSupportPage extends StatelessWidget {
       child: Text(
         title,
         style: TextStyles.large.copyWith(color: colors.textBase),
-      ),
-    );
-  }
-
-  Widget _buildHelpTopicItem(
-    BuildContext context, {
-    required String title,
-    required String subText,
-    required List<List<dynamic>> icon,
-    required String faqUrl,
-  }) {
-    return SettingsItem(
-      title: title,
-      subtitle: subText,
-      subtitleMaxLines: 2,
-      icon: icon,
-      showOnlyLoadingState: true,
-      onTap: () async {
-        await _openHelpPage(context, title: title, url: faqUrl);
-      },
-    );
-  }
-
-  Future<void> _openHelpPage(
-    BuildContext context, {
-    required String title,
-    String url = _helpUrl,
-  }) async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (BuildContext context) {
-          return WebPage(title, url);
-        },
       ),
     );
   }

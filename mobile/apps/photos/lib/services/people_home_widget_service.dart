@@ -20,8 +20,8 @@ import 'package:synchronized/synchronized.dart';
 class PeopleHomeWidgetService {
   static const String SELECTED_PEOPLE_KEY = "selectedPeopleHW";
   static const String PEOPLE_LAST_HASH_KEY = "peopleLastHash";
-  static const String ANDROID_CLASS_NAME = "EntePeopleWidgetProvider";
-  static const String IOS_CLASS_NAME = "EntePeopleWidget";
+  static const String ANDROID_CLASS_NAME = "PhotosPeopleWidgetProvider";
+  static const String IOS_CLASS_NAME = "PhotosPeopleWidget";
   static const String PEOPLE_STATUS_KEY = "peopleStatusKey.widget";
   static const String PEOPLE_CHANGED_KEY = "peopleChanged.widget";
   static const String TOTAL_PEOPLE_KEY = "totalPeople";

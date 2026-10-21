@@ -1,5 +1,5 @@
 name: backup_exclusion
-description: iOS backup exclusion utilities for Ente Flutter apps
+description: iOS backup exclusion utilities for the Photos Flutter apps
 
 resolution: workspace
 environment:

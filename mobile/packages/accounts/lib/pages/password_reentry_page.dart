@@ -167,7 +167,7 @@ class _PasswordReentryPageState extends State<PasswordReentryPage> {
         ],
       );
       if (result == true && mounted) {
-        await sendLogs(context, "support@ente.com", postShare: () {});
+        await sendLogs(context, "support@sh-clock.local", postShare: () {});
       }
       return;
     }

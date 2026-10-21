@@ -1,5 +1,5 @@
 name: native_video_editor
-description: Ente-owned native video metadata, frame extraction, and editing operations
+description: Native video metadata, frame extraction, and editing operations
 
 resolution: workspace
 environment:

@@ -15,7 +15,7 @@ class ForegroundHeartbeat(private val context: Context) {
     }
     private val preferences by lazy {
         context.getSharedPreferences(
-            EnteApplication.FLUTTER_SHARED_PREFERENCES,
+            PhotosApplication.FLUTTER_SHARED_PREFERENCES,
             Context.MODE_PRIVATE
         )
     }

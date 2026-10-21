@@ -4,7 +4,7 @@ import "package:logging/logging.dart";
 import "package:path_provider/path_provider.dart";
 
 const legacyKitShareDirectoryPrefix = "ente_legacy_kit_share_";
-const legacyKitShareFilePrefix = "ente-legacy-kit-";
+const legacyKitShareFilePrefix = "legacy-kit-";
 const legacyKitShareRetention = Duration(minutes: 5);
 
 final _logger = Logger("LegacyKitShareFiles");

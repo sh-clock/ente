@@ -157,9 +157,9 @@ Future<void> shareLogs(
 }
 
 Future<void> openSupportPage(String? subject, String? body) async {
-  const url = "https://github.com/ente/ente/discussions/new?category=q-a";
+  const url = "https://github.com/sh-clock/ente/discussions";
   if (subject != null && body != null) {
-    await launchUrl(Uri.parse("$url&title=$subject&body=$body"));
+    await launchUrl(Uri.parse("$url?title=$subject&body=$body"));
   } else {
     await launchUrl(Uri.parse(url));
   }
@@ -186,7 +186,7 @@ Future<void> exportLogs(
     final DateTime now = DateTime.now().toUtc();
     final String shortMonthName = DateFormat('MMM').format(now);
     final String logFileName =
-        'ente-logs-${now.year}-$shortMonthName-${now.day}-${now.hour}-${now.minute}';
+        'photos-logs-${now.year}-$shortMonthName-${now.day}-${now.hour}-${now.minute}';
 
     final bytes = await File(zipFilePath).readAsBytes();
     await FileSaverUtil.saveFile(logFileName, 'zip', bytes, MimeType.zip);

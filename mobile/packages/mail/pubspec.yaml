@@ -1,5 +1,5 @@
 name: ente_mail
-description: Ente-owned system mail composition for Android and iOS
+description: System mail composition for Android and iOS
 
 resolution: workspace
 environment:

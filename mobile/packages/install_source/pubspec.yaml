@@ -1,5 +1,5 @@
 name: ente_install_source
-description: Android install-source attribution for Ente apps
+description: Android install-source attribution for the Photos mobile apps
 
 resolution: workspace
 environment:

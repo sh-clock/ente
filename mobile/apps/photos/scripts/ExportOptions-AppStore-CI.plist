@@ -16,15 +16,15 @@
     <string>Apple Distribution</string>
     <key>provisioningProfiles</key>
     <dict>
-        <key>io.ente.frame</key>
+        <key>com.shclock.photos</key>
         <string>Photos App Store</string>
-        <key>io.ente.frame.ShareExtension</key>
+        <key>com.shclock.photos.ShareExtension</key>
         <string>Photos Share Extension App Store</string>
-        <key>io.ente.frame.EnteAlbumWidget</key>
+        <key>com.shclock.photos.PhotosAlbumWidget</key>
         <string>Photos Album Widget App Store</string>
-        <key>io.ente.frame.EnteMemoryWidget</key>
+        <key>com.shclock.photos.PhotosMemoryWidget</key>
         <string>Photos Memory Widget App Store</string>
-        <key>io.ente.frame.EntePeopleWidget</key>
+        <key>com.shclock.photos.PhotosPeopleWidget</key>
         <string>Photos People Widget App Store</string>
     </dict>
 </dict>

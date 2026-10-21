@@ -175,7 +175,7 @@ class _RecoveryPageState extends State<RecoveryPage> {
                                   onTap: () async {
                                     await sendEmail(
                                       context,
-                                      to: "support@ente.com",
+                                      to: "support@sh-clock.local",
                                     );
                                   },
                                   shouldSurfaceExecutionStates: false,

@@ -1342,7 +1342,7 @@ class _GalleryAppBarWidgetState extends State<GalleryAppBarWidget> {
             MaterialPageRoute(
               builder: (context) => WebPage(
                 widget.title ?? "",
-                "https://albums.ente.com/?t=$authToken#$albumKey",
+                "https://albums.sh-clock.dev/?t=$authToken#$albumKey",
               ),
             ),
           );

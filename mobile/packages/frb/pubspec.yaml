@@ -1,5 +1,5 @@
 name: ente_frb
-description: Shared generated Dart value types for Ente native bindings
+description: Shared generated Dart value types for the Photos native bindings
 publish_to: none
 
 resolution: workspace

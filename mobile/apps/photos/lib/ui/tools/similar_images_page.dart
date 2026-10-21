@@ -29,8 +29,7 @@ import "package:photos/ui/viewer/file/detail_page.dart";
 import "package:photos/ui/viewer/file/thumbnail_widget.dart";
 import "package:photos/utils/delete_file_util.dart";
 import "package:photos/utils/dialog_util.dart";
-import 'package:rive/rive.dart' as rive;
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 enum SimilarImagesPageState { setup, loading, results }
 
@@ -1257,15 +1256,10 @@ class _LoadingScreenState extends State<_LoadingScreen> {
   int _currentTextIndex = 0;
 
   late List<String> _loadingTexts;
-  late final rive.FileLoader _analysisAnimationLoader;
 
   @override
   void initState() {
     super.initState();
-    _analysisAnimationLoader = rive.FileLoader.fromAsset(
-      'assets/ducky_analyze_files.riv',
-      riveFactory: rive.Factory.flutter,
-    );
     _startTextCycling();
   }
 
@@ -1287,7 +1281,6 @@ class _LoadingScreenState extends State<_LoadingScreen> {
   @override
   void dispose() {
     _timer?.cancel();
-    _analysisAnimationLoader.dispose();
     super.dispose();
   }
 
@@ -1307,20 +1300,10 @@ class _LoadingScreenState extends State<_LoadingScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-            height: 160,
-            child: rive.RiveWidgetBuilder(
-              fileLoader: _analysisAnimationLoader,
-              builder: (BuildContext context, rive.RiveState state) {
-                if (state is rive.RiveLoaded) {
-                  return rive.RiveWidget(
-                    controller: state.controller,
-                    fit: rive.Fit.contain,
-                  );
-                }
-                return const SizedBox.expand();
-              },
-            ),
+          Image.asset(
+            "assets/ducky_ml.png",
+            height: 150,
+            fit: BoxFit.contain,
           ),
           const SizedBox(height: 16),
           AnimatedSwitcher(

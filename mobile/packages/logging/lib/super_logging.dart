@@ -71,6 +71,10 @@ extension SuperLogRecord on log.LogRecord {
 }
 
 class LogConfig {
+  // Fork: no telemetry ships by default. sentryDsn is left null by
+  // every caller in this fork, which keeps SentryFlutter.init guarded
+  // off (sentryIsEnabled = false) - matching the desktop policy of no
+  // remote error reporting.
   String? sentryDsn;
 
   String? tunnel;

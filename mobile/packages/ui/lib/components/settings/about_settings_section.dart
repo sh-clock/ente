@@ -16,29 +16,25 @@ class AboutSettingsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final strings = context.strings;
     final items = [
+      // Fork: debrand — the ente.com blog/privacy/terms web properties are
+      // gone; all document links point at the fork's repository.
       SettingsItem(
         title: strings.weAreOpenSource,
         icon: HugeIcons.strokeRoundedGithub,
         showOnlyLoadingState: true,
-        onTap: () => _openUrl('https://github.com/ente/ente'),
-      ),
-      SettingsItem(
-        title: strings.blog,
-        icon: HugeIcons.strokeRoundedPencilEdit01,
-        showOnlyLoadingState: true,
-        onTap: () => _openUrl('https://ente.com/blog'),
+        onTap: () => _openUrl('https://github.com/sh-clock/ente'),
       ),
       SettingsItem(
         title: strings.privacy,
         icon: HugeIcons.strokeRoundedShield01,
         showOnlyLoadingState: true,
-        onTap: () => _openUrl('https://ente.com/privacy'),
+        onTap: () => _openUrl('https://github.com/sh-clock/ente'),
       ),
       SettingsItem(
         title: strings.termsOfServicesTitle,
         icon: HugeIcons.strokeRoundedFile01,
         showOnlyLoadingState: true,
-        onTap: () => _openUrl('https://ente.com/terms'),
+        onTap: () => _openUrl('https://github.com/sh-clock/ente'),
       ),
       if (onCheckForUpdates != null)
         SettingsItem(

@@ -517,7 +517,7 @@ class _EmailEntryPageState extends State<EmailEntryPage> {
                       PlatformUtil.openWebView(
                         context,
                         context.strings.termsOfServicesTitle,
-                        "https://ente.com/terms",
+                        "https://github.com/sh-clock/ente",
                       ),
                   style: const TextStyle(decoration: TextDecoration.underline),
                 ),
@@ -526,7 +526,7 @@ class _EmailEntryPageState extends State<EmailEntryPage> {
                       PlatformUtil.openWebView(
                         context,
                         context.strings.privacyPolicyTitle,
-                        "https://ente.com/privacy",
+                        "https://github.com/sh-clock/ente",
                       ),
                   style: const TextStyle(decoration: TextDecoration.underline),
                 ),

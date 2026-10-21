@@ -1,5 +1,5 @@
 name: ente_background_manager
-description: Native scheduling and headless task lifecycle for Ente Photos.
+description: Native scheduling and headless task lifecycle for Photos.
 version: 0.0.1
 publish_to: none
 resolution: workspace
