@@ -42,7 +42,10 @@ fn model_asset(model: Model) -> Asset {
             .iter()
             .map(|file| AssetFile {
                 name: file.name.to_string(),
-                url: format!("https://models.sh-clock.dev/{}", file.name),
+                // ML models are fetched from the public models.ente.com CDN
+                // by default. To self-host, upload the catalog (see
+                // download-models.cmd) and repoint this host.
+                url: format!("https://models.ente.com/{}", file.name),
                 size: file.size,
                 sha256: file.sha256.to_string(),
             })

@@ -37,7 +37,9 @@ use ente_assets::{Asset, AssetFile, AssetStore};
 pub const SEGMENTATION_MODEL_SHA256: &str =
     "5ddcb87c70cb7674189e6fc148e84a490ca65b282276534210255a777d48a808";
 
-const SEGMENTATION_MODEL_URL: &str = "https://models.sh-clock.dev/document_segmentation_opt.onnx";
+// Segmentation model defaults to the public models.ente.com CDN. To
+// self-host, upload the catalog (see download-models.cmd) and repoint this.
+const SEGMENTATION_MODEL_URL: &str = "https://models.ente.com/document_segmentation_opt.onnx";
 const SEGMENTATION_MODEL_FILE: &str = "document_segmentation_opt.onnx";
 
 fn segmentation_model_asset() -> Result<Asset, ScanError> {

@@ -2,30 +2,29 @@
 REM ============================================================================
 REM download-models.cmd - fetch all ML model assets for Photos
 REM
-REM Source: your own R2 bucket placeholder. The upstream host was
-REM models.ente.com; this fork no longer downloads from ente. Upload the
-REM models once (see RE-HOSTING below) and keep BASE pointing at your bucket.
+REM Source: the public models.ente.com CDN, which the app also uses as its
+REM default at runtime. Fresh installs download the ML models on first use
+REM from there; this script only exists if you want a local copy.
 REM
 REM Sizes and SHA-256 checksums are pinned to match the app's catalog:
 REM   rust/crates/ml/src/assets.rs      (face + CLIP + pets)
 REM   rust/crates/ml/src/ocr/assets.rs  (PaddleOCR PP-OCRv5)
 REM   rust/crates/ml/src/scan/mod.rs    (document segmentation)
 REM
-REM RE-HOSTING: upload everything under .\models\ to your R2 bucket keeping
-REM the same relative paths, then change BASE below to your bucket URL.
-REM The app-side URLs live in the rust files listed above (they currently
-REM point at models.ente.com and must be flipped to the same bucket).
-REM After you flip them, this same script doubles as the downloader for
-REM your bucket.
+REM RE-HOSTING: to serve the models from your own bucket instead, upload
+REM everything under .\models\ keeping the same relative paths, then change
+REM BASE below AND the app-side URLs in the rust files listed above to the
+REM same bucket, and rebuild. Until then, leave everything pointing at
+REM models.ente.com.
 REM
 REM Requires: curl + PowerShell (both ship with Windows 10+).
 REM ============================================================================
 
 setlocal enabledelayedexpansion
 
-REM TODO: replace with your own R2 bucket URL (e.g. https://pub-xxxx.r2.dev
-REM or a custom domain) once the models have been uploaded there.
-set "BASE=https://models.sh-clock.dev"
+REM Default: the public ente models CDN (same host the app itself uses).
+REM To self-host: replace with your own bucket URL after uploading .\models\.
+set "BASE=https://models.ente.com"
 set "OUT=%~dp0models"
 
 echo Base URL : %BASE%
@@ -88,10 +87,13 @@ if errorlevel 1 goto :fail
 
 echo.
 echo All models downloaded and verified into %OUT%
-echo Upload this folder to your R2 bucket, then flip the base URL:
+echo The app fetches these automatically on first use; this copy is only
+echo needed if you plan to self-host. To self-host, upload this folder to
+echo your bucket keeping the same relative paths, then flip the base URL:
 echo   - this script: BASE=...
 echo   - app (rust, read-only catalog): rust/crates/ml/src/assets.rs,
 echo     rust/crates/ml/src/ocr/assets.rs, rust/crates/ml/src/scan/mod.rs
+echo   - then rebuild the app (the URLs are compiled into the native addon)
 echo.
 exit /b 0
 
