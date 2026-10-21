@@ -631,7 +631,7 @@
   "contactNameHint": "Nom complet du contact d'urgence",
   "contactNotes": "Message pour le contact",
   "contactNotesHint": "Informations importantes a partager avec cette personne lorsqu'elle sera contactee",
-  "contactToManageSubscription": "Veuillez nous contacter à support@ente.com pour gérer votre abonnement {provider}.",
+  "contactToManageSubscription": "Veuillez nous contacter pour gérer votre abonnement {provider}.",
   "@contactToManageSubscription": {
     "placeholders": {
       "provider": {}
@@ -979,7 +979,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -1378,8 +1378,8 @@
     "description": "Forgot password link label"
   },
   "forgotRecoveryKey": "Clé de récupération égarée ?",
-  "free10GB": "10 Go gratuits sur <bold-green>Photos</bold-green> Photos",
-  "freeStorageOffer": "10% de réduction sur <bold-green>Photos</bold-green> Photos",
+  "free10GB": "10 Go gratuits sur <bold-green>Photos</bold-green>",
+  "freeStorageOffer": "10% de réduction sur <bold-green>Photos</bold-green>",
   "freeStorageOfferDescription": "Utilisez le code coupon \"AUTH\" pour obtenir 10% de réduction la première année",
   "freeTrial": "Essai gratuit",
   "freeUpAmount": "Libérer {sizeInMBorGB}",
@@ -1725,7 +1725,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -1966,7 +1966,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -2252,7 +2252,7 @@
   "playstoreSubscription": "Abonnement au PlayStore",
   "playStream": "Lire le stream",
   "pleaseCheckPasswordAndTryAgain": "Vérifier le mot de passe et réessayer.",
-  "pleaseContactSupportAndWeWillBeHappyToHelp": "Veuillez contacter support@ente.com et nous serons heureux de vous aider !",
+  "pleaseContactSupportAndWeWillBeHappyToHelp": "Veuillez contacter le support et nous serons heureux de vous aider !",
   "pleaseContactSupportIfTheProblemPersists": "Merci de contacter l'assistance si cette erreur persiste",
   "pleaseEmailUsAt": "Merci de nous envoyer un email à {toEmail}",
   "@pleaseEmailUsAt": {
@@ -2960,21 +2960,21 @@
   "sharedWith": "Partage avec",
   "shareKey": "Clé de partage",
   "shareLink": "Partager le lien",
-  "shareMyVerificationID": "Voici mon ID de vérification : {verificationID} pour ente.com.",
+  "shareMyVerificationID": "Voici mon ID de vérification : {verificationID}.",
   "@shareMyVerificationID": {
     "placeholders": {
       "verificationID": {}
     }
   },
   "shareStorageWith5Members": "Partager votre espace de stockage avec 5 membres",
-  "shareTextConfirmOthersVerificationID": "Hé ! Pouvez-vous confirmer qu'il s'agit de votre ID de vérification ente.com : {verificationID}",
+  "shareTextConfirmOthersVerificationID": "Hé ! Pouvez-vous confirmer qu'il s'agit de votre ID de vérification : {verificationID}",
   "@shareTextConfirmOthersVerificationID": {
     "placeholders": {
       "verificationID": {}
     }
   },
-  "shareTextRecommendUsingEnteForFamily": "Téléchargez Photos pour que je puisse vous ajouter à mon abonnement familial\n\nhttps://ente.com",
-  "shareTextRecommendUsingEnteForPhotos": "Téléchargez Photos pour pouvoir facilement partager des photos et vidéos en qualité originale\n\nhttps://ente.com",
+  "shareTextRecommendUsingEnteForFamily": "Téléchargez Photos pour que je puisse vous ajouter à mon abonnement familial",
+  "shareTextRecommendUsingEnteForPhotos": "Téléchargez Photos pour pouvoir facilement partager des photos et vidéos en qualité originale",
   "shareThisLink": "Ce lien permet a toute personne qui le recoit d'acceder a ton element. Tu peux supprimer l'acces a tout moment en supprimant le lien.",
   "shareWithNonenteUsers": "Partager avec des utilisateurs non-Photos",
   "shareYourSubscription": "Partagez votre abonnement avec vos proches",
@@ -3221,7 +3221,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -3518,7 +3518,7 @@
       "path": {
         "description": "File path where the exported video was written",
         "type": "String",
-        "example": "/tmp/ente_export.mp4"
+        "example": "/tmp/photos_export.mp4"
       }
     }
   },
@@ -3554,7 +3554,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -3579,7 +3579,7 @@
       "email": {
         "description": "The email address of the user",
         "type": "String",
-        "example": "example@ente.com"
+        "example": "example@example.com"
       }
     }
   },

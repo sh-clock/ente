@@ -303,7 +303,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -1053,7 +1053,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },

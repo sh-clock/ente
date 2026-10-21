@@ -565,7 +565,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -827,8 +827,8 @@
   "@forgotPassword": {
     "description": "Forgot password link label"
   },
-  "free10GB": "10GB gratuïts a <bold-green>ente</bold-green> Fotos",
-  "freeStorageOffer": "10% de descompte a <bold-green>ente</bold-green> photos",
+  "free10GB": "10GB gratuïts a <bold-green>Photos</bold-green>",
+  "freeStorageOffer": "10% de descompte a <bold-green>Photos</bold-green>",
   "freeStorageOfferDescription": "Utilitzeu el codi \"AUTH\" per obtenir un 10% de descompte el primer any",
   "freeTrial": "Prova gratuïta",
   "freeUpAmount": "Allibera {sizeInMBorGB}",
@@ -1052,7 +1052,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -1282,7 +1282,7 @@
   "ocrModelsPrepareFailed": "No s'han pogut preparar els models OCR",
   "ocrNoTextDetected": "No s'ha detectat text",
   "offlineModeWarning": "Has triat procedir sense còpies de seguretat. Realitza còpies manuals per garantir la seguretat dels teus codis.",
-  "onEnte": "A <branding>ente</branding>",
+  "onEnte": "A <branding>Photos</branding>",
   "@onEnte": {
     "description": "The text displayed above albums backed up to Photos",
     "type": "text"
@@ -2070,7 +2070,7 @@
   "suggestions": "Suggeriments",
   "sunrise": "A l'horitzó",
   "support": "Suport",
-  "supportEnte": "Donar suport a <bold-green>ente</bold-green>",
+  "supportEnte": "Donar suport a <bold-green>Photos</bold-green>",
   "syncing": "Sincronitzant...",
   "syncProgress": "{completed}/{total} records preservats",
   "@syncProgress": {
@@ -2134,7 +2134,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -2290,7 +2290,7 @@
       "path": {
         "description": "File path where the exported video was written",
         "type": "String",
-        "example": "/tmp/ente_export.mp4"
+        "example": "/tmp/photos_export.mp4"
       }
     }
   },
@@ -2326,7 +2326,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },

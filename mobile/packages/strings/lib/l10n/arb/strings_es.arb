@@ -911,7 +911,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -1251,8 +1251,8 @@
     "description": "Forgot password link label"
   },
   "forgotRecoveryKey": "¿Olvidaste la llave de recuperación?",
-  "free10GB": "10 GB gratis en <bold-green>Photos</bold-green> Fotos",
-  "freeStorageOffer": "10% de descuento en <bold-green>ente</bold-green> fotos",
+  "free10GB": "10 GB gratis en <bold-green>Photos</bold-green>",
+  "freeStorageOffer": "10% de descuento en <bold-green>Photos</bold-green>",
   "freeStorageOfferDescription": "Usa el cupón \"AUTH\" para obtener un 10% de descuento en el primer año",
   "freeTrial": "Prueba gratuita",
   "freeUpAmount": "Liberar {sizeInMBorGB}",
@@ -1526,7 +1526,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -1838,7 +1838,7 @@
   "offlineNameFaceBannerTitle": "Dale un nombre a esta cara",
   "offlineSettingsBannerDesc": "La encriptación Zero-knowledge garantiza que tu información solo será tuya.",
   "offlineSettingsBannerTitle": "Nunca podremos ver tus fotos.",
-  "onEnte": "En <branding>ente</branding>",
+  "onEnte": "En <branding>Photos</branding>",
   "@onEnte": {
     "description": "The text displayed above albums backed up to Photos",
     "type": "text"
@@ -2814,7 +2814,7 @@
   "suggestions": "Sugerencias",
   "sunrise": "Sobre el horizonte",
   "support": "Soporte",
-  "supportEnte": "Apoya a <bold-green>ente</bold-green>",
+  "supportEnte": "Apoya a <bold-green>Photos</bold-green>",
   "syncing": "Sincronizando...",
   "syncProgress": "{completed}/{total} recuerdos conservados",
   "@syncProgress": {
@@ -2891,7 +2891,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -3169,7 +3169,7 @@
       "path": {
         "description": "File path where the exported video was written",
         "type": "String",
-        "example": "/tmp/ente_export.mp4"
+        "example": "/tmp/photos_export.mp4"
       }
     }
   },
@@ -3206,7 +3206,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -3229,7 +3229,7 @@
       "email": {
         "description": "The email address of the user",
         "type": "String",
-        "example": "example@ente.com"
+        "example": "example@example.com"
       }
     }
   },

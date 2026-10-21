@@ -455,7 +455,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -875,7 +875,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -1049,7 +1049,7 @@
   "offlineModeWarning": "Ai ales să continui fără backup-uri. Te rog salvează-ți backup-urile manual ca să fii sigur că ai codurile în siguranță.",
   "onboardingDesc": "Salvați-vă fotografiile și videoclipurile. Toate aminitirle într-un singur loc.",
   "onboardingTitle": "Pentru tot ce nu vreți să uitați",
-  "onEnte": "Pe <branding>ente</branding>",
+  "onEnte": "Pe <branding>Photos</branding>",
   "@onEnte": {
     "description": "The text displayed above albums backed up to Photos",
     "type": "text"
@@ -1589,7 +1589,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -1768,7 +1768,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -1791,7 +1791,7 @@
       "email": {
         "description": "The email address of the user",
         "type": "String",
-        "example": "example@ente.com"
+        "example": "example@example.com"
       }
     }
   },

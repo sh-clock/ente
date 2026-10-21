@@ -351,7 +351,7 @@
     "placeholders": {
       "castUrl": {
         "type": "String",
-        "example": "https://cast.ente.com"
+        "example": "https://cast.example.com"
       }
     }
   },
@@ -783,7 +783,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -1136,8 +1136,8 @@
     "description": "Forgot password link label"
   },
   "forgotRecoveryKey": "Забули ключ відновлення?",
-  "free10GB": "10 ГБ вільного простору на <bold-green>ente</bold-green> Photos",
-  "freeStorageOffer": "Знижка 10% на <bold-green>ente</bold-green> Photos",
+  "free10GB": "10 ГБ вільного простору на <bold-green>Photos</bold-green>",
+  "freeStorageOffer": "Знижка 10% на <bold-green>Photos</bold-green>",
   "freeStorageOfferDescription": "Скористайтеся кодом «AUTH», щоб отримати знижку в 10% на перший рік",
   "freeTrial": "Безплатний пробний період",
   "freeUpAmount": "Звільніть {sizeInMBorGB}",
@@ -1171,7 +1171,7 @@
     "placeholders": {
       "url": {
         "type": "String",
-        "example": "legacy.ente.com"
+        "example": "legacy.example.com"
       }
     }
   },
@@ -1489,7 +1489,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -2508,7 +2508,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -2566,7 +2566,7 @@
   "sharedWith": "Поділено з",
   "shareLink": "Поділитися посиланням",
   "shareStorageWith5Members": "Поділитися сховищем із 5 учасниками",
-  "shareTextRecommendUsingEnteForFamily": "Установи Photos, щоб мені можна було додати тебе до сімейного тарифу\n\nhttps://ente.com",
+  "shareTextRecommendUsingEnteForFamily": "Установи Photos, щоб мені можна було додати тебе до сімейного тарифу",
   "shareThisLink": "Це посилання дозволяє будь-кому, хто його отримає, отримати доступ до вашого елемента. Ви можете скасувати доступ у будь-який час, видаливши посилання.",
   "shareWithNonenteUsers": "Поділитися з користувачами без Photos",
   "shareYourSubscription": "Поділіться своєю підпискою з близькими",
@@ -2703,7 +2703,7 @@
   "suggestions": "Пропозиції",
   "sunrise": "На горизонті",
   "support": "Підтримка",
-  "supportEnte": "Підтримка <bold-green>ente</bold-green>",
+  "supportEnte": "Підтримка <bold-green>Photos</bold-green>",
   "syncing": "Синхронізуємо...",
   "syncProgress": "{completed} / {total} спогадів збережено",
   "@syncProgress": {
@@ -2770,7 +2770,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -3043,7 +3043,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -3076,7 +3076,7 @@
       "email": {
         "description": "The email address of the user",
         "type": "String",
-        "example": "example@ente.com"
+        "example": "example@example.com"
       }
     }
   },
@@ -3195,7 +3195,7 @@
     "placeholders": {
       "url": {
         "type": "String",
-        "example": "legacy.ente.com"
+        "example": "legacy.example.com"
       }
     }
   },
@@ -3215,7 +3215,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },

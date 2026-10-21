@@ -388,7 +388,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -732,7 +732,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -871,7 +871,7 @@
     "description": "No internet connection error message"
   },
   "noPhotosFoundHere": "Ingen bilder funnet her",
-  "noRecoveryKeyNoDecryption": "Grunnet vår type ente-til-ende-krypteringsprotokoll kan ikke dine data dekrypteres uten passordet ditt eller gjenopprettingsnøkkelen din",
+  "noRecoveryKeyNoDecryption": "Grunnet vår type ende-til-ende-krypteringsprotokoll kan ikke dine data dekrypteres uten passordet ditt eller gjenopprettingsnøkkelen din",
   "@noRecoveryKeyNoDecryption": {
     "description": "Explanation that data cannot be decrypted without password or recovery key"
   },
@@ -902,7 +902,7 @@
     }
   },
   "notThisPerson": "Ikke denne personen?",
-  "onEnte": "På <branding>ente</branding>",
+  "onEnte": "På <branding>Photos</branding>",
   "@onEnte": {
     "description": "The text displayed above albums backed up to Photos",
     "type": "text"
@@ -1519,7 +1519,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -1686,7 +1686,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },

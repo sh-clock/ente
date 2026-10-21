@@ -251,7 +251,7 @@
   "allowDownloads": "Allow downloads",
   "allowJoining": "Allow joining",
   "allowJoiningAlbum": "Allow joining album",
-  "allowJoiningDescription": "Viewers with an Photos account can join your album and stay updated",
+  "allowJoiningDescription": "Viewers with a Photos account can join your album and stay updated",
   "allowPermBody": "Please allow access to your photos from Settings so Photos can display and backup your library.",
   "allowPermTitle": "Allow access to photos",
   "allPersonGroupingWillReset": "All groupings for this person will be reset, and you will lose all suggestions made for this person",
@@ -571,7 +571,7 @@
     "placeholders": {
       "castUrl": {
         "type": "String",
-        "example": "https://cast.ente.com"
+        "example": "https://cast.example.com"
       }
     }
   },
@@ -651,7 +651,7 @@
   "codeChangeLimitReached": "Sorry, you've reached the limit of code changes.",
   "codeCopiedToClipboard": "Code copied to clipboard",
   "codeIssuerHint": "Issuer",
-  "collabLinkSectionDescription": "Let people add photos without an Photos account",
+  "collabLinkSectionDescription": "Let people add photos without a Photos account",
   "collaborator": "Collaborator",
   "collageLayout": "Layout",
   "collageSaved": "Collage saved to gallery",
@@ -771,7 +771,7 @@
   "@contactUs": {
     "description": "Button label for contacting Photos support"
   },
-  "contactToManageSubscription": "Please contact us at support@ente.com to manage your {provider} subscription.",
+  "contactToManageSubscription": "Please contact us to manage your {provider} subscription.",
   "@contactToManageSubscription": {
     "placeholders": {
       "provider": {}
@@ -834,7 +834,7 @@
   "createAccountTitle": "Create an account",
   "createAlbum": "Create album",
   "createAlbumActionHint": "Long press to select photos and click + to create an album",
-  "createAnEnteAccount": "Create an Photos account",
+  "createAnEnteAccount": "Create a Photos account",
   "createAnotherKit": "Create another kit",
   "createBackupNow": "Create backup now",
   "createCollaborativeLink": "Create collaborative link",
@@ -1199,7 +1199,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -1284,7 +1284,7 @@
     }
   },
   "emailHint": "Enter your email address",
-  "emailNeedsEnteAccountForFamily": "{email} does not have an Photos account.\n\nSend them an invite and add them to your family once they've created an account on Photos.",
+  "emailNeedsEnteAccountForFamily": "{email} does not have a Photos account.\n\nSend them an invite and add them to your family once they've created an account on Photos.",
   "@emailNeedsEnteAccountForFamily": {
     "placeholders": {
       "email": {
@@ -1293,13 +1293,13 @@
       }
     }
   },
-  "emailNoEnteAccount": "{email} does not have an Photos account.\n\nSend them an invite to share items.",
+  "emailNoEnteAccount": "{email} does not have a Photos account.\n\nSend them an invite to share items.",
   "@emailNoEnteAccount": {
     "placeholders": {
       "email": {}
     }
   },
-  "emailNoEnteAccountPhotos": "{email} does not have an Photos account.\n\nSend them an invite to share photos.",
+  "emailNoEnteAccountPhotos": "{email} does not have a Photos account.\n\nSend them an invite to share photos.",
   "@emailNoEnteAccountPhotos": {
     "placeholders": {
       "email": {}
@@ -1830,8 +1830,8 @@
   },
   "forgotPasswordPrompt": "Forgot password?",
   "forgotRecoveryKey": "Forgot recovery key?",
-  "free10GB": "10GB free on <bold-green>ente</bold-green> Photos",
-  "freeStorageOffer": "10% off on <bold-green>ente</bold-green> photos",
+  "free10GB": "10GB free on <bold-green>Photos</bold-green>",
+  "freeStorageOffer": "10% off on <bold-green>Photos</bold-green>",
   "freeStorageOfferDescription": "Use code \"AUTH\" to get 10% off first year",
   "free": "Free",
   "freeTrial": "Free trial",
@@ -1879,7 +1879,7 @@
     "placeholders": {
       "url": {
         "type": "String",
-        "example": "legacy.ente.com"
+        "example": "legacy.example.com"
       }
     }
   },
@@ -2451,7 +2451,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -2808,7 +2808,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -2932,7 +2932,7 @@
     "description": "Explains that account deletion affects all Photos apps"
   },
   "oneLineAboutTheIssue": "One line about the issue",
-  "onEnte": "On <branding>ente</branding>",
+  "onEnte": "On <branding>Photos</branding>",
   "@onEnte": {
     "description": "The text displayed above albums backed up to Photos",
     "type": "text"
@@ -3195,7 +3195,7 @@
   "@pleaseCheckYourInternetConnectionAndTryAgain": {
     "description": "Message asking user to check internet connection"
   },
-  "pleaseContactSupportAndWeWillBeHappyToHelp": "Please contact support@ente.com and we will be happy to help!",
+  "pleaseContactSupportAndWeWillBeHappyToHelp": "Please contact support and we will be happy to help!",
   "pleaseContactSupportIfTheProblemPersists": "Please contact support if the problem persists",
   "pleaseEmailUsAt": "Please email us at {toEmail}",
   "@pleaseEmailUsAt": {
@@ -3262,8 +3262,8 @@
     }
   },
   "publicLink": "Public link",
-  "publicCollectionLinkAccessDescription": "Anyone with the link can open the collection without an Photos account.",
-  "publicLinkAccessDescription": "Anyone with the link can open the album without an Photos account.",
+  "publicCollectionLinkAccessDescription": "Anyone with the link can open the collection without a Photos account.",
+  "publicLinkAccessDescription": "Anyone with the link can open the album without a Photos account.",
   "publicLinkCollectDescription": "Anyone with this link can add photos to your album.",
   "publicLinkEnabled": "Public link enabled",
   "publicLinkViewDescription": "Anyone with this link can access your album.",
@@ -4045,7 +4045,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -4153,7 +4153,7 @@
     "description": "Subtitle for sending a viewing link to the current photo or video from the file viewer"
   },
   "shareMemory": "Share memory",
-  "shareMyVerificationID": "Here's my verification ID: {verificationID} for ente.com.",
+  "shareMyVerificationID": "Here's my verification ID: {verificationID}.",
   "@shareMyVerificationID": {
     "placeholders": {
       "verificationID": {}
@@ -4161,16 +4161,16 @@
   },
   "shareNotSupportedForSharedFiles": "Share is not supported for shared files",
   "shareStorageWith5Members": "Share storage with 5 members",
-  "shareTextConfirmOthersVerificationID": "Hey, can you confirm that this is your ente.com verification ID: {verificationID}",
+  "shareTextConfirmOthersVerificationID": "Hey, can you confirm that this is your verification ID: {verificationID}",
   "@shareTextConfirmOthersVerificationID": {
     "placeholders": {
       "verificationID": {}
     }
   },
-  "shareTextRecommendUsingEnte": "Download Photos so we can easily share original quality files\n\nhttps://ente.com",
-  "shareTextRecommendUsingEnteForFamily": "Download Photos so I can add you to my family plan\n\nhttps://ente.com",
-  "shareTextRecommendUsingEnteForPhotos": "Download Photos so we can easily share original quality photos and videos\n\nhttps://ente.com",
-  "shareTextReferralInvite": "Get 20 GB free with Photos! Download the app at https://ente.com/invite and use code {referralCode}.",
+  "shareTextRecommendUsingEnte": "Download Photos so we can easily share original quality files",
+  "shareTextRecommendUsingEnteForFamily": "Download Photos so I can add you to my family plan",
+  "shareTextRecommendUsingEnteForPhotos": "Download Photos so we can easily share original quality photos and videos",
+  "shareTextReferralInvite": "Get 20 GB free with Photos! Download the app and use code {referralCode}.",
   "@shareTextReferralInvite": {
     "placeholders": {
       "referralCode": {}
@@ -4399,7 +4399,7 @@
   "suggestions": "Suggestions",
   "sunrise": "On the horizon",
   "support": "Support",
-  "supportEnte": "Support <bold-green>ente</bold-green>",
+  "supportEnte": "Support <bold-green>Photos</bold-green>",
   "syncing": "Syncing...",
   "syncProgress": "{completed}/{total} memories preserved",
   "@syncProgress": {
@@ -4481,7 +4481,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -4827,7 +4827,7 @@
       "path": {
         "description": "File path where the exported video was written",
         "type": "String",
-        "example": "/tmp/ente_export.mp4"
+        "example": "/tmp/photos_export.mp4"
       }
     }
   },
@@ -4866,7 +4866,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -4899,7 +4899,7 @@
       "email": {
         "description": "The email address of the user",
         "type": "String",
-        "example": "example@ente.com"
+        "example": "example@example.com"
       }
     }
   },
@@ -5052,7 +5052,7 @@
     "placeholders": {
       "url": {
         "type": "String",
-        "example": "legacy.ente.com"
+        "example": "legacy.example.com"
       }
     }
   },
@@ -5072,7 +5072,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },

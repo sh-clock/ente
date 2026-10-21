@@ -663,7 +663,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -981,8 +981,8 @@
     "description": "Forgot password link label"
   },
   "forgotRecoveryKey": "Zapomniałeś klucz odzyskiwania?",
-  "free10GB": "10 GB za darmo na zdjęcia <bold-green>ente</bold-green>",
-  "freeStorageOffer": "10% zniżki na zdjęcia <bold-green>ente</bold-green>",
+  "free10GB": "10 GB za darmo na <bold-green>Photos</bold-green>",
+  "freeStorageOffer": "10% zniżki na <bold-green>Photos</bold-green>",
   "freeStorageOfferDescription": "Użyj kodu „AUTH”, aby uzyskać 10% zniżki na pierwszy rok",
   "freeTrial": "Darmowy okres próbny",
   "freeUpAmount": "Zwolnij {sizeInMBorGB}",
@@ -1267,7 +1267,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -1486,7 +1486,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -1569,7 +1569,7 @@
   "offlineModeWarning": "Zdecydowano się kontynuować bez kopii zapasowych. Prosimy wykonywać ręczne kopie zapasowe, aby upewnić się, że Twoje kody są bezpieczne.",
   "offlineSettingsBannerTitle": "Nie możemy zobaczyć Twoich zdjęć. Nigdy.",
   "oneLineAboutTheIssue": "Problem w jednej linijce",
-  "onEnte": "W <branding>ente</branding>",
+  "onEnte": "W <branding>Photos</branding>",
   "@onEnte": {
     "description": "The text displayed above albums backed up to Photos",
     "type": "text"
@@ -2242,21 +2242,21 @@
   "sharedWith": "Udostępniono",
   "shareKey": "Udostępnij klucz",
   "shareLink": "Udostępnij link",
-  "shareMyVerificationID": "Oto mój identyfikator weryfikacyjny: {verificationID} dla ente.com.",
+  "shareMyVerificationID": "Oto mój identyfikator weryfikacyjny: {verificationID}.",
   "@shareMyVerificationID": {
     "placeholders": {
       "verificationID": {}
     }
   },
   "shareStorageWith5Members": "Udostępnij przestrzeń 5 użytkownikom",
-  "shareTextConfirmOthersVerificationID": "Hej, czy możesz potwierdzić, że to jest Twój identyfikator weryfikacyjny ente.com: {verificationID}",
+  "shareTextConfirmOthersVerificationID": "Hej, czy możesz potwierdzić, że to jest Twój identyfikator weryfikacyjny: {verificationID}",
   "@shareTextConfirmOthersVerificationID": {
     "placeholders": {
       "verificationID": {}
     }
   },
-  "shareTextRecommendUsingEnteForFamily": "Pobierz Photos, abym mógł dodać cię do mojego planu rodzinnego\n\nhttps://ente.com",
-  "shareTextRecommendUsingEnteForPhotos": "Pobierz Photos, abyśmy mogli łatwo udostępniać zdjęcia i wideo w oryginalnej jakości\n\nhttps://ente.com",
+  "shareTextRecommendUsingEnteForFamily": "Pobierz Photos, abym mógł dodać cię do mojego planu rodzinnego",
+  "shareTextRecommendUsingEnteForPhotos": "Pobierz Photos, abyśmy mogli łatwo udostępniać zdjęcia i wideo w oryginalnej jakości",
   "shareThisLink": "Ten link pozwala każdemu, kto go otrzyma, uzyskać dostęp do Twojego elementu. Możesz w każdej chwili usunąć dostęp, usuwając link.",
   "shareWithNonenteUsers": "Udostępnij użytkownikom bez konta Photos",
   "shareYourSubscription": "Podziel się swoją subskrypcją z bliskimi",
@@ -2396,7 +2396,7 @@
   "suggestFeatures": "Zaproponuj funkcje",
   "sunrise": "Na horyzoncie",
   "support": "Wsparcie techniczne",
-  "supportEnte": "Wesprzyj <bold-green>ente</bold-green>",
+  "supportEnte": "Wesprzyj <bold-green>Photos</bold-green>",
   "syncing": "Synchronizowanie...",
   "syncProgress": "Zachowano {completed}/{total} wspomnień",
   "@syncProgress": {
@@ -2470,7 +2470,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -2737,7 +2737,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -2759,7 +2759,7 @@
       "email": {
         "description": "The email address of the user",
         "type": "String",
-        "example": "example@ente.com"
+        "example": "example@example.com"
       }
     }
   },

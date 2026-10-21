@@ -540,7 +540,7 @@
     "placeholders": {
       "castUrl": {
         "type": "String",
-        "example": "https://cast.ente.com"
+        "example": "https://cast.example.com"
       }
     }
   },
@@ -736,7 +736,7 @@
   "@contactUs": {
     "description": "Button label for contacting Photos support"
   },
-  "contactToManageSubscription": "Kontakta oss på support@ente.com för att hantera ditt {provider}-abonnemang.",
+  "contactToManageSubscription": "Kontakta oss för att hantera ditt {provider}-abonnemang.",
   "@contactToManageSubscription": {
     "placeholders": {
       "provider": {}
@@ -1158,7 +1158,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -1771,8 +1771,8 @@
     "description": "Forgot password link label"
   },
   "forgotRecoveryKey": "Har du glömt återställningsnyckeln?",
-  "free10GB": "10GB gratis på <bold-green>ente</bold-green> Foton",
-  "freeStorageOffer": "10% rabatt på <bold-green>ente</bold-green> foton",
+  "free10GB": "10GB gratis på <bold-green>Photos</bold-green>",
+  "freeStorageOffer": "10% rabatt på <bold-green>Photos</bold-green>",
   "freeStorageOfferDescription": "Använd koden \"AUTH\" för att få 10% rabatt första året",
   "freeTrial": "Gratis provperiod",
   "freeUpAmount": "Frigör {sizeInMBorGB}",
@@ -1819,7 +1819,7 @@
     "placeholders": {
       "url": {
         "type": "String",
-        "example": "legacy.ente.com"
+        "example": "legacy.example.com"
       }
     }
   },
@@ -2381,7 +2381,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -2728,7 +2728,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -2852,7 +2852,7 @@
     "description": "Explains that account deletion affects all Photos apps"
   },
   "oneLineAboutTheIssue": "En rad om problemet",
-  "onEnte": "På <branding>ente</branding>",
+  "onEnte": "På <branding>Photos</branding>",
   "@onEnte": {
     "description": "The text displayed above albums backed up to Photos",
     "type": "text"
@@ -3112,7 +3112,7 @@
   "@pleaseCheckYourInternetConnectionAndTryAgain": {
     "description": "Message asking user to check internet connection"
   },
-  "pleaseContactSupportAndWeWillBeHappyToHelp": "Vänligen kontakta support@ente.com så hjälper vi hjärna dig!",
+  "pleaseContactSupportAndWeWillBeHappyToHelp": "Vänligen kontakta oss så hjälper vi hjärna dig!",
   "pleaseContactSupportIfTheProblemPersists": "Vänligen kontakta support om problemet kvarstår",
   "pleaseEmailUsAt": "Skicka e-post till oss på {toEmail}",
   "@pleaseEmailUsAt": {
@@ -3952,7 +3952,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -4050,7 +4050,7 @@
   "shareLegacyDescription": "Skicka varje kort till den person som det är avsett för. Inget enskilt kort fungerar ensamt.",
   "shareLink": "Dela länk",
   "shareMemory": "Dela minne",
-  "shareMyVerificationID": "Här är mitt verifierings-ID: {verificationID} för ente.com.",
+  "shareMyVerificationID": "Här är mitt verifierings-ID: {verificationID}.",
   "@shareMyVerificationID": {
     "placeholders": {
       "verificationID": {}
@@ -4058,16 +4058,16 @@
   },
   "shareNotSupportedForSharedFiles": "Det går inte att dela delade filer",
   "shareStorageWith5Members": "Dela lagring med 5 medlemmar",
-  "shareTextConfirmOthersVerificationID": "Hej, kan du bekräfta att detta är ditt verifierings-ID för ente.com: {verificationID}",
+  "shareTextConfirmOthersVerificationID": "Hej, kan du bekräfta att detta är ditt verifierings-ID: {verificationID}",
   "@shareTextConfirmOthersVerificationID": {
     "placeholders": {
       "verificationID": {}
     }
   },
-  "shareTextRecommendUsingEnte": "Ladda ner Photos så kan vi enkelt dela filer i originalkvalitet\n\nhttps://ente.com",
-  "shareTextRecommendUsingEnteForFamily": "Ladda ner Photos så att jag kan lägga till dig i mitt familjeabonnemang\n\nhttps://ente.com",
-  "shareTextRecommendUsingEnteForPhotos": "Ladda ner Photos så kan vi enkelt dela foton och videor i originalkvalitet\n\nhttps://ente.com",
-  "shareTextReferralInvite": "Få 20 GB gratis med Photos! Ladda ner appen på https://ente.com/invite och använd koden {referralCode}.",
+  "shareTextRecommendUsingEnte": "Ladda ner Photos så kan vi enkelt dela filer i originalkvalitet",
+  "shareTextRecommendUsingEnteForFamily": "Ladda ner Photos så att jag kan lägga till dig i mitt familjeabonnemang",
+  "shareTextRecommendUsingEnteForPhotos": "Ladda ner Photos så kan vi enkelt dela foton och videor i originalkvalitet",
+  "shareTextReferralInvite": "Få 20 GB gratis med Photos! Ladda ner appen och använd koden {referralCode}.",
   "@shareTextReferralInvite": {
     "placeholders": {
       "referralCode": {}
@@ -4294,7 +4294,7 @@
   "suggestions": "Förslag",
   "sunrise": "På horisonten",
   "support": "Support",
-  "supportEnte": "Stöd <bold-green>ente</bold-green>",
+  "supportEnte": "Stöd <bold-green>Photos</bold-green>",
   "syncing": "Synkar...",
   "syncProgress": "{completed}/{total} minnen bevarade",
   "@syncProgress": {
@@ -4376,7 +4376,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -4711,7 +4711,7 @@
       "path": {
         "description": "File path where the exported video was written",
         "type": "String",
-        "example": "/tmp/ente_export.mp4"
+        "example": "/tmp/photos_export.mp4"
       }
     }
   },
@@ -4750,7 +4750,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -4783,7 +4783,7 @@
       "email": {
         "description": "The email address of the user",
         "type": "String",
-        "example": "example@ente.com"
+        "example": "example@example.com"
       }
     }
   },
@@ -4932,7 +4932,7 @@
     "placeholders": {
       "url": {
         "type": "String",
-        "example": "legacy.ente.com"
+        "example": "legacy.example.com"
       }
     }
   },
@@ -4952,7 +4952,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },

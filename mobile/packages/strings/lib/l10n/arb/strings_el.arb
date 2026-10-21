@@ -412,7 +412,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -633,7 +633,7 @@
   "@forgotPassword": {
     "description": "Forgot password link label"
   },
-  "freeStorageOffer": "10% έκπτωση στο <bold-green>ente</bold-green> photos",
+  "freeStorageOffer": "10% έκπτωση στο <bold-green>Photos</bold-green>",
   "freeStorageOfferDescription": "Χρησιμοποιήστε τον κωδικό \"AUTH\" για να λάβετε 10% έκπτωση για τον πρώτο χρόνο",
   "freeTrial": "Δωρεάν δοκιμή",
   "freeUpAmount": "Εξοικονόμηση {sizeInMBorGB}",
@@ -839,7 +839,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -991,7 +991,7 @@
   "ocrModelsPrepareFailed": "Δεν ήταν δυνατή η προετοιμασία μοντέλων OCR",
   "ocrNoTextDetected": "Δεν ανιχνεύθηκε κείμενο",
   "offlineModeWarning": "Επιλέξατε να προχωρήσετε χωρίς αντίγραφα ασφαλείας. Παρακαλώ κάντε χειροκίνητα αντίγραφα ασφαλείας για να βεβαιωθείτε ότι οι κωδικοί σας είναι ασφαλείς.",
-  "onEnte": "Στο <branding>ente</branding>",
+  "onEnte": "Στο <branding>Photos</branding>",
   "@onEnte": {
     "description": "The text displayed above albums backed up to Photos",
     "type": "text"
@@ -1521,7 +1521,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },

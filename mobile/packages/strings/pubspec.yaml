@@ -1,5 +1,5 @@
 name: ente_strings
-description: A Flutter package containing shared localization strings for ente apps
+description: A Flutter package containing shared localization strings for the Photos mobile apps
 
 resolution: workspace
 environment:

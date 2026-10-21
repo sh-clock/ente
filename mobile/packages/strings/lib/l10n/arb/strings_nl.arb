@@ -462,7 +462,7 @@
   "contactNotes": "Bericht voor contact",
   "contactNotesHint": "Belangrijke informatie om te delen met deze persoon wanneer contact wordt opgenomen",
   "contacts": "Contacten",
-  "contactToManageSubscription": "Neem contact met ons op via support@ente.com om uw {provider} abonnement te beheren.",
+  "contactToManageSubscription": "Neem contact met ons op om uw {provider} abonnement te beheren.",
   "@contactToManageSubscription": {
     "placeholders": {
       "provider": {}
@@ -769,7 +769,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -1111,8 +1111,8 @@
     "description": "Forgot password link label"
   },
   "forgotRecoveryKey": "Herstelcode vergeten?",
-  "free10GB": "10GB gratis op <bold-green>ente</bold-green> Photos",
-  "freeStorageOffer": "10% korting op <bold-green>ente</bold-green> photos",
+  "free10GB": "10GB gratis op <bold-green>Photos</bold-green>",
+  "freeStorageOffer": "10% korting op <bold-green>Photos</bold-green>",
   "freeStorageOfferDescription": "Gebruik de code \"AUTH\" voor 10% korting op je eerste jaar",
   "freeTrial": "Gratis proefversie",
   "freeUpAmount": "Maak {sizeInMBorGB} vrij",
@@ -1395,7 +1395,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -1697,7 +1697,7 @@
     "description": "The text displayed above folders/albums stored on device",
     "type": "text"
   },
-  "onEnte": "Op <branding>ente</branding>",
+  "onEnte": "Op <branding>Photos</branding>",
   "@onEnte": {
     "description": "The text displayed above albums backed up to Photos",
     "type": "text"
@@ -1867,7 +1867,7 @@
   "@pleaseCheckYourInternetConnectionAndTryAgain": {
     "description": "Message asking user to check internet connection"
   },
-  "pleaseContactSupportAndWeWillBeHappyToHelp": "Neem alstublieft contact op met support@ente.com en we helpen u graag!",
+  "pleaseContactSupportAndWeWillBeHappyToHelp": "Neem alstublieft contact met ons op en we helpen u graag!",
   "pleaseContactSupportIfTheProblemPersists": "Neem contact op met klantenservice als het probleem aanhoudt",
   "pleaseEmailUsAt": "Stuur ons een e-mail op {toEmail}",
   "@pleaseEmailUsAt": {
@@ -2469,7 +2469,7 @@
   "sharedWith": "Gedeeld met",
   "shareKey": "Sleutel delen",
   "shareLink": "Link delen",
-  "shareMyVerificationID": "Dit is mijn verificatie-ID: {verificationID} voor ente.com.",
+  "shareMyVerificationID": "Dit is mijn verificatie-ID: {verificationID}.",
   "@shareMyVerificationID": {
     "placeholders": {
       "verificationID": {}
@@ -2477,14 +2477,14 @@
   },
   "shareNotSupportedForSharedFiles": "Delen wordt niet ondersteund voor gedeelde bestanden",
   "shareStorageWith5Members": "Opslagruimte delen met 5 deelnemers",
-  "shareTextConfirmOthersVerificationID": "Hey, kunt u bevestigen dat dit uw ente.com verificatie ID is: {verificationID}",
+  "shareTextConfirmOthersVerificationID": "Hey, kunt u bevestigen dat dit uw verificatie ID is: {verificationID}",
   "@shareTextConfirmOthersVerificationID": {
     "placeholders": {
       "verificationID": {}
     }
   },
-  "shareTextRecommendUsingEnteForFamily": "Download Photos zodat ik je kan toevoegen aan mijn familie abonnement\n\nhttps://ente.com",
-  "shareTextRecommendUsingEnteForPhotos": "Download Photos zodat we gemakkelijk foto's en video's van originele kwaliteit kunnen delen\n\nhttps://ente.com",
+  "shareTextRecommendUsingEnteForFamily": "Download Photos zodat ik je kan toevoegen aan mijn familie abonnement",
+  "shareTextRecommendUsingEnteForPhotos": "Download Photos zodat we gemakkelijk foto's en video's van originele kwaliteit kunnen delen",
   "shareThisLink": "Met deze link kan iedereen die hem ontvangt je item openen. Je kunt de toegang op elk moment intrekken door de link te verwijderen.",
   "shareWithNonenteUsers": "Delen met niet-Photos gebruikers",
   "sharing": "Delen...",
@@ -2626,7 +2626,7 @@
   "suggestions": "Suggesties",
   "sunrise": "Aan de horizon",
   "support": "Ondersteuning",
-  "supportEnte": "Steun <bold-green>ente</bold-green>",
+  "supportEnte": "Steun <bold-green>Photos</bold-green>",
   "syncing": "Synchroniseren...",
   "syncProgress": "{completed}/{total} herinneringen bewaard",
   "@syncProgress": {
@@ -2704,7 +2704,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -2995,7 +2995,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -3019,7 +3019,7 @@
       "email": {
         "description": "The email address of the user",
         "type": "String",
-        "example": "example@ente.com"
+        "example": "example@example.com"
       }
     }
   },

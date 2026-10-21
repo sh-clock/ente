@@ -564,7 +564,7 @@
     "placeholders": {
       "castUrl": {
         "type": "String",
-        "example": "https://cast.ente.com"
+        "example": "https://cast.example.com"
       }
     }
   },
@@ -760,7 +760,7 @@
   "@contactUs": {
     "description": "Button label for contacting Photos support"
   },
-  "contactToManageSubscription": "Vui lòng liên hệ với chúng tôi qua support@ente.com để quản lý gói {provider} của bạn.",
+  "contactToManageSubscription": "Vui lòng liên hệ với chúng tôi để quản lý gói {provider} của bạn.",
   "@contactToManageSubscription": {
     "placeholders": {
       "provider": {}
@@ -1182,7 +1182,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -1812,8 +1812,8 @@
     "description": "Forgot password link label"
   },
   "forgotRecoveryKey": "Quên mã khôi phục?",
-  "free10GB": "10GB miễn phí với <bold-green>ente</bold-green> Photos",
-  "freeStorageOffer": "Giảm 10% <bold-green>ente</bold-green> Photos",
+  "free10GB": "10GB miễn phí với <bold-green>Photos</bold-green>",
+  "freeStorageOffer": "Giảm 10% <bold-green>Photos</bold-green>",
   "freeStorageOfferDescription": "Dùng mã \"AUTH\" để giảm 10% năm đầu tiên",
   "freeTrial": "Dùng thử miễn phí",
   "freeUpAmount": "Giải phóng {sizeInMBorGB}",
@@ -1860,7 +1860,7 @@
     "placeholders": {
       "url": {
         "type": "String",
-        "example": "legacy.ente.com"
+        "example": "legacy.example.com"
       }
     }
   },
@@ -2428,7 +2428,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -2781,7 +2781,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -2905,7 +2905,7 @@
     "description": "Explains that account deletion affects all Photos apps"
   },
   "oneLineAboutTheIssue": "Một dòng về vấn đề",
-  "onEnte": "Trên <branding>ente</branding>",
+  "onEnte": "Trên <branding>Photos</branding>",
   "@onEnte": {
     "description": "The text displayed above albums backed up to Photos",
     "type": "text"
@@ -3165,7 +3165,7 @@
   "@pleaseCheckYourInternetConnectionAndTryAgain": {
     "description": "Message asking user to check internet connection"
   },
-  "pleaseContactSupportAndWeWillBeHappyToHelp": "Vui lòng liên hệ support@ente.com và chúng tôi rất sẵn sàng giúp đỡ!",
+  "pleaseContactSupportAndWeWillBeHappyToHelp": "Vui lòng liên hệ bộ phận hỗ trợ và chúng tôi rất sẵn sàng giúp đỡ!",
   "pleaseContactSupportIfTheProblemPersists": "Vui lòng liên hệ bộ phận hỗ trợ nếu vấn đề vẫn tiếp diễn",
   "pleaseEmailUsAt": "Vui lòng gửi email cho chúng tôi tại {toEmail}",
   "@pleaseEmailUsAt": {
@@ -4005,7 +4005,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -4103,7 +4103,7 @@
   "shareLegacyDescription": "Hãy gửi từng tấm thiệp cho đúng người nhận. Không có tấm thiệp nào có thể dùng riêng lẻ.",
   "shareLink": "Chia sẻ liên kết",
   "shareMemory": "Chia sẻ kỷ niệm",
-  "shareMyVerificationID": "Đây là ID xác minh của tôi: {verificationID} cho ente.com.",
+  "shareMyVerificationID": "Đây là ID xác minh của tôi: {verificationID}.",
   "@shareMyVerificationID": {
     "placeholders": {
       "verificationID": {}
@@ -4111,16 +4111,16 @@
   },
   "shareNotSupportedForSharedFiles": "Không hỗ trợ chia sẻ đối với các tệp được chia sẻ",
   "shareStorageWith5Members": "Chia sẻ dung lượng bộ nhớ với 5 thành viên",
-  "shareTextConfirmOthersVerificationID": "Này, bạn có thể xác nhận rằng đây là ID xác minh ente.com của bạn không: {verificationID}",
+  "shareTextConfirmOthersVerificationID": "Này, bạn có thể xác nhận rằng đây là ID xác minh của bạn không: {verificationID}",
   "@shareTextConfirmOthersVerificationID": {
     "placeholders": {
       "verificationID": {}
     }
   },
-  "shareTextRecommendUsingEnte": "Tải Photos để chúng ta có thể dễ dàng chia sẻ tệp chất lượng gốc\n\nhttps://ente.com",
-  "shareTextRecommendUsingEnteForFamily": "Tải Photos để tôi có thể thêm bạn vào gói gia đình\n\nhttps://ente.com",
-  "shareTextRecommendUsingEnteForPhotos": "Tải Photos để chúng ta có thể dễ dàng chia sẻ ảnh và video chất lượng gốc\n\nhttps://ente.com",
-  "shareTextReferralInvite": "Nhận miễn phí 20 GB với Photos! Tải ứng dụng tại https://ente.com/invite và sử dụng mã {referralCode}.",
+  "shareTextRecommendUsingEnte": "Tải Photos để chúng ta có thể dễ dàng chia sẻ tệp chất lượng gốc",
+  "shareTextRecommendUsingEnteForFamily": "Tải Photos để tôi có thể thêm bạn vào gói gia đình",
+  "shareTextRecommendUsingEnteForPhotos": "Tải Photos để chúng ta có thể dễ dàng chia sẻ ảnh và video chất lượng gốc",
+  "shareTextReferralInvite": "Nhận miễn phí 20 GB với Photos! Tải ứng dụng và sử dụng mã {referralCode}.",
   "@shareTextReferralInvite": {
     "placeholders": {
       "referralCode": {}
@@ -4348,7 +4348,7 @@
   "suggestions": "Gợi ý",
   "sunrise": "Đường chân trời",
   "support": "Hỗ trợ",
-  "supportEnte": "Hỗ trợ <bold-green>ente</bold-green>",
+  "supportEnte": "Hỗ trợ <bold-green>Photos</bold-green>",
   "syncing": "Đang đồng bộ...",
   "syncProgress": "{completed}/{total} kỷ niệm đã được lưu giữ",
   "@syncProgress": {
@@ -4430,7 +4430,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -4765,7 +4765,7 @@
       "path": {
         "description": "File path where the exported video was written",
         "type": "String",
-        "example": "/tmp/ente_export.mp4"
+        "example": "/tmp/photos_export.mp4"
       }
     }
   },
@@ -4804,7 +4804,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -4837,7 +4837,7 @@
       "email": {
         "description": "The email address of the user",
         "type": "String",
-        "example": "example@ente.com"
+        "example": "example@example.com"
       }
     }
   },
@@ -4986,7 +4986,7 @@
     "placeholders": {
       "url": {
         "type": "String",
-        "example": "legacy.ente.com"
+        "example": "legacy.example.com"
       }
     }
   },
@@ -5006,7 +5006,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },

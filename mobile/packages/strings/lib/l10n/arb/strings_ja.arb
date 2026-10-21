@@ -70,7 +70,7 @@
   "addTag": "タグの追加",
   "addToAlbum": "アルバムに追加",
   "addToCollection": "コレクションに追加",
-  "addToEnte": "Enteに追加",
+  "addToEnte": "Photosに追加",
   "addToHiddenAlbum": "非表示アルバムに追加",
   "addToPerson": "人物を追加",
   "@addToPerson": {
@@ -110,7 +110,7 @@
   "allowAppToOpenSharedAlbumLinks": "共有アルバムリンクを開くことをアプリに許可する",
   "allowDownloads": "ダウンロードを許可",
   "allowJoiningAlbum": "アルバムへの参加を許可",
-  "allowPermBody": "Enteがライブラリを表示およびバックアップできるように、端末の設定から写真へのアクセスを許可してください。",
+  "allowPermBody": "Photosがライブラリを表示およびバックアップできるように、端末の設定から写真へのアクセスを許可してください。",
   "allowPermTitle": "写真へのアクセスを許可",
   "allPersonGroupingWillReset": "この人のグループ化がリセットされ、この人かもしれない写真への提案もなくなります",
   "allTabEmptyHint": "まだ何もありません。+ をタップしてコードを追加するか、ゴミ箱を開いて復元してください。",
@@ -134,7 +134,7 @@
   "@androidSignInTitle": {
     "description": "Message showed as a title in a dialog which indicates the user that they need to scan biometric to continue. It is used on Android side. Maximum 60 characters."
   },
-  "aNewVersionOfEnteIsAvailable": "Enteの新しいバージョンが利用可能です。",
+  "aNewVersionOfEnteIsAvailable": "Photosの新しいバージョンが利用可能です。",
   "appearance": "表示",
   "appIcon": "アプリアイコン",
   "appleId": "Apple ID",
@@ -236,7 +236,7 @@
   "backupSettings": "バックアップ設定",
   "backupStatus": "バックアップの状態",
   "backupStatusDescription": "バックアップされたアイテムがここに表示されます",
-  "backupToEnte": "Enteにバックアップ",
+  "backupToEnte": "Photosにバックアップ",
   "backupVideos": "動画をバックアップ",
   "beach": "砂浜と海",
   "birthday": "誕生日",
@@ -416,7 +416,7 @@
   },
   "createAccountTitle": "アカウントを作成する",
   "createAlbumActionHint": "長押しで写真を選択し、+をクリックしてアルバムを作成します",
-  "createAnEnteAccount": "Enteのアカウントを作成",
+  "createAnEnteAccount": "Photosのアカウントを作成",
   "createCollaborativeLink": "共同作業用リンクを作成",
   "createCollage": "コラージュを作る",
   "createCollection": "コレクションを作成",
@@ -500,7 +500,7 @@
   "deleteFiles": "ファイルを削除",
   "deleteFromBoth": "両方から削除",
   "deleteFromDevice": "デバイスから削除",
-  "deleteFromEnte": "Enteから削除",
+  "deleteFromEnte": "Photosから削除",
   "deleteHiddenFilesFromDevice": "デバイスから隠れたファイルを削除する",
   "deleteLink": "リンクを削除",
   "deleteLinkQuestion": "リンクを削除しますか？",
@@ -609,7 +609,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -657,7 +657,7 @@
     "description": "Title shown when editing an existing secret"
   },
   "editsSaved": "編集が保存されました",
-  "editsToLocationWillOnlyBeSeenWithinEnte": "位置情報の編集はEnteでのみ表示されます",
+  "editsToLocationWillOnlyBeSeenWithinEnte": "位置情報の編集はPhotosでのみ表示されます",
   "editTag": "タグの編集",
   "editTime": "時刻を編集",
   "eligible": "対象となる",
@@ -673,13 +673,13 @@
       }
     }
   },
-  "emailNoEnteAccount": "{email}はEnteアカウントを持っていません。\n\nアイテムを共有するには招待を送信してください。",
+  "emailNoEnteAccount": "{email}はPhotosアカウントを持っていません。\n\nアイテムを共有するには招待を送信してください。",
   "@emailNoEnteAccount": {
     "placeholders": {
       "email": {}
     }
   },
-  "emailNoEnteAccountPhotos": "{email} はEnteアカウントを持っていません。\n\n写真を共有するために「招待」を送信してください。",
+  "emailNoEnteAccountPhotos": "{email} はPhotosアカウントを持っていません。\n\n写真を共有するために「招待」を送信してください。",
   "@emailNoEnteAccountPhotos": {
     "placeholders": {
       "email": {}
@@ -693,7 +693,7 @@
       }
     }
   },
-  "emailVerificationEnableWarning": "アカウントから閉め出されるのを防ぐために、メール認証を有効にする前にメール 2FA のコピーが ente Auth 外に保管されていることを確認してください。",
+  "emailVerificationEnableWarning": "アカウントから閉め出されるのを防ぐために、メール認証を有効にする前にメール 2FA のコピーが Photos 外に保管されていることを確認してください。",
   "emailYourLogs": "ログをメールで送信",
   "@emailYourLogs": {
     "description": "Title for emailing logs dialog"
@@ -881,7 +881,7 @@
   "font": "フォント",
   "food": "料理を楽しむ",
   "forgotRecoveryKey": "リカバリーキーをお忘れですか？",
-  "freeStorageOffer": "<bold-green>ente</bold-green>の写真が10%オフ",
+  "freeStorageOffer": "<bold-green>Photos</bold-green>の写真が10%オフ",
   "freeStorageOfferDescription": "クーポンコード \"AUTH\" の使用で初年度が10%オフになります",
   "freeTrial": "無料トライアル",
   "freeUpAmount": "{sizeInMBorGB} を解放する",
@@ -955,7 +955,7 @@
   "importBitwardenGuide": "Bitwarden Tools の \"保管庫のエクスポート\" オプションを使用後、平文の JSON ファイルをインポートしてください。",
   "importCodeDelimiterInfo": "コードはカンマまたは改行で区切ることができます",
   "importCodes": "コードをインポート",
-  "importEnteEncGuide": "Enteからエクスポートした暗号化されたJSONファイルを選択してください",
+  "importEnteEncGuide": "Photosからエクスポートした暗号化されたJSONファイルを選択してください",
   "importEnterSetupKey": "手動で入力",
   "importFailureDesc": "選択されたファイルを解析できませんでした。",
   "importFromGallery": "ギャラリーからインポート",
@@ -1010,7 +1010,7 @@
   "invite": "招待",
   "inviteMembers": "メンバーを招待",
   "inviteResent": "招待を再送する",
-  "inviteToEnte": "Enteに招待する",
+  "inviteToEnte": "Photosに招待する",
   "ok": "OK",
   "@ok": {
     "description": "Generic OK button label"
@@ -1114,7 +1114,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -1145,7 +1145,7 @@
   "@loginSessionExpiredDetails": {
     "description": "Login session expired details"
   },
-  "loginToEnte": "Enteにログイン",
+  "loginToEnte": "Photosにログイン",
   "loginToExistingAccount": "既存のアカウントでログイン",
   "loginWithAuthAccount": "認証アカウントでログイン",
   "loginWithTOTP": "TOTPでログイン",
@@ -1200,7 +1200,7 @@
   "minimizeToTrayOnClose": "閉じたときにトレイに最小化",
   "mlConsent": "機械学習を有効にする",
   "mlConsentConfirmation": "機械学習を有効にします",
-  "mlConsentDescription": "機械学習を有効にすると、Enteは顔などの情報をファイルから抽出します。\n\nこれはお使いのデバイスで行われ、生成された生体情報は暗号化されます。",
+  "mlConsentDescription": "機械学習を有効にすると、Photosは顔などの情報をファイルから抽出します。\n\nこれはお使いのデバイスで行われ、生成された生体情報は暗号化されます。",
   "mlConsentPrivacy": "この機能の詳細については、こちらをクリックしてください。",
   "mlProgressBannerDescription": "あなたの写真は、顔やオブジェクトなどを検出するためにデバイス上で処理されます。",
   "mlProgressBannerTitle": "もう少しお待ちください！",
@@ -1237,11 +1237,11 @@
   "moveToHiddenAlbum": "隠しアルバムに移動",
   "movingFilesToAlbum": "アルバムにファイルを移動中",
   "name": "名前順",
-  "networkConnectionRefusedErr": "Enteに接続できませんでした。しばらくしてから再試行してください。エラーが解決しない場合は、サポートにお問い合わせください。",
+  "networkConnectionRefusedErr": "Photosに接続できませんでした。しばらくしてから再試行してください。エラーが解決しない場合は、サポートにお問い合わせください。",
   "@networkConnectionRefusedErr": {
     "description": "Error message shown when the app cannot connect to Photos due to connection refused"
   },
-  "networkHostLookUpErr": "Enteに接続できませんでした。ネットワーク設定を確認し、エラーが解決しない場合はサポートにお問い合わせください。",
+  "networkHostLookUpErr": "Photosに接続できませんでした。ネットワーク設定を確認し、エラーが解決しない場合はサポートにお問い合わせください。",
   "@networkHostLookUpErr": {
     "description": "Error message shown when the app cannot connect to Photos due to network host lookup failure"
   },
@@ -1516,7 +1516,7 @@
   "@pleaseCheckYourInternetConnectionAndTryAgain": {
     "description": "Message asking user to check internet connection"
   },
-  "pleaseContactSupportAndWeWillBeHappyToHelp": "support@ente.comまでお問い合わせください。お手伝いします！",
+  "pleaseContactSupportAndWeWillBeHappyToHelp": "サポートまでお問い合わせください。お手伝いします！",
   "pleaseContactSupportIfTheProblemPersists": "問題が解決しない場合はサポートにお問い合わせください",
   "pleaseEmailUsAt": "{toEmail} にメールでご連絡ください",
   "@pleaseEmailUsAt": {
@@ -1946,7 +1946,7 @@
       }
     }
   },
-  "selectedFilesAreNotOnEnte": "選択したファイルはEnte上にありません",
+  "selectedFilesAreNotOnEnte": "選択したファイルはPhotos上にありません",
   "selectedItemsWillBeRemovedFromThisPerson": "選択したアイテムはこの人としての登録が解除されますが、ライブラリからは削除されません。",
   "selectedPhotos": "{count} 個を選択",
   "@selectedPhotos": {
@@ -2036,9 +2036,9 @@
   "shareCodesDuration": "コードを共有したい期間を選択してください。",
   "sharedWith": "共有先",
   "shareLink": "リンクの共有",
-  "shareTextRecommendUsingEnteForPhotos": "Enteをダウンロードして、写真や動画を簡単に共有\n\nhttps://ente.com",
+  "shareTextRecommendUsingEnteForPhotos": "Photosをダウンロードして、写真や動画を簡単に共有",
   "shareThisLink": "このリンクを受け取った人は誰でもあなたのアイテムにアクセスできます。リンクを削除することでいつでもアクセスを取り消すことができます。",
-  "shareWithNonenteUsers": "Enteを使っていない人に共有",
+  "shareWithNonenteUsers": "Photosを使っていない人に共有",
   "sharing": "共有中...",
   "sharingAndCollaboration": "共有と共同作業",
   "sharingAndCollaborationDesc": "アルバム、リンク、ファミリープラン",
@@ -2049,7 +2049,7 @@
   "showMemories": "思い出を表示",
   "showPerson": "人物を表示",
   "showQRAuthMessage": "QR コードを表示するためには認証が必要です",
-  "sigInBackupReminder": "サインイン後、Enteは自動的にコードをバックアップします。\n\nコードを追加のバックアップとしてエクスポートすることをお勧めします。",
+  "sigInBackupReminder": "サインイン後、Photosは自動的にコードをバックアップします。\n\nコードを追加のバックアップとしてエクスポートすることをお勧めします。",
   "signInToBackup": "コードをバックアップするためにサインインする",
   "signOutFromOtherDevices": "他のデバイスからサインアウトする",
   "@signOutFromOtherDevices": {
@@ -2155,7 +2155,7 @@
   "suggestions": "提案",
   "sunrise": "水平線",
   "support": "サポート",
-  "supportEnte": "<bold-green>ente</bold-green>をサポートする",
+  "supportEnte": "<bold-green>Photos</bold-green>をサポートする",
   "syncing": "同期中...",
   "syncProgress": "{completed}/{total} のメモリが保存されました",
   "@syncProgress": {
@@ -2219,7 +2219,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -2448,7 +2448,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -2462,7 +2462,7 @@
       "email": {
         "description": "The email address of the user",
         "type": "String",
-        "example": "example@ente.com"
+        "example": "example@example.com"
       }
     }
   },

@@ -341,7 +341,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -484,7 +484,7 @@
   "fileTypes": "Jenis file",
   "flip": "Balik",
   "focusOnSearchBar": "Buka pencarian begitu aplikasi dibuka",
-  "freeStorageOffer": "Potongan 10% di <bold-green>ente</bold-green> photos",
+  "freeStorageOffer": "Potongan 10% di <bold-green>Photos</bold-green>",
   "freeStorageOfferDescription": "Gunakan kode \"AUTH\" untuk mendapatkan potongan 10% untuk tahun pertama",
   "freeTrial": "Percobaan gratis",
   "freeUpAmount": "Bersihkan {sizeInMBorGB}",
@@ -658,7 +658,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -806,7 +806,7 @@
   "nothingToSeeHere": "Tidak ada apa-apa di sini",
   "notifications": "Notifikasi",
   "offlineModeWarning": "Anda telah memilih pilihan 'Gunakan tanpa pencadangan'. Mohon lakukan pencadangan secara manual demi memastikan bahwa kode-kode Anda aman.",
-  "onEnte": "Di <branding>ente</branding>",
+  "onEnte": "Di <branding>Photos</branding>",
   "@onEnte": {
     "description": "The text displayed above albums backed up to Photos",
     "type": "text"
@@ -1171,7 +1171,7 @@
   "successfullyUnarchived": "Berhasil dikeluarkan dari arsip",
   "suggestFeatures": "Sarankan fitur",
   "support": "Dukungan",
-  "supportEnte": "Dukung <bold-green>ente</bold-green>",
+  "supportEnte": "Dukung <bold-green>Photos</bold-green>",
   "syncing": "Menyinkronkan...",
   "syncProgress": "{completed}/{total} memori tersimpan",
   "@syncProgress": {
@@ -1222,7 +1222,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -1333,7 +1333,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },

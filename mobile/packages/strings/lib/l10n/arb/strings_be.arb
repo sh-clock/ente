@@ -530,7 +530,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -800,8 +800,8 @@
   "@forgotPassword": {
     "description": "Forgot password link label"
   },
-  "free10GB": "10 ГБ бясплатнай прасторы на <bold-green>ente</bold-green> Photos",
-  "freeStorageOffer": "Скідка ў памеры 10% на <bold-green>ente</bold-green> Photos",
+  "free10GB": "10 ГБ бясплатнай прасторы на <bold-green>Photos</bold-green>",
+  "freeStorageOffer": "Скідка ў памеры 10% на <bold-green>Photos</bold-green>",
   "freeStorageOfferDescription": "Выкарыстоўвайце код «AUTH», каб атрымаць скідку ў памеры 10% за першы год",
   "freeTrial": "Бясплатная пробны перыяд",
   "freeUpAmount": "Вызваліць {sizeInMBorGB}",
@@ -1045,7 +1045,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -2030,7 +2030,7 @@
   "suggestFeatures": "Прапанаваць функцыю",
   "sunrise": "На гарызонце",
   "support": "Падтрымка",
-  "supportEnte": "Падтрымка <bold-green>ente</bold-green>",
+  "supportEnte": "Падтрымка <bold-green>Photos</bold-green>",
   "syncing": "Сінхранізацыя...",
   "syncProgress": "{completed}/{total} успамінаў захавана",
   "@syncProgress": {
@@ -2101,7 +2101,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -2275,7 +2275,7 @@
       "path": {
         "description": "File path where the exported video was written",
         "type": "String",
-        "example": "/tmp/ente_export.mp4"
+        "example": "/tmp/photos_export.mp4"
       }
     }
   },
@@ -2311,7 +2311,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },

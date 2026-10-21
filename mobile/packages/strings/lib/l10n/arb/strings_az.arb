@@ -637,7 +637,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -1084,7 +1084,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -1325,7 +1325,7 @@
   "offlineNameFaceBannerTitle": "Bu üzə ad verin",
   "offlineSettingsBannerDesc": "Sıfır bilik\" Zero-knowledge şifrələməsi o deməkdir ki, xatirələriniz yalnız sizə məxsus qalır.",
   "offlineSettingsBannerTitle": "Biz sizin fotolarınızı görə bilmərik. Heç vaxt.",
-  "onEnte": "<branding>ente</branding>-də",
+  "onEnte": "<branding>Photos</branding>-də",
   "@onEnte": {
     "description": "The text displayed above albums backed up to Photos",
     "type": "text"
@@ -2228,7 +2228,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -2414,7 +2414,7 @@
       "path": {
         "description": "File path where the exported video was written",
         "type": "String",
-        "example": "/tmp/ente_export.mp4"
+        "example": "/tmp/photos_export.mp4"
       }
     }
   },
@@ -2448,7 +2448,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -2472,7 +2472,7 @@
       "email": {
         "description": "The email address of the user",
         "type": "String",
-        "example": "example@ente.com"
+        "example": "example@example.com"
       }
     }
   },

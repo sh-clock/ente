@@ -564,7 +564,7 @@
     "placeholders": {
       "castUrl": {
         "type": "String",
-        "example": "https://cast.ente.com"
+        "example": "https://cast.example.com"
       }
     }
   },
@@ -760,7 +760,7 @@
   "@contactUs": {
     "description": "Button label for contacting Photos support"
   },
-  "contactToManageSubscription": "请发送邮件至 support@ente.com 以管理您的 {provider} 订阅。",
+  "contactToManageSubscription": "请联系我们以管理您的 {provider} 订阅。",
   "@contactToManageSubscription": {
     "placeholders": {
       "provider": {}
@@ -1182,7 +1182,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -1812,8 +1812,8 @@
     "description": "Forgot password link label"
   },
   "forgotRecoveryKey": "丢失恢复密钥？",
-  "free10GB": "在 <bold-green>ente</bold-green> Photos 上可享 10 GB 免费空间",
-  "freeStorageOffer": "购买 <bold-green>ente</bold-green> Photos 可享 10% 折扣",
+  "free10GB": "在 <bold-green>Photos</bold-green> 上可享 10 GB 免费空间",
+  "freeStorageOffer": "购买 <bold-green>Photos</bold-green> 可享 10% 折扣",
   "freeStorageOfferDescription": "使用优惠码“AUTH”可享受首年 10% 折扣",
   "freeTrial": "免费试用",
   "freeUpAmount": "释放 {sizeInMBorGB}",
@@ -1860,7 +1860,7 @@
     "placeholders": {
       "url": {
         "type": "String",
-        "example": "legacy.ente.com"
+        "example": "legacy.example.com"
       }
     }
   },
@@ -2431,7 +2431,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -2784,7 +2784,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -2908,7 +2908,7 @@
     "description": "Explains that account deletion affects all Photos apps"
   },
   "oneLineAboutTheIssue": "用一句话描述问题",
-  "onEnte": "在 <branding>ente</branding> 上",
+  "onEnte": "在 <branding>Photos</branding> 上",
   "@onEnte": {
     "description": "The text displayed above albums backed up to Photos",
     "type": "text"
@@ -3168,7 +3168,7 @@
   "@pleaseCheckYourInternetConnectionAndTryAgain": {
     "description": "Message asking user to check internet connection"
   },
-  "pleaseContactSupportAndWeWillBeHappyToHelp": "请联系 support@ente.com，我们很乐意为您提供帮助！",
+  "pleaseContactSupportAndWeWillBeHappyToHelp": "请联系支持团队，我们很乐意为您提供帮助！",
   "pleaseContactSupportIfTheProblemPersists": "如果问题仍然存在，请联系支持团队",
   "pleaseEmailUsAt": "请给我们发送电子邮件至 {toEmail}",
   "@pleaseEmailUsAt": {
@@ -4008,7 +4008,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -4106,7 +4106,7 @@
   "shareLegacyDescription": "将每张卡片发送给对应的人。任何单张卡片都无法单独生效。",
   "shareLink": "共享链接",
   "shareMemory": "共享回忆",
-  "shareMyVerificationID": "这是我的 ente.com 验证 ID：{verificationID}。",
+  "shareMyVerificationID": "这是我的验证 ID：{verificationID}。",
   "@shareMyVerificationID": {
     "placeholders": {
       "verificationID": {}
@@ -4114,16 +4114,16 @@
   },
   "shareNotSupportedForSharedFiles": "共享文件不支持再共享",
   "shareStorageWith5Members": "与 5 位成员共享存储空间",
-  "shareTextConfirmOthersVerificationID": "嘿，您能确认这是您的 ente.com 验证 ID 吗：{verificationID}",
+  "shareTextConfirmOthersVerificationID": "嘿，您能确认这是您的验证 ID 吗：{verificationID}",
   "@shareTextConfirmOthersVerificationID": {
     "placeholders": {
       "verificationID": {}
     }
   },
-  "shareTextRecommendUsingEnte": "下载 Photos，方便我们轻松共享原始质量的文件\n\nhttps://ente.com",
-  "shareTextRecommendUsingEnteForFamily": "下载 Photos，这样我就能把您加入我的家庭计划：\n\nhttps://ente.com",
-  "shareTextRecommendUsingEnteForPhotos": "下载 Photos，这样我们就能轻松共享原始画质的照片和视频：\n\nhttps://ente.com",
-  "shareTextReferralInvite": "使用 Photos 获得 20 GB 免费空间！在 https://ente.com/invite 下载应用并使用代码 {referralCode}。",
+  "shareTextRecommendUsingEnte": "下载 Photos，方便我们轻松共享原始质量的文件",
+  "shareTextRecommendUsingEnteForFamily": "下载 Photos，这样我就能把您加入我的家庭计划",
+  "shareTextRecommendUsingEnteForPhotos": "下载 Photos，这样我们就能轻松共享原始画质的照片和视频",
+  "shareTextReferralInvite": "使用 Photos 获得 20 GB 免费空间！下载应用并使用代码 {referralCode}。",
   "@shareTextReferralInvite": {
     "placeholders": {
       "referralCode": {}
@@ -4351,7 +4351,7 @@
   "suggestions": "建议",
   "sunrise": "在地平线上",
   "support": "支持",
-  "supportEnte": "支持 <bold-green>ente</bold-green>",
+  "supportEnte": "支持 <bold-green>Photos</bold-green>",
   "syncing": "正在同步...",
   "syncProgress": "已保存 {completed}/{total} 段回忆",
   "@syncProgress": {
@@ -4433,7 +4433,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -4768,7 +4768,7 @@
       "path": {
         "description": "File path where the exported video was written",
         "type": "String",
-        "example": "/tmp/ente_export.mp4"
+        "example": "/tmp/photos_export.mp4"
       }
     }
   },
@@ -4807,7 +4807,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -4840,7 +4840,7 @@
       "email": {
         "description": "The email address of the user",
         "type": "String",
-        "example": "example@ente.com"
+        "example": "example@example.com"
       }
     }
   },
@@ -4989,7 +4989,7 @@
     "placeholders": {
       "url": {
         "type": "String",
-        "example": "legacy.ente.com"
+        "example": "legacy.example.com"
       }
     }
   },
@@ -5009,7 +5009,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },

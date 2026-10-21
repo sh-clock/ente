@@ -35,7 +35,7 @@
   "addPhotos": "Додај фотографије",
   "addTag": "Додај ознаку",
   "addToAlbum": "Додај у албум",
-  "addToEnte": "Додај у Енте",
+  "addToEnte": "Додај у Photos",
   "addToHiddenAlbum": "Додај у тајни албум",
   "adjust": "Прилагоди",
   "advanced": "Напредно",
@@ -76,7 +76,7 @@
   "@androidSignInTitle": {
     "description": "Message showed as a title in a dialog which indicates the user that they need to scan biometric to continue. It is used on Android side. Maximum 60 characters."
   },
-  "aNewVersionOfEnteIsAvailable": "Нова Енте верзија је доступна.",
+  "aNewVersionOfEnteIsAvailable": "Нова Photos верзија је доступна.",
   "appIcon": "Иконица апликације",
   "appleId": "Епл идентификација",
   "appLock": "Закључавање апликације",
@@ -286,7 +286,7 @@
   "deleteEmptyAlbumsWithQuestionMark": "Обриши празне албуме?",
   "deleteFromBoth": "Обриши са оба",
   "deleteFromDevice": "Обриши са уређаја",
-  "deleteFromEnte": "Обриши са Енте-а",
+  "deleteFromEnte": "Обриши са Photos-а",
   "deleteLocation": "Обриши локацију",
   "deletePhotos": "Обриши фотгорафије",
   "deleteSharedAlbum": "Иѕбриши дељени албум?",
@@ -352,7 +352,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -392,7 +392,7 @@
   "editOrder": "Уреди поредак",
   "editsSaved": "Измене сачуване",
   "editTag": "Уреди ознаку",
-  "emailNoEnteAccountPhotos": "{email} нема Енте налог.\n\nПошаљи им позивницу за дељење фотографија.",
+  "emailNoEnteAccountPhotos": "{email} нема Photos налог.\n\nПошаљи им позивницу за дељење фотографија.",
   "@emailNoEnteAccountPhotos": {
     "placeholders": {
       "email": {}
@@ -487,7 +487,7 @@
   "@forgotPassword": {
     "description": "Forgot password link label"
   },
-  "freeStorageOffer": "Попуст од 10% на <bold-green>ente</bold-green> photos",
+  "freeStorageOffer": "Попуст од 10% на <bold-green>Photos</bold-green>",
   "freeStorageOfferDescription": "Употребите кôд \"AUTH\" да би добили попуст од 10% прве године",
   "freeTrial": "Бесплатна проба",
   "freeUpDeviceSpace": "Ослободи простор на уређају",
@@ -616,7 +616,7 @@
   "invalidQRCode": "Неважећи QR кôд",
   "invalidRecoveryKey": "Кључ за опоравак који сте унели није исправан. Постарајте се да садржи 24 речи, и проверите да ли сте их правилно уписали.\n\nУколико сте унели стари формат кључа, постарајте се да садржи 64 карактера и додатно проверите да ли је сваки исправно уписан.",
   "invite": "Позови",
-  "inviteToEnte": "Позови у Енте",
+  "inviteToEnte": "Позови у Photos",
   "ok": "ОК",
   "@ok": {
     "description": "Generic OK button label"
@@ -1148,7 +1148,7 @@
   "shareALink": "Подели везу",
   "shareCodes": "Дели кôдове",
   "shareCodesDuration": "Изаберите трајање за које желите да поделите кôдове.",
-  "shareWithNonenteUsers": "Пошаљи корисницима који немају Енте налог",
+  "shareWithNonenteUsers": "Пошаљи корисницима који немају Photos налог",
   "sharing": "Делим...",
   "shouldHideCode": "Сакриј кодове",
   "showLargeIcons": "Прикажи велике иконе",
@@ -1226,7 +1226,7 @@
   "successfullyUnarchived": "Успешно премештено из архиве",
   "sunrise": "На хирозонту",
   "support": "Подршка",
-  "supportEnte": "Подржи <bold-green>ente</bold-green>",
+  "supportEnte": "Подржи <bold-green>Photos</bold-green>",
   "syncing": "Синхронизујем...",
   "syncStopped": "Синхронизација прекинута",
   "tag": "Ознака",
@@ -1268,7 +1268,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -1375,7 +1375,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },

@@ -539,7 +539,7 @@
   "@contactSupport": {
     "description": "Contact support button label"
   },
-  "contactToManageSubscription": "اپنی {provider} سبسکرپشن کا نظم کرنے کے لیے support@ente.com پر رابطہ کریں.",
+  "contactToManageSubscription": "اپنی {provider} سبسکرپشن کا نظم کرنے کے لیے ہم سے رابطہ کریں.",
   "@contactToManageSubscription": {
     "placeholders": {
       "provider": {}
@@ -829,7 +829,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -959,7 +959,7 @@
   "@endpointUpdatedMessage": {
     "description": "Success message when endpoint is updated"
   },
-  "ente": "اینٹی",
+  "ente": "Photos",
   "enterAlbumName": "البم کا نام درج کریں",
   "enterAnEmailAddress": "ایک ای میل ایڈریس درج کریں",
   "enterAValidEmailAddress": "درست ای میل ایڈریس درج کریں",
@@ -1183,8 +1183,8 @@
     "description": "Forgot password link label"
   },
   "forgotRecoveryKey": "ریکوری کی بھول گئے؟",
-  "free10GB": "<bold-green>ente</bold-green> فوٹوز پر ۱۰ جی بی مفت",
-  "freeStorageOffer": "<bold-green>ente</bold-green> فوٹوز پر ۱۰٪ کی چھوٹ",
+  "free10GB": "<bold-green>Photos</bold-green> پر ۱۰ جی بی مفت",
+  "freeStorageOffer": "<bold-green>Photos</bold-green> پر ۱۰٪ کی چھوٹ",
   "freeStorageOfferDescription": "پہلے سال ۱۰٪ چھوٹ حاصل کرنے کے لیے کوڈ ”AUTH“ استعمال کریں",
   "freeTrial": "مفت ٹرائل",
   "freeUpAmount": "{sizeInMBorGB} خالی کریں",
@@ -1500,7 +1500,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -1624,7 +1624,7 @@
   "mixedGrouping": "ملی جلی گروپنگ؟",
   "mlConsent": "مشین لرننگ کو فعال کریں",
   "mlConsentConfirmation": "میں سمجھتا ہوں، اور مشین لرننگ کو فعال کرنا چاہتا ہوں",
-  "mlConsentDescription": "اگر آپ مشین لرننگ کو فعال کرتے ہیں، تو اینٹی Photos فائلوں سے چہرے کی ساخت جیسی معلومات اخذ کرے گا، بشمول وہ فائلیں جو آپ کے ساتھ شیئر کی گئی ہیں.\n\nیہ عمل آپ کے اپنے آلے پر ہوگا، اور تیار کردہ تمام بائیومیٹرک معلومات مکمل طور پر اینڈ ٹو اینڈ انکرپٹڈ ہوں گی.",
+  "mlConsentDescription": "اگر آپ مشین لرننگ کو فعال کرتے ہیں، تو Photos فائلوں سے چہرے کی ساخت جیسی معلومات اخذ کرے گا، بشمول وہ فائلیں جو آپ کے ساتھ شیئر کی گئی ہیں.\n\nیہ عمل آپ کے اپنے آلے پر ہوگا، اور تیار کردہ تمام بائیومیٹرک معلومات مکمل طور پر اینڈ ٹو اینڈ انکرپٹڈ ہوں گی.",
   "mlConsentPrivacy": "ہماری پرائیویسی پالیسی میں اس فیچر کے بارے میں مزید تفصیلات کے لیے براہ کرم یہاں کلک کریں",
   "mlIndexingDescription": "نوٹ کریں کہ مشین لرننگ تمام آئٹمز پراسیس ہونے تک زیادہ انٹرنیٹ اور بیٹری استعمال کرے گی۔ تیز پراسیسنگ کے لیے ڈیسک ٹاپ ایپ استعمال کریں، تمام نتائج خود بخود سنک ہو جائیں گے.",
   "mlProgressBannerDescription": "آپ کی تصاویر پر چہروں، اشیاء اور مزید کا پتہ لگانے کے لیے ڈیوائس پر کارروائی کی جا رہی ہے.",
@@ -1712,7 +1712,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -1812,7 +1812,7 @@
     "type": "text"
   },
   "oneLineAboutTheIssue": "مسئلے کے بارے میں ایک لائن",
-  "onEnte": "<branding>ente</branding> پر",
+  "onEnte": "<branding>Photos</branding> پر",
   "@onEnte": {
     "description": "The text displayed above albums backed up to Photos",
     "type": "text"
@@ -2005,7 +2005,7 @@
   "@pleaseCheckYourInternetConnectionAndTryAgain": {
     "description": "Message asking user to check internet connection"
   },
-  "pleaseContactSupportAndWeWillBeHappyToHelp": "از کرم support@ente.com پر رابطہ کریں اور ہمیں خوشی ہوگی مدد کر کے!",
+  "pleaseContactSupportAndWeWillBeHappyToHelp": "از کرم ہم سے رابطہ کریں اور ہمیں خوشی ہوگی مدد کر کے!",
   "pleaseContactSupportIfTheProblemPersists": "اگر مسئلہ برقرار رہے تو براہ کرم سپورٹ سے رابطہ کریں",
   "pleaseEmailUsAt": "براہ کرم ہمیں {toEmail} پر ای میل کریں",
   "@pleaseEmailUsAt": {
@@ -2657,21 +2657,21 @@
   "sharedPhotoNotificationsExplanation": "نئی تصاویر اور البمز جن میں آپ شامل ہیں یا آپ کے ساتھ شیئر کیے گئے",
   "shareKey": "کی شیئر کریں",
   "shareLink": "لنک شیئر کریں",
-  "shareMyVerificationID": "یہ میرا تصدیقی ID ہے: {verificationID} ente.com کے لیے.",
+  "shareMyVerificationID": "یہ میرا تصدیقی ID ہے: {verificationID}.",
   "@shareMyVerificationID": {
     "placeholders": {
       "verificationID": {}
     }
   },
   "shareStorageWith5Members": "۵ اراکین کے ساتھ اسٹوریج شیئر کریں",
-  "shareTextConfirmOthersVerificationID": "ارے، کیا آپ تصدیق کر سکتے ہیں کہ یہ آپ کا ente.com تصدیقی ID ہے: {verificationID}",
+  "shareTextConfirmOthersVerificationID": "ارے، کیا آپ تصدیق کر سکتے ہیں کہ یہ آپ کا تصدیقی ID ہے: {verificationID}",
   "@shareTextConfirmOthersVerificationID": {
     "placeholders": {
       "verificationID": {}
     }
   },
-  "shareTextRecommendUsingEnteForFamily": "Photos ڈاؤن لوڈ کریں تاکہ میں آپ کو اپنے فیملی پلان میں شامل کر سکوں۔\n\nhttps://ente.com",
-  "shareTextRecommendUsingEnteForPhotos": "Photos ڈاؤن لوڈ کریں تاکہ ہم اصل معیار کی تصاویر اور ویڈیوز آسانی سے شیئر کر سکیں۔\n\nhttps://ente.com",
+  "shareTextRecommendUsingEnteForFamily": "Photos ڈاؤن لوڈ کریں تاکہ میں آپ کو اپنے فیملی پلان میں شامل کر سکوں۔",
+  "shareTextRecommendUsingEnteForPhotos": "Photos ڈاؤن لوڈ کریں تاکہ ہم اصل معیار کی تصاویر اور ویڈیوز آسانی سے شیئر کر سکیں۔",
   "shareWithNonenteUsers": "غیر Photos صارفین کے ساتھ شیئر کریں",
   "shareYourSubscription": "اپنی سبسکرپشن اپنے پیاروں کے ساتھ شیئر کریں",
   "sharing": "شیئر کیا جا رہا ہے...",
@@ -2831,7 +2831,7 @@
   "suggestions": "تجاویز",
   "sunrise": "افق پر",
   "support": "سپورٹ",
-  "supportEnte": "<bold-green>ente</bold-green> کو سپورٹ کریں",
+  "supportEnte": "<bold-green>Photos</bold-green> کو سپورٹ کریں",
   "syncing": "Sync ہو رہا ہے...",
   "syncProgress": "{completed}/{total} یادیں محفوظ",
   "@syncProgress": {
@@ -2908,7 +2908,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -3145,7 +3145,7 @@
       "path": {
         "description": "File path where the exported video was written",
         "type": "String",
-        "example": "/tmp/ente_export.mp4"
+        "example": "/tmp/photos_export.mp4"
       }
     }
   },
@@ -3182,7 +3182,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -3206,7 +3206,7 @@
       "email": {
         "description": "The email address of the user",
         "type": "String",
-        "example": "example@ente.com"
+        "example": "example@example.com"
       }
     }
   },

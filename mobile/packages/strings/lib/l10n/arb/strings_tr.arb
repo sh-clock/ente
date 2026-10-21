@@ -625,7 +625,7 @@
       "supportEmail": {
         "description": "The support email address",
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -910,8 +910,8 @@
     "description": "Forgot password link label"
   },
   "forgotRecoveryKey": "Kurtarma anahtarınızı mı unuttunuz?",
-  "free10GB": "<bold-green>Photos</bold-green> Photos'ta 10 GB ücretsiz",
-  "freeStorageOffer": "<bold-green>ente</bold-green> fotoğraflarında %10 indirim",
+  "free10GB": "<bold-green>Photos</bold-green>'ta 10 GB ücretsiz",
+  "freeStorageOffer": "<bold-green>Photos</bold-green>'da %10 indirim",
   "freeStorageOfferDescription": "İlk yılda %10 indirim almak için \"AUTH\" kodunu kullanın",
   "freeTrial": "Ücretsiz deneme",
   "freeUpAmount": "{sizeInMBorGB} yer açın",
@@ -1177,7 +1177,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -1357,7 +1357,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ente.com"
+        "example": "support@example.com"
       }
     }
   },
@@ -1436,7 +1436,7 @@
   "ocrNoTextDetected": "Yazı algılanmadı",
   "offlineModeWarning": "Yedekleme yapmadan devam etmeyi seçtiniz. Kodlarınızın güvende olduğundan emin olmak için lütfen manuel yedekleme yapın.",
   "oneLineAboutTheIssue": "Sorunu açıklayan bir satır",
-  "onEnte": "<branding>ente</branding> üzerinde",
+  "onEnte": "<branding>Photos</branding> üzerinde",
   "@onEnte": {
     "description": "The text displayed above albums backed up to Photos",
     "type": "text"
@@ -2258,7 +2258,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "someone@ente.com"
+        "example": "someone@example.com"
       }
     }
   },
@@ -2505,7 +2505,7 @@
     "placeholders": {
       "webUrl": {
         "type": "String",
-        "example": "photos.ente.com"
+        "example": "photos.example.com"
       }
     }
   },
@@ -2528,7 +2528,7 @@
       "email": {
         "description": "The email address of the user",
         "type": "String",
-        "example": "example@ente.com"
+        "example": "example@example.com"
       }
     }
   },
