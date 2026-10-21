@@ -95,6 +95,18 @@ const stageNapiAddons = async (appDir, platform, arch) => {
     const stageDir = path.join(appDir, "build", "napi");
     await fsp.mkdir(stageDir, { recursive: true });
 
+    // Opt-in escape hatch for low-disk machines: reuse the already-staged
+    // addon instead of recompiling the rust tree (only safe when the rust
+    // sources have not changed since the last build).
+    if (process.env.PHOTOS_SKIP_NAPI_BUILD == "1") {
+        for (const a of arches) {
+            const staged = path.join(stageDir, `index.${napiTriple(platform, a)}.node`);
+            await fsp.access(staged);
+        }
+        console.log("> skipping napi build (PHOTOS_SKIP_NAPI_BUILD=1)");
+        return;
+    }
+
     const wanted = [];
     for (const a of arches) {
         const addonPath = await buildNapiAddon(appDir, platform, a);
