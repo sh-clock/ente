@@ -9,6 +9,7 @@ extraFiles:
       filter: ["**/*", "!ffmpeg/{ffprobe,ffprobe.exe,.archive-sha256}"]
 beforeBuild: scripts/beforeBuild.js
 beforePack: scripts/beforePack.js
+afterPack: scripts/afterPack.js
 win:
     target:
         - target: zip
