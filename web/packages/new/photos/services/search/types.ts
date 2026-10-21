@@ -30,7 +30,6 @@ export type SidebarActionID =
     | "preferences.mlSearch"
     | "preferences.streamableVideos"
     | "help.helpCenter"
-    | "help.blog"
     | "help.requestFeature"
     | "help.support"
     | "help.viewLogs";

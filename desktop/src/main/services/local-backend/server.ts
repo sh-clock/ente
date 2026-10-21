@@ -30,6 +30,12 @@ export interface LocalBackend {
     port: number;
     origin: string;
     close: () => Promise<void>;
+    /**
+     * Register the vault token; once set, all API routes (but not the
+     * presigned blob transport or the uploader bridge) require it as the
+     * `X-Auth-Token` header.
+     */
+    setExpectedToken: (token: string) => void;
 }
 
 const localUser = { id: 1, email: "local@vault", role: "owner" };
@@ -41,6 +47,10 @@ const startLocalBackend = (opts: LocalBackendOptions): Promise<LocalBackend> =>
         const log = opts.log ?? console.log;
         const store = new LocalVaultStore(opts.dataDir);
         const tries = opts.portTries ?? 10;
+        // The renderer registers the vault token over IPC once the vault is
+        // ready; until then (and in the standalone dev server) the server
+        // runs open, so the boot-time origin discovery cannot 401.
+        const authState = { expectedToken: undefined as string | undefined };
 
         const attempt = (offset: number) => {
             if (offset >= tries) {
@@ -53,7 +63,7 @@ const startLocalBackend = (opts: LocalBackendOptions): Promise<LocalBackend> =>
             }
             const port = opts.port + offset;
             const server = http.createServer((req, res) => {
-                handle(store, req, res, port, log).catch((e) => {
+                handle(store, req, res, port, log, authState).catch((e) => {
                     log("[local-backend] unhandled error", e);
                     if (!res.headersSent) {
                         res.writeHead(500, corsHeaders());
@@ -79,7 +89,14 @@ const startLocalBackend = (opts: LocalBackendOptions): Promise<LocalBackend> =>
                         store.flush();
                         server.close(() => resolveClose());
                     });
-                resolve({ port, origin: `http://127.0.0.1:${port}`, close });
+                resolve({
+                    port,
+                    origin: `http://127.0.0.1:${port}`,
+                    close,
+                    setExpectedToken: (token: string) => {
+                        authState.expectedToken = token;
+                    },
+                });
             });
         };
 
@@ -179,6 +196,7 @@ const handle = async (
     res: ServerResponse,
     port: number,
     log: (...args: unknown[]) => void,
+    authState: { expectedToken: string | undefined },
 ) => {
     const method = req.method ?? "GET";
     const url = new URL(req.url ?? "/", `http://127.0.0.1:${port}`);
@@ -189,6 +207,22 @@ const handle = async (
         res.writeHead(204, corsHeaders());
         res.end();
         return;
+    }
+
+    // Authenticated museum routes. Presigned blob transport and the native
+    // uploader bridge are exempt (the client uploads to them exactly the way
+    // it would upload to presigned object URLs, without an auth token), but
+    // every API route requires the vault token once it has been registered.
+    const isPresignedTransport =
+        pathname.startsWith("/blobs/") ||
+        pathname === "/file-upload" ||
+        pathname === "/multipart-upload" ||
+        pathname === "/multipart-complete";
+    if (authState.expectedToken !== undefined && !isPresignedTransport) {
+        if (req.headers["x-auth-token"] !== authState.expectedToken) {
+            sendJSON(res, 401, { error: "unauthorized" });
+            return;
+        }
     }
 
     log(`[local-backend] ${method} ${pathname}${url.search}`);
@@ -833,9 +867,64 @@ const handle = async (
     }
 
     if (method === "GET" && pathname === "/files/data/preview") {
-        // Preview (HLS) segments are not generated in local mode; the viewer
-        // falls back to progressive playback.
-        sendJSON(res, 404, { error: "no preview data" });
+        // The playlist was written to fileData when the segments were
+        // uploaded (see PUT /files/video-data); the segments themselves are
+        // served as a plain blob GET via this presigned-style URL.
+        const fileID = numericParam(url, "fileID");
+        const entry = fileID !== undefined ? store.videoData[fileID] : undefined;
+        if (!entry || !entry.objectID) {
+            sendJSON(res, 404, { error: "no preview data" });
+            return;
+        }
+        sendJSON(res, 200, { url: `${origin}/blobs/${entry.objectID}` });
+        return;
+    }
+
+    if (method === "GET" && pathname === "/files/data/preview-upload-url") {
+        // Native HLS generation (ffmpeg-worker) requests upload URLs with a
+        // GET (non-V2 flow); multipart when isMultiPart=true&count=N.
+        const isMultiPart = url.searchParams.get("isMultiPart") == "true";
+        const count = Math.min(
+            10000,
+            Math.max(1, numericParam(url, "count") ?? 1),
+        );
+        const objectKey = store.newObjectKey();
+        if (isMultiPart) {
+            sendJSON(res, 200, {
+                objectID: objectKey,
+                partURLs: Array.from(
+                    { length: count },
+                    (_, i) => `${origin}/blobs/${objectKey}?part=${i + 1}`,
+                ),
+                completeURL: `${origin}/blobs/${objectKey}`,
+            });
+        } else {
+            sendJSON(res, 200, {
+                objectID: objectKey,
+                url: `${origin}/blobs/${objectKey}`,
+            });
+        }
+        return;
+    }
+
+    if (method === "POST" && pathname === "/multipart-preview-upload-url") {
+        // V2 flow: the body carries part checksums; the count comes from them
+        // (or from contentLength / partLength when absent).
+        const body = await readJSON(req);
+        const contentLength = Number(body.contentLength ?? 0);
+        const partLength = Number(body.partLength ?? 0);
+        const partMd5s: string[] = body.partMd5s ?? [];
+        const count = partMd5s.length ||
+            (partLength > 0 ? Math.ceil(contentLength / partLength) : 1);
+        const objectKey = store.newObjectKey();
+        sendJSON(res, 200, {
+            objectID: objectKey,
+            partURLs: Array.from(
+                { length: Math.max(1, count) },
+                (_, i) => `${origin}/blobs/${objectKey}?part=${i + 1}`,
+            ),
+            completeURL: `${origin}/blobs/${objectKey}`,
+        });
         return;
     }
 
@@ -844,6 +933,7 @@ const handle = async (
         const objectKey = store.newObjectKey();
         sendJSON(res, 200, {
             objectKey,
+            objectID: objectKey,
             url: `${origin}/blobs/${objectKey}`,
         });
         return;
@@ -851,12 +941,22 @@ const handle = async (
 
     if (method === "PUT" && pathname === "/files/video-data") {
         const body = await readJSON(req);
-        store.videoData[Number(body.fileID).toString()] = {
-            fileID: Number(body.fileID),
+        const fileID = Number(body.fileID);
+        store.videoData[fileID.toString()] = {
+            fileID,
             objectID: String(body.objectID ?? ""),
             objectSize: Number(body.objectSize ?? 0),
             playlist: String(body.playlist ?? ""),
             playlistHeader: String(body.playlistHeader ?? ""),
+            updatedAt: store.nowMicros(),
+        };
+        // Museum stores the (encrypted) playlist itself as file data so that
+        // other clients can discover it via /files/data/fetch and status-diff.
+        store.fileData[`${fileID}:vid_preview`] = {
+            fileID,
+            type: "vid_preview",
+            encryptedData: String(body.playlist ?? ""),
+            decryptionHeader: String(body.playlistHeader ?? ""),
             updatedAt: store.nowMicros(),
         };
         store.markDirty();
@@ -1002,6 +1102,14 @@ const handle = async (
     // ------------------------------------------------------------- sessions
 
     if (pathname === "/users/session-validity/v2") {
+        sendJSON(res, 200, {});
+        return;
+    }
+
+    // The vault is local; "logout" on the remote is a no-op, but the client
+    // still notifies the (museum-compatible) API, so acknowledge it instead
+    // of 404ing into the client's error log on every logout.
+    if (pathname === "/users/logout") {
         sendJSON(res, 200, {});
         return;
     }

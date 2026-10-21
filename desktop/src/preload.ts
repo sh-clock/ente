@@ -28,6 +28,9 @@ const appVersion = () => ipcRenderer.invoke("appVersion");
 
 const localAPIOrigin = (): Promise<string> => ipcRenderer.invoke("localAPIOrigin");
 
+const localBackendSetToken = (token: string): Promise<void> =>
+    ipcRenderer.invoke("localBackendSetToken", token);
+
 const logToDisk = (message: string): void =>
     ipcRenderer.send("logToDisk", message);
 
@@ -254,6 +257,7 @@ const clearPendingUploads = () => ipcRenderer.invoke("clearPendingUploads");
 contextBridge.exposeInMainWorld("electron", {
     appVersion,
     localAPIOrigin,
+    localBackendSetToken,
     logToDisk,
     openDirectory,
     openLogDirectory,

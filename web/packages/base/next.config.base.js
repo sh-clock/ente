@@ -66,8 +66,7 @@ const nextConfig = {
         "ente-utils",
         "ente-new",
         "ente-prelogin-wasm",
-        "ente-paste-wasm",
-    ],
+            ],
 
     env: { gitSHA, appName, isDesktop, desktopAppVersion },
 

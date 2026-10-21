@@ -220,7 +220,6 @@
     "no_two_factor_recovery_key_message": "Prosím zašlete e-mail na <a>{{emailID}}</a> z Vaší registrované e-mailové adresy",
     "contact_support": "Kontaktovat podporu",
     "help": "Pomoc",
-    "blog": "Blog",
     "request_feature": "Požadavek na funkci",
     "support": "Podpora",
     "cancel": "Zrušit",
@@ -685,7 +684,7 @@
     "welcome_title": "Vítejte v <a/>",
     "upload_to_library": "",
     "upload_reason_already_in_library": "",
-    "help_center": "Photos Nápověda",
+    "help_center": "Nápověda aplikace Photos",
     "save_a_copy": "Uložit kopii na Photos",
     "open_on_startup": "Otevřít Photos při spuštění"
 }

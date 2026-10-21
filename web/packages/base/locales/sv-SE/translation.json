@@ -220,7 +220,6 @@
     "no_two_factor_recovery_key_message": "Skicka ett mail till <a>{{emailID}}</a> från din registrerade e-postadress",
     "contact_support": "Kontakta support",
     "help": "",
-    "blog": "",
     "request_feature": "",
     "support": "Support",
     "cancel": "Avbryt",

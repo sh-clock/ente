@@ -27,6 +27,7 @@ import { ffmpegDetermineVideoDuration, ffmpegExec } from "./services/ffmpeg";
 import {
     defaultLocalBackendPort,
     localBackendOrigin,
+    setLocalBackendExpectedToken,
 } from "./services/local-backend";
 import {
     fsExists,
@@ -138,6 +139,13 @@ export const attachIPCHandlers = () => {
 
     handle("localAPIOrigin", () =>
         localBackendOrigin() ?? `http://127.0.0.1:${defaultLocalBackendPort}`);
+
+    // The renderer registers the vault token once the vault is ready; from
+    // then on the local backend rejects API calls without it.
+    handle("localBackendSetToken", (_, token: string) => {
+        if (typeof token == "string" && token)
+            setLocalBackendExpectedToken(token);
+    });
 
     handle("openDirectory", (_, dirPath: string) => openDirectory(dirPath));
 

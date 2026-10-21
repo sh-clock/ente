@@ -26,16 +26,19 @@ const createFFmpeg = () => {
         if (_ffmpeg === loading) _ffmpeg = undefined;
         throw error;
     };
-    const loading = ffmpeg
-        .load({
-            // The fork ships native ffmpeg for desktop; this web fallback
-            // points at a neutral placeholder (never ente's CDN).
-            coreURL: "https://assets.sh-clock.dev/ffmpeg-core-9.0.2/ffmpeg-core.js",
-            wasmURL:
-                "https://assets.sh-clock.dev/ffmpeg-core-9.0.2/ffmpeg-core.wasm",
-        })
-        .then(() => ffmpeg)
-        .catch(failed);
+    const loading = Promise.reject(
+        new Error(
+            "ffmpeg.wasm core is not bundled with this build. Desktop apps " +
+                "use the bundled native ffmpeg; a pure-web deployment must " +
+                "self-host ffmpeg-core (see @ffmpeg/ffmpeg docs) and point " +
+                "this loader at it.",
+        ),
+    ).then(() => ffmpeg) as Promise<FFmpeg>;
+    void loading.catch(() => {
+        // Already reported to the caller via the rejected promise; keep the
+        // lazy singleton resettable so a future bundle can retry.
+        if (_ffmpeg === loading) _ffmpeg = undefined;
+    });
     const exec = ffmpeg.exec.bind(ffmpeg);
     const probe = ffmpeg.ffprobe.bind(ffmpeg);
     ffmpeg.exec = (...args) => exec(...args).catch(failed);

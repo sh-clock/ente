@@ -31,6 +31,8 @@ one the user last saw.
 
 ## ML models
 
-The ML models are not bundled. If you need them, fetch them with
-[download-models.cmd](../download-models.cmd) (see its header for re-hosting
-notes) and pre-seed `<userData>/models` for offline installs.
+The ML models are not bundled. Online installs download them automatically
+from the public models.ente.com CDN on first ML enable (~251 MB: CLIP image +
+text, face detection + embedding). For offline installs, fetch them with
+[download-models.cmd](../../download-models.cmd) (see its header for
+re-hosting notes) and pre-seed `<userData>/assets/models`.

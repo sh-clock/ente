@@ -220,7 +220,6 @@
     "no_two_factor_recovery_key_message": "Por favor, envíe un correo electrónico a <a>{{emailID}}</a> desde la dirección de correo electrónico que usó para registrarse",
     "contact_support": "Contacta con soporte",
     "help": "Ayuda",
-    "blog": "Blog",
     "request_feature": "Solicitar una función",
     "support": "Soporte",
     "cancel": "Cancelar",

@@ -220,7 +220,6 @@
     "no_two_factor_recovery_key_message": "あなたの登録したメールアドレスから<a>{{emailID}}</a> にメールをお送りください",
     "contact_support": "お問い合わせ",
     "help": "Help",
-    "blog": "ブログ",
     "request_feature": "機能をリクエスト",
     "support": "サポート",
     "cancel": "キャンセル",
@@ -685,7 +684,7 @@
     "welcome_title": "<a/> へようこそ",
     "upload_to_library": "",
     "upload_reason_already_in_library": "",
-    "help_center": "Photos Help",
+    "help_center": "Photos ヘルプ",
     "save_a_copy": "コピーをPhotosに保存",
     "open_on_startup": "開始時に Photos を開く"
 }

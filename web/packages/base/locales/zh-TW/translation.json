@@ -220,7 +220,6 @@
     "no_two_factor_recovery_key_message": "請使用您註冊的電子郵件地址寄信至 <a>{{emailID}}</a>",
     "contact_support": "聯絡支援",
     "help": "說明",
-    "blog": "部落格",
     "request_feature": "提出功能需求",
     "support": "支援",
     "cancel": "取消",

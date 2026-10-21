@@ -1,3 +1,5 @@
+// Dormant in the fork: clients pass their own origin (the local backend
+// on desktop/web). Kept as the wasm/frb default constructor fallback.
 pub const PRODUCTION_API_ORIGIN: &str = "https://api.ente.com";
 
 // `origin` must be an origin. Preserving path prefixes is a best-effort

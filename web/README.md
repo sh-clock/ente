@@ -1,56 +1,50 @@
-# Ente's web apps
+# Photos (web renderer)
 
-Source code for Ente's web apps and supporting websites.
+This directory contains the web tree for **Photos**, the offline fork of
+[ente](https://github.com/ente-io/ente). It builds the Next.js renderer that
+the desktop app loads; it can also run as a plain web app during development,
+talking to a local vault backend.
 
-Live versions include:
+## What's here
 
-- Ente Photos: [photos.ente.com](https://photos.ente.com)
-- Ente Albums: [albums.ente.com](https://albums.ente.com)
-- Ente Auth: [auth.ente.com](https://auth.ente.com)
-- Ente Locker: [locker.ente.com](https://locker.ente.com)
+- `apps/photos` — the Photos app (the only app in this fork).
+- `packages/*` — shared libraries (`base`, `gallery`, `media`, `new`, `utils`,
+  `accounts`, `wasm`).
+- `packages/base/locales` — the 53 bundled locales (crowdin-compatible).
 
-To know more about Ente, see [our main README](../README.md) or visit [ente.com](https://ente.com).
+## Commands
 
-## Building from source
+All commands are run from this directory (`web/`):
 
-Install [Node](https://nodejs.org) and [Rust](https://www.rust-lang.org/tools/install).
-
-Install dependencies
-
-```sh
-npm ci
+```bash
+npm ci            # install dependencies
+npm run dev       # dev server for the web flavor (needs the local backend below)
+npm run build     # production build
+npm run lint      # eslint + lint-exceptions gate
+npm test          # unit tests
 ```
 
-Start a local development server
+The desktop renderer build is produced by `desktop/` (`build-renderer`
+script), which builds the same Next.js app with `_PHOTOS_IS_DESKTOP=1` so the
+app wires itself to the Electron bridge and the local vault backend.
 
-```sh
-npm run dev
+## Local backend
+
+The app stores everything in a local vault served by a museum-compatible
+loopback backend (`desktop/src/main/services/local-backend/`). When running
+the web flavor in development, start the backend standalone:
+
+```bash
+node desktop/scripts/local-backend-standalone.mjs
 ```
 
-That's it. The web app will automatically hot reload when you make changes.
+It listens on `http://127.0.0.1:41119` (override with
+`PHOTOS_LOCAL_BACKEND_PORT`). See
+[docs/PROTOCOL-INTEGRATION.md](../docs/PROTOCOL-INTEGRATION.md) for how this
+seam is designed to be replaced by a different backend.
 
-By default, `npm run dev` builds the Photos app. To run the public albums app, use `npm run dev:albums`. To run auth, use `npm run dev:auth`.
+## Attribution
 
-To see the full list of apps you can run (and other scripts that you can use), use `npm run`.
-
-> [!NOTE]
->
-> If `package-lock.json` has not changed since your last `npm ci`, you can use `npm install` as a faster incremental alternative.
-
-## Docker images
-
-A Docker image containing the self-hosting web apps is available from `ghcr.io/ente/web`. See [docs/docker.md](docs/docker.md) for more details.
-
-## Attributions
-
-City coordinates from [Simple Maps](https://simplemaps.com/data/world-cities)
-
-## 🌍 Translate
-
-[![Crowdin](https://badges.crowdin.net/ente-photos-web/localized.svg)](https://crowdin.com/project/ente-photos-web)
-
-The web apps can be translated in the [Ente Web Crowdin project](https://crowdin.com/project/ente-photos-web). See [docs/translations.md](docs/translations.md) for more details.
-
-## 💚 Contribute
-
-For more ways to contribute, see [CONTRIBUTING.md](../CONTRIBUTING.md).
+The Simple Maps city dataset (`world_cities.json`) is used for location
+search; see its license terms inside the file. This project is a fork of
+ente (AGPL-3.0): https://github.com/sh-clock/ente

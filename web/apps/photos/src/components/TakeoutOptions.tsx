@@ -152,11 +152,7 @@ export function TakeoutOptions({
                         {t("takeout_help_prompt")}{" "}
                     </span>
                     <Link
-                        href={
-                            provider == "apple"
-                                ? "https://github.com/sh-clock/ente"
-                                : "https://github.com/sh-clock/ente"
-                        }
+                        href="https://github.com/sh-clock/ente"
                         target="_blank"
                         rel="noopener"
                         sx={{

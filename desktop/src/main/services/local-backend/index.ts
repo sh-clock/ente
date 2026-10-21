@@ -28,3 +28,7 @@ export const startLocalBackendIfNeeded = async (
 };
 
 export const localBackendOrigin = () => backend?.origin;
+
+/** Register the vault token with the running backend (see LocalBackend). */
+export const setLocalBackendExpectedToken = (token: string) =>
+    backend?.setExpectedToken(token);

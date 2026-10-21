@@ -220,7 +220,6 @@
     "no_two_factor_recovery_key_message": "Lütfen kaydolduğun e-posta adresinden <a>{{emailID}}</a> adresine bir e-posta bırak",
     "contact_support": "Destek ile iletişime geç",
     "help": "Yardım",
-    "blog": "Blog",
     "request_feature": "Özellik İste",
     "support": "Destek",
     "cancel": "İptal",
@@ -682,10 +681,10 @@
     "auto_lock_1_minute": "",
     "auto_lock_5_minutes": "",
     "auto_lock_30_minutes": "",
-    "welcome_title": "<a/>'ye hoş geldin",
+    "welcome_title": "<a/>'a hoş geldin",
     "upload_to_library": "",
     "upload_reason_already_in_library": "",
     "help_center": "Photos Yardım",
-    "save_a_copy": "Bir kopyasını Photos’ye kaydet",
-    "open_on_startup": "Başlangıçta Photos’yi aç"
+    "save_a_copy": "Bir kopyasını Photos’a kaydet",
+    "open_on_startup": "Başlangıçta Photos’u aç"
 }

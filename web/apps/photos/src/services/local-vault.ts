@@ -21,7 +21,7 @@ import type { KeyAttributes } from "ente-accounts/services/user";
 import { isDesktop } from "ente-base/app";
 import log from "ente-base/log";
 import { haveMasterKeyInSession } from "ente-base/session-storage";
-import { saveAuthToken } from "ente-base/token";
+import { savedAuthToken, saveAuthToken } from "ente-base/token";
 import localforage from "localforage";
 import {
     saveMasterKeyInSessionAndSafeStore,
@@ -101,6 +101,19 @@ const generateVaultKeyAttributes = async (
     };
 };
 
+// Tell the local backend (via IPC, which browser pages cannot reach) which
+// token authenticates this vault, so that other origins on this machine
+// cannot issue API calls against it. No-op on web (no electron bridge).
+const registerVaultTokenWithBackend = async (token: string) => {
+    try {
+        await globalThis.electron?.localBackendSetToken(token);
+    } catch (e) {
+        // The backend runs open until a token is registered; failing to
+        // register is logged but must not block the boot.
+        log.error("Failed to register the vault token with the backend", e);
+    }
+};
+
 /**
  * Ensure that a local vault exists, creating one on first run, and that the
  * vault's master key is available in the current session.
@@ -111,7 +124,10 @@ const generateVaultKeyAttributes = async (
 export const ensureLocalVault = async () => {
     const user = savedLocalUser();
     if (user && savedKeyAttributes()) {
-        // Existing vault: restore the master key into this session.
+        // Existing vault: register its token with the backend, restore the
+        // master key into this session.
+        const token = await savedAuthToken();
+        if (token) await registerVaultTokenWithBackend(token);
         await updateSessionFromElectronSafeStorageIfNeeded();
         if (!haveMasterKeyInSession()) {
             const masterKey = await readMasterKeyLocally();
@@ -139,6 +155,7 @@ export const ensureLocalVault = async () => {
     });
     saveKeyAttributes(keyAttributes);
     saveAuthToken(token);
+    await registerVaultTokenWithBackend(token);
     await clearMasterKeyLocally();
     await saveMasterKeyInSessionAndSafeStore(masterKey);
     await saveMasterKeyLocally(masterKey);

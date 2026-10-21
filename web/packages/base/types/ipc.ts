@@ -24,6 +24,8 @@ export interface PersistedAppLockConfig {
 export interface Electron {
     appVersion: () => Promise<string>;
     localAPIOrigin: () => Promise<string>;
+    /** Register the vault token with the local backend (auth gate). */
+    localBackendSetToken: (token: string) => Promise<void>;
     logToDisk: (message: string) => void;
     openDirectory: (dirPath: string) => Promise<void>;
     openLogDirectory: () => Promise<void>;
@@ -52,9 +54,6 @@ export interface Electron {
     toggleAutoLaunch: () => Promise<void>;
     getNativeDeviceLockCapability: () => Promise<NativeDeviceLockCapability>;
     promptDeviceLock: (reason: string) => Promise<boolean>;
-
-    updateAndRestart: () => void;
-    updateOnNextRestart: (version: string) => void;
 
     fs: {
         exists: (path: string) => Promise<boolean>;

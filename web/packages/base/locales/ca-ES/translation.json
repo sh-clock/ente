@@ -220,7 +220,6 @@
     "no_two_factor_recovery_key_message": "Si us plau, envia un correu a <a>{{emailID}}</a> des de la teva adreça de correu registrada",
     "contact_support": "Contacta amb suport",
     "help": "Ajuda",
-    "blog": "Blog",
     "request_feature": "Sol·licita una funcionalitat",
     "support": "Suport",
     "cancel": "Cancel·la",
@@ -685,7 +684,7 @@
     "welcome_title": "Benvingut a <a/>",
     "upload_to_library": "",
     "upload_reason_already_in_library": "",
-    "help_center": "Ajuda d'Photos",
+    "help_center": "Ajuda de Photos",
     "save_a_copy": "Guarda una còpia a Photos",
     "open_on_startup": "Obre Photos en arrencar"
 }

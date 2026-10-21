@@ -220,7 +220,6 @@
     "no_two_factor_recovery_key_message": "يرجى إرسال بريد إلكتروني إلى <a>{{emailID}}</a> من عنوان بريدك الإلكتروني المسجل",
     "contact_support": "الاتصال بالدعم",
     "help": "المساعدة",
-    "blog": "المدونة",
     "request_feature": "طلب ميزة",
     "support": "الدعم",
     "cancel": "إلغاء",

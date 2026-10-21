@@ -220,7 +220,6 @@
     "no_two_factor_recovery_key_message": "Iš savo registruoto el. pašto adreso parašykite el. laišką adresu <a>{{{emailID}}</a>",
     "contact_support": "Susisiekti su pagalbos komanda",
     "help": "Pagalba",
-    "blog": "Tinklaraštis",
     "request_feature": "Prašyti funkcijos",
     "support": "Pagalba el. paštu",
     "cancel": "Atšaukti",

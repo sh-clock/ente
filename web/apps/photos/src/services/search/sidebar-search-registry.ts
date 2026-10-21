@@ -196,12 +196,6 @@ const sidebarActions = (): SidebarAction[] => {
             keywords: ["help", "docs"],
         },
         {
-            id: "help.blog",
-            label: t("blog"),
-            path: [helpCategory, t("blog")],
-            keywords: ["news"],
-        },
-        {
             id: "help.requestFeature",
             label: t("request_feature"),
             path: [helpCategory, t("request_feature")],

@@ -23,7 +23,7 @@ jobs:
                   cache: "npm"
                   cache-dependency-path: "web/package-lock.json"
 
-            # Restore-only; primed on main by warm-caches.yml.
+            # Restore-only cache (no priming workflow in this fork).
             - name: Restore Rust cache
               uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
               with:
@@ -52,9 +52,7 @@ jobs:
 
             - run: npm audit --audit-level critical
 
-            - run: _ENTE_IS_DESKTOP=1 npm run build:photos
-
-            - run: npm run build:wasm
+            - run: _PHOTOS_IS_DESKTOP=1 npm run build:photos
 
             - run: node scripts/lint.mjs
 

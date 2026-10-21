@@ -220,7 +220,6 @@
     "no_two_factor_recovery_key_message": "Надішліть листа на <a>{{emailID}}</a> з вашої зареєстрованої поштової адреси",
     "contact_support": "Звернутися до служби підтримки",
     "help": "Довідка",
-    "blog": "Блог",
     "request_feature": "Запропонувати функцію",
     "support": "Підтримка",
     "cancel": "Скасувати",
