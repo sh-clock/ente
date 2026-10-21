@@ -259,11 +259,9 @@ const updateMLStatusSnapshot = async () => {
     }
 };
 
-const interimCounts = (): Pick<
-    Extract<MLStatus, { phase: "scheduled" }>,
-    "nSyncedFiles" | "nTotalFiles"
-> => {
+const interimCounts = () => {
     const snap = _state.mlStatusSnapshot;
+    // Every non-disabled variant carries the counts (clustering included).
     if (snap && snap.phase != "disabled")
         return { nSyncedFiles: snap.nSyncedFiles, nTotalFiles: snap.nTotalFiles };
     return { nSyncedFiles: 0, nTotalFiles: 0 };
