@@ -1,1 +1,1 @@
-ente - almacenamiento de fotos encriptado
+Fotos - Galería sin conexión

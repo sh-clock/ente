@@ -71,7 +71,7 @@ jobs:
               with:
                   shared-key: rust-flutter
 
-            - run: cargo codegen frb
+            - run: cargo codegen frb photos
               working-directory: rust
 
             - run: cargo clippy -p ente-photos-frb --features flutter --all-targets --locked

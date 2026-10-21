@@ -20,7 +20,6 @@ dev_dependencies:
 
 flutter:
   assets:
-    - assets/apps/
     - assets/ente_wordmark.svg
   fonts:
     - family: Inter

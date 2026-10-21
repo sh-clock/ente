@@ -1,1 +1,1 @@
-ente é um aplicativo de armazenamento de fotos criptografado de ponta a ponta
+Galeria de fotos privada e offline com busca, rostos e álbums no aparelho.

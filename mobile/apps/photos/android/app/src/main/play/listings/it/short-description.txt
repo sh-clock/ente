@@ -1,1 +1,1 @@
-ente è un'applicazione di archiviazione foto e video crittografata end-to-end
+Galleria foto privata e offline con ricerca, volti e album sul dispositivo.

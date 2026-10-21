@@ -1,1 +1,1 @@
-ente ist eine Ende-zu-Ende-verschlüsselte Fotospeicher-App
+Private, Offline-Fotogalerie mit On-Device-Suche, Gesichter und Alben.

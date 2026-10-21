@@ -9,7 +9,6 @@ export 'components/buttons/fab_component.dart';
 export 'components/buttons/icon_button_component.dart';
 export 'components/centered_constrained_component.dart';
 export 'components/divider_component.dart';
-export 'components/ente_app_icon.dart';
 export 'components/filter_chip_component.dart';
 export 'components/loading/loading_component.dart';
 export 'components/loading/loading_dialog_component.dart';

@@ -14,6 +14,11 @@ import "package:shared_preferences/shared_preferences.dart";
 // runtime to fetch the memory-lane background-music manifest; re-host
 // by pointing _manifestURL at your own mirror.
 const _manifestURL = "https://music.ente.com/tracks.json";
+// Off by default: this fork's posture is that nothing leaves the device
+// unless the user opted in. Flip to true (and preferably point _manifestURL
+// at your own mirror) to enable the remote manifest refresh; the cached
+// manifest keeps working offline either way.
+const _manifestFetchEnabled = false;
 const _manifestPreferenceKey = "memory_music_manifest";
 
 String memoryMusicCacheFileName(String url) =>
@@ -95,6 +100,10 @@ class MemoryMusicService {
   }
 
   Future<void> _refreshManifest() async {
+    if (!_manifestFetchEnabled) {
+      _manifestRefreshed = true;
+      return;
+    }
     try {
       final manifest = await _fetchManifest();
       final tracks = _parseManifest(manifest);

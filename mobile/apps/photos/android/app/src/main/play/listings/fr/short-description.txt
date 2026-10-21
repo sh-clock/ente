@@ -1,1 +1,1 @@
-ente est une application de stockage de photos chiffrées de bout en bout
+Galerie privée hors ligne : recherche, visages et albums sur l'appareil.

@@ -58,14 +58,14 @@ function check() {
     const version = sourceVersion();
     expect(
         "package-lock.json",
-        value(files.packageLock, /"name": "ente",\n\s+"version": "([^"]+)"/),
+        value(files.packageLock, /"name": "photos",\n\s+"version": "([^"]+)"/),
         version,
     );
     expect(
         'package-lock.json packages[""]',
         value(
             files.packageLock,
-            /"": \{\n\s+"name": "ente",\n\s+"version": "([^"]+)"/,
+            /"": \{\n\s+"name": "photos",\n\s+"version": "([^"]+)"/,
         ),
         version,
     );
@@ -75,17 +75,17 @@ function setVersion(version) {
     validateVersion(version);
     replace(
         files.packageJson,
-        /("name": "ente",\n\s+"version": ")[^"]+(")/,
+        /("name": "photos",\n\s+"version": ")[^"]+(")/,
         (_m, a, b) => `${a}${version}${b}`,
     );
     replace(
         files.packageLock,
-        /("name": "ente",\n\s+"version": ")[^"]+(")/,
+        /("name": "photos",\n\s+"version": ")[^"]+(")/,
         (_m, a, b) => `${a}${version}${b}`,
     );
     replace(
         files.packageLock,
-        /("": \{\n\s+"name": "ente",\n\s+"version": ")[^"]+(")/,
+        /("": \{\n\s+"name": "photos",\n\s+"version": ")[^"]+(")/,
         (_m, a, b) => `${a}${version}${b}`,
     );
     check();

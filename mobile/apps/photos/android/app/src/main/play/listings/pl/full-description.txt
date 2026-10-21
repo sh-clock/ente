@@ -1,0 +1,10 @@
+Zdjęcia to prywatna galeria offline. Twoje zdjęcia zostają na Twoim urządzeniu, w lokalnym sejfie szyfrowanym end-to-end w spoczynku: bez konta, bez chmury, nic nie opuszcza urządzenia.
+
+Uczenie maszynowe na urządzeniu, na Twoim sprzęcie:
+- Magiczne wyszukiwanie: opisz zdjęcie słowami i znajdź je
+- Automatyczne grupowanie twarzy i widok Osoby
+- Albumy, ulubione i kosz z przywracaniem
+
+Wszystko, czego oczekujesz od galerii: szybka siatka, duże miniatury, odtwarzanie wideo i udostępnianie offline.
+
+Bez reklam. Bez trackerów. Bez subskrypcji. Open source na github.com/sh-clock/ente.
