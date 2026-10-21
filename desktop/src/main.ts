@@ -147,8 +147,11 @@ const registerPrivilegedSchemes = () => {
 };
 
 const attachProcessHandlers = () => {
-    // Electron's default SIGINT shutdown can lose recent storage writes in dev.
+    // Electron's default signal shutdown can lose recent storage writes in dev.
     process.on("SIGINT", () => app.quit());
+    // Linux desktop environments and package managers signal with SIGTERM;
+    // without this the before-quit store flush is skipped for them.
+    process.on("SIGTERM", () => app.quit());
 };
 
 // loadURL does not retry if the Next dev server returns ERR_CONNECTION_REFUSED.

@@ -132,16 +132,69 @@ export class LocalVaultStore {
         this.stateFile = path.join(dataDir, "state.json");
         fs.mkdirSync(this.blobsDir, { recursive: true });
         this.state = this.load();
+        this.seedMonotonicClock();
     }
 
     private load(): LocalVaultState {
-        try {
-            const raw = fs.readFileSync(this.stateFile, "utf8");
+        const parse = (raw: string): LocalVaultState => {
             const parsed = JSON.parse(raw) as Partial<LocalVaultState>;
             return { ...emptyState(), ...parsed };
+        };
+        let raw: string | undefined;
+        try {
+            raw = fs.readFileSync(this.stateFile, "utf8");
         } catch {
-            return emptyState();
+            // No state.json: first boot — unless a .bak exists (a crash
+            // between the two renames of a flush); recover from it.
+            try {
+                return parse(fs.readFileSync(`${this.stateFile}.bak`, "utf8"));
+            } catch {
+                return emptyState();
+            }
         }
+        try {
+            return parse(raw);
+        } catch (error) {
+            // state.json is corrupt: try the .bak the previous flush kept.
+            // Refuse to silently reset the vault — a reset would drop every
+            // row and orphan every blob with no recovery path.
+            try {
+                const recovered = parse(
+                    fs.readFileSync(`${this.stateFile}.bak`, "utf8"),
+                );
+                console.error(
+                    "[local-backend] state.json corrupt; recovered from .bak",
+                    error,
+                );
+                return recovered;
+            } catch {
+                throw new Error(
+                    `[local-backend] state.json and state.json.bak are both ` +
+                        `unreadable; refusing to reset the vault. Restore a valid ` +
+                        `state.json into ${this.dataDir} before restarting. ` +
+                        `(${String(error)})`,
+                );
+            }
+        }
+    }
+
+    /** Seed the monotonic clock from persisted timestamps so a system-clock
+     * regression across restarts can never freeze strict-`>` diffs (every
+     * diff filter would skip rows whose regenerated timestamps went
+     * backwards). */
+    private seedMonotonicClock() {
+        let maxSeen = 0;
+        const consider = (t: number | undefined) => {
+            if (typeof t === "number" && t > maxSeen) maxSeen = t;
+        };
+        for (const c of this.state.collections) consider(c.updationTime);
+        for (const f of this.state.files) consider(f.updationTime);
+        for (const t of this.state.trash) consider(t.updatedAt);
+        for (const byID of Object.values(this.state.userEntities))
+            for (const e of byID) consider(e.updatedAt);
+        for (const fd of Object.values(this.state.fileData))
+            consider(fd.updatedAt);
+        if (maxSeen > this.lastTime) this.lastTime = maxSeen;
     }
 
     /** Monotonic epoch-microseconds clock (diffs paginate on updatedAt). */
@@ -390,12 +443,49 @@ export class LocalVaultStore {
         this.dirty = false;
         try {
             const tmp = `${this.stateFile}.tmp`;
-            fs.writeFileSync(tmp, JSON.stringify(this.state));
+            // write + fsync the tmp file so a crash can never publish a
+            // zeroed/partial state.json under its final name.
+            const fd = fs.openSync(tmp, "w");
+            try {
+                fs.writeFileSync(fd, JSON.stringify(this.state));
+                fs.fsyncSync(fd);
+            } finally {
+                fs.closeSync(fd);
+            }
+            // Keep the previous generation for corruption recovery, then
+            // publish. A crash between the renames leaves state.json absent
+            // but .bak present — load() recovers from it.
+            try {
+                fs.renameSync(this.stateFile, `${this.stateFile}.bak`);
+            } catch {
+                // First flush (no previous state): nothing to back up.
+            }
             fs.renameSync(tmp, this.stateFile);
+            // fsync the directory so the renames themselves are durable.
+            try {
+                const dirFd = fs.openSync(this.dataDir, "r");
+                try {
+                    fs.fsyncSync(dirFd);
+                } finally {
+                    fs.closeSync(dirFd);
+                }
+            } catch {
+                // Best-effort: some platforms refuse fsync on directories.
+            }
         } catch (e) {
-            // The in-memory state remains authoritative; retry on next mark.
+            // The in-memory state remains authoritative; retry shortly.
             this.dirty = true;
             console.error("[local-backend] state flush failed", e);
+            if (!this.flushTimer) {
+                this.flushTimer = setTimeout(
+                    () => {
+                        this.flushTimer = undefined;
+                        this.flush();
+                    },
+                    5_000,
+                );
+                this.flushTimer.unref?.();
+            }
         }
     }
 
@@ -410,6 +500,17 @@ export class LocalVaultStore {
     writeBlob(objectKey: string, data: Buffer): string {
         const p = this.blobPath(objectKey);
         fs.writeFileSync(p, data);
+        // Non-blocking fsync so a power cut can't leave a truncated blob
+        // behind a live state.json row (the synchronous write is complete
+        // before this fires; fsync runs on the threadpool).
+        try {
+            fs.open(p, "r+", (err, fd) => {
+                if (err) return;
+                fs.fsync(fd, () => fs.close(fd, () => undefined));
+            });
+        } catch {
+            // Best-effort durability; never break the write path.
+        }
         return p;
     }
 

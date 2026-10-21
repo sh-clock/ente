@@ -46,6 +46,10 @@ const localUser = { id: 1, email: "local@vault", role: "owner" };
 
 const trashRetentionMicros = 30 * 24 * 60 * 60 * 1000 * 1000; // 30 days
 
+/** A single 206 response serves at most this many bytes (a server may
+ * return a subset of the requested range); caps range-buffer allocations. */
+const MAX_RANGE_BYTES = 32 * 1024 * 1024;
+
 const startLocalBackend = (opts: LocalBackendOptions): Promise<LocalBackend> =>
     new Promise((resolve, reject) => {
         const log = opts.log ?? console.log;
@@ -308,7 +312,12 @@ const handle = async (
         }
     }
 
-    log(`[local-backend] ${method} ${pathname}${url.search}`);
+    log(
+        `[local-backend] ${method} ${pathname}${url.search.replace(
+            /([?&])x-signature=[^&]*/i,
+            "$1x-signature=<redacted>",
+        )}`,
+    );
 
     // ------------------------------------------------------- blob transport
 
@@ -382,6 +391,12 @@ const handle = async (
             return;
         }
         const key = decodeURIComponent(pathname.slice("/blobs/".length));
+        // Keys are 32-hex object keys; anything else (incl. `..`) is a 404,
+        // never a filesystem write.
+        if (!/^[0-9a-f]{32}$/.test(key)) {
+            sendJSON(res, 404, { error: "blob not found" });
+            return;
+        }
         const part = numericParam(url, "part");
         const body = await readBody(req);
         if (part) {
@@ -408,6 +423,10 @@ const handle = async (
             return;
         }
         const key = decodeURIComponent(pathname.slice("/blobs/".length));
+        if (!/^[0-9a-f]{32}$/.test(key)) {
+            sendJSON(res, 404, { error: "blob not found" });
+            return;
+        }
         const body = await readBody(req);
         completeFromXML(store, `${origin}/blobs/${key}`, body);
         sendJSON(res, 200, {});
@@ -415,7 +434,14 @@ const handle = async (
     }
 
     if (method === "GET" && pathname.startsWith("/blobs/")) {
-        serveBlob(store, req, res, decodeURIComponent(pathname.slice("/blobs/".length)));
+        const key = decodeURIComponent(pathname.slice("/blobs/".length));
+        // Keys are 32-hex object keys; anything else (incl. `..`) is a 404,
+        // never a filesystem lookup.
+        if (!/^[0-9a-f]{32}$/.test(key)) {
+            sendJSON(res, 404, { error: "blob not found" });
+            return;
+        }
+        serveBlob(store, req, res, key);
         return;
     }
 
@@ -535,12 +561,12 @@ const handle = async (
             sendJSON(res, 404, { error: "collection not found" });
             return;
         }
-        if (pathname.endsWith("magic-metadata")) {
-            collection.magicMetadata = body.magicMetadata;
-        } else if (pathname.includes("public")) {
+        if (pathname.includes("public")) {
             collection.pubMagicMetadata = body.magicMetadata;
-        } else {
+        } else if (pathname.includes("sharee")) {
             collection.sharedMagicMetadata = body.magicMetadata;
+        } else {
+            collection.magicMetadata = body.magicMetadata;
         }
         collection.updationTime = store.nowMicros();
         store.markDirty();
@@ -551,6 +577,10 @@ const handle = async (
     if (method === "POST" && pathname === "/collections/add-files") {
         const body = await readJSON(req);
         const collectionID = Number(body.collectionID);
+        if (!collectionByID(store, collectionID)) {
+            sendJSON(res, 404, { error: "collection not found" });
+            return;
+        }
         const files: { id: number; encryptedKey: string; keyDecryptionNonce: string }[] =
             body.files ?? [];
         for (const item of files) {
@@ -691,6 +721,10 @@ const handle = async (
 
     if (method === "POST" && pathname === "/files") {
         const body = await readJSON(req);
+        if (!collectionByID(store, Number(body.collectionID))) {
+            sendJSON(res, 404, { error: "collection not found" });
+            return;
+        }
         const file: StoredFile = {
             id: store.allocateFileID(),
             collectionID: Number(body.collectionID),
@@ -709,7 +743,10 @@ const handle = async (
                 ),
                 size: Number(body.thumbnail?.size ?? 0),
             },
-            ...(body.info !== undefined ? { info: body.info } : {}),
+            // The upstream museum server populates info; the client never
+            // sends it. Synthesize it so Large files / Find duplicates and
+            // the ML size guard work against the local backend.
+            info: body.info ?? { fileSize: Number(body.file?.size ?? 0) },
             updationTime: store.nowMicros(),
             metadata: body.metadata ?? {},
             ...(body.pubMagicMetadata !== undefined
@@ -729,6 +766,10 @@ const handle = async (
     if (method === "POST" && pathname === "/files/copy") {
         const body = await readJSON(req);
         const dstCollectionID = Number(body.dstCollectionID);
+        if (!collectionByID(store, dstCollectionID)) {
+            sendJSON(res, 404, { error: "collection not found" });
+            return;
+        }
         const files: { id: number; encryptedKey: string; keyDecryptionNonce: string }[] =
             body.files ?? [];
         const oldToNewFileIDMap: Record<string, number> = {};
@@ -747,6 +788,10 @@ const handle = async (
                 updationTime: store.nowMicros(),
             });
         }
+        // Museum semantics: copying into a collection must advance its
+        // updationTime, or clients that already synced it never re-diff it.
+        const dstCollection = collectionByID(store, dstCollectionID);
+        if (dstCollection) dstCollection.updationTime = store.nowMicros();
         store.markDirty();
         sendJSON(res, 200, { oldToNewFileIDMap });
         return;
@@ -754,7 +799,11 @@ const handle = async (
 
     if (method === "POST" && pathname === "/files/trash") {
         const body = await readJSON(req);
-        const fileIDs: number[] = (body.fileIDs ?? []).map(Number);
+        // The client sends {items:[{fileID,collectionID}]} (the upstream
+        // museum shape); {fileIDs} is the older variant. Accept both.
+        const fileIDs: number[] = body.items
+            ? body.items.map((i: { fileID: unknown }) => Number(i.fileID))
+            : (body.fileIDs ?? []).map(Number);
         const updatedAt = store.nowMicros();
         const deleteBy = updatedAt + trashRetentionMicros;
         const trashedCollectionIDs = new Set<number>();
@@ -789,13 +838,27 @@ const handle = async (
     if (method === "POST" && pathname === "/trash/delete") {
         const body = await readJSON(req);
         const fileIDs = new Set<number>((body.fileIDs ?? []).map(Number));
-        await deleteTrashItems(store, (t) => fileIDs.has(t.file.id));
+        // Never purge rows the user already restored out of the trash.
+        await deleteTrashItems(
+            store,
+            (t) => fileIDs.has(t.file.id) && !t.isRestored,
+        );
         sendJSON(res, 200, {});
         return;
     }
 
     if (method === "POST" && pathname === "/trash/empty") {
-        await deleteTrashItems(store, (t) => !t.isDeleted);
+        // Honor the client's cutoff (protect items trashed after its last
+        // pull) and never purge rows that were restored out of the trash.
+        const body = await readJSON(req).catch(() => ({}));
+        const cutoff = Number(body.lastUpdatedAt ?? 0) || 0;
+        await deleteTrashItems(
+            store,
+            (t) =>
+                !t.isDeleted &&
+                !t.isRestored &&
+                (cutoff === 0 || t.updatedAt <= cutoff),
+        );
         sendJSON(res, 200, {});
         return;
     }
@@ -856,6 +919,7 @@ const handle = async (
         const body = await readJSON(req);
         const metadataList: { id: number; magicMetadata: unknown }[] =
             body.metadataList ?? [];
+        const touchedCollectionIDs = new Set<number>();
         for (const item of metadataList) {
             const file = store.files.find((f) => f.id === Number(item.id));
             if (!file) continue;
@@ -865,6 +929,13 @@ const handle = async (
                 file.magicMetadata = item.magicMetadata;
             }
             file.updationTime = store.nowMicros();
+            touchedCollectionIDs.add(file.collectionID);
+        }
+        // Museum semantics: file-row mutations must bump the owning
+        // collection's updationTime, or synced clients skip the re-diff.
+        for (const cid of touchedCollectionIDs) {
+            const collection = collectionByID(store, cid);
+            if (collection) collection.updationTime = store.nowMicros();
         }
         store.markDirty();
         sendJSON(res, 200, {});
@@ -1350,7 +1421,12 @@ const completeFromXML = (
 
 const deleteTrashItems = (
     store: LocalVaultStore,
-    predicate: (t: { isDeleted: boolean; file: { id: number } }) => boolean,
+    predicate: (t: {
+        isDeleted: boolean;
+        isRestored: boolean;
+        updatedAt: number;
+        file: { id: number };
+    }) => boolean,
 ) => {
     const purgedIDs: number[] = [];
     for (const item of store.trash) {
@@ -1376,11 +1452,13 @@ const serveBlob = (
     objectKey: string,
 ) => {
     const stats = store.statBlob(objectKey);
-    if (!stats) {
+    if (!stats || !stats.isFile()) {
         sendJSON(res, 404, { error: "blob not found" });
         return;
     }
     const total = stats.size;
+    // Range serving on an empty blob is a full-body 200 (a 206 with an
+    // inverted/empty Content-Range would be malformed).
     const range = req.headers.range;
     const baseHeaders = {
         ...corsHeaders(),
@@ -1388,12 +1466,16 @@ const serveBlob = (
         "Content-Type": "application/octet-stream",
         ETag: etagFor(Buffer.from(objectKey)),
     };
-    if (range) {
+    if (range && total > 0) {
         const match = range.match(/bytes=(\d*)-(\d*)/);
         let start = match?.[1] ? Number(match[1]) : 0;
         let end = match?.[2] ? Number(match[2]) : total - 1;
         if (Number.isNaN(start) || start >= total) start = 0;
         if (Number.isNaN(end) || end >= total) end = total - 1;
+        if (end < start) end = total - 1;
+        // A 206 may cover a subset of the requested range: cap it so a
+        // hostile `bytes=0-536870911` cannot allocate the blob in RAM.
+        end = Math.min(end, start + MAX_RANGE_BYTES - 1);
         const chunk = store.readBlobRange(objectKey, start, end);
         if (!chunk) {
             sendJSON(res, 404, { error: "blob read failed" });
@@ -1409,5 +1491,8 @@ const serveBlob = (
     }
     res.writeHead(200, { ...baseHeaders, "Content-Length": total });
     const stream = fs.createReadStream(store.blobPath(objectKey));
+    // If the blob vanished (purge race) or resolved to a directory, destroy
+    // the socket instead of leaving the response hung forever.
+    stream.on("error", () => res.destroy());
     stream.pipe(res);
 };

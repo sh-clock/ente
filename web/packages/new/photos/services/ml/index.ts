@@ -54,7 +54,14 @@ let _state = new MLState();
 let _didInitML = false;
 
 const worker = () =>
-    (_state.comlinkWorker ??= createComlinkWorker()).then((cw) => cw.remote);
+    (_state.comlinkWorker ??= createComlinkWorker()
+        .catch((error) => {
+            // Don't cache the rejection: a failed spawn must stay retryable
+            // (disable+enable ML), and status callers surface it as an error.
+            _state.comlinkWorker = undefined;
+            throw error;
+        }))
+        .then((cw) => cw.remote);
 
 const createComlinkWorker = async () => {
     const electron = ensureElectron();
@@ -237,8 +244,30 @@ export const mlStatusSnapshot = (): MLStatus | undefined => {
 
 const triggerStatusUpdate = () => void updateMLStatusSnapshot();
 
-const updateMLStatusSnapshot = async () =>
-    setMLStatusSnapshot(await getMLStatus());
+const updateMLStatusSnapshot = async () => {
+    try {
+        setMLStatusSnapshot(await getMLStatus());
+    } catch (error) {
+        // Worker creation failed (the utility process didn't spawn): surface
+        // it instead of leaving an eternal "Scheduled" with no error.
+        setMLStatusSnapshot({
+            phase: "scheduled",
+            phaseFailed: true,
+            errorMessage: `ML worker failed to start: ${String(error)}`,
+            ...interimCounts(),
+        });
+    }
+};
+
+const interimCounts = (): Pick<
+    Extract<MLStatus, { phase: "scheduled" }>,
+    "nSyncedFiles" | "nTotalFiles"
+> => {
+    const snap = _state.mlStatusSnapshot;
+    if (snap && snap.phase != "disabled")
+        return { nSyncedFiles: snap.nSyncedFiles, nTotalFiles: snap.nTotalFiles };
+    return { nSyncedFiles: 0, nTotalFiles: 0 };
+};
 
 const setMLStatusSnapshot = (snapshot: MLStatus) => {
     _state.mlStatusSnapshot = snapshot;
