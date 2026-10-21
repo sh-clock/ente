@@ -28,9 +28,11 @@ const createFFmpeg = () => {
     };
     const loading = ffmpeg
         .load({
-            coreURL: "https://assets.ente.com/ffmpeg-core-9.0.2/ffmpeg-core.js",
+            // The fork ships native ffmpeg for desktop; this web fallback
+            // points at a neutral placeholder (never ente's CDN).
+            coreURL: "https://assets.sh-clock.dev/ffmpeg-core-9.0.2/ffmpeg-core.js",
             wasmURL:
-                "https://assets.ente.com/ffmpeg-core-9.0.2/ffmpeg-core.wasm",
+                "https://assets.sh-clock.dev/ffmpeg-core-9.0.2/ffmpeg-core.wasm",
         })
         .then(() => ffmpeg)
         .catch(failed);

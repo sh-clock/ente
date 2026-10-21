@@ -29,9 +29,11 @@ const createDefaultSettings = (): Settings => ({
     previewUploadV2Enabled: false,
     mapEnabled: false,
     cfUploadProxyDisabled: false,
-    castURL: "https://cast.ente.com",
-    embedURL: "https://embed.ente.com",
-    customDomainCNAME: "my.ente.com",
+    // Cast and embed were removed in the fork; neutral placeholder defaults
+    // (no reader exists for these values).
+    castURL: "",
+    embedURL: "",
+    customDomainCNAME: "",
 });
 
 class SettingsState {

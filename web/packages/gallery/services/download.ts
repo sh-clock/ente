@@ -150,8 +150,10 @@ const publicAlbums_downloadThumbnail = async (
         if (customOrigin) {
             return fetchPublicCollectionFile(file.id, "thumbnail", credentials);
         } else {
+            // Unreachable in the fork (public albums feature removed); the
+            // placeholder keeps any accidental call off ente's servers.
             return fetch(
-                `https://public-albums.ente.com/preview/?fileID=${file.id}`,
+                `https://public-albums.sh-clock.dev/preview/?fileID=${file.id}`,
                 {
                     headers:
                         authenticatedPublicAlbumsRequestHeaders(credentials),
@@ -174,8 +176,9 @@ const publicAlbums_downloadFile = async (
         if (customOrigin) {
             return fetchPublicCollectionFile(file.id, "file", credentials);
         } else {
+            // Unreachable in the fork (public albums feature removed).
             return fetch(
-                `https://public-albums.ente.com/download/?fileID=${file.id}`,
+                `https://public-albums.sh-clock.dev/download/?fileID=${file.id}`,
                 {
                     headers:
                         authenticatedPublicAlbumsRequestHeaders(credentials),
