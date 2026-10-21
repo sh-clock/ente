@@ -24,6 +24,7 @@ workspace:
   - packages/backup_exclusion
   - packages/base
   - packages/configuration
+  - packages/contacts
   - packages/ente_components
   - packages/ente_crypto_api
   - packages/ente_crypto_dart_adapter
@@ -45,6 +46,7 @@ workspace:
   - packages/network
   - packages/qr
   - packages/screen_cover
+  - packages/sharing
   - packages/strings
   - packages/ui
   - packages/utils
