@@ -253,12 +253,13 @@ interface ManageMLProps {
 const ManageML: React.FC<ManageMLProps> = ({ mlStatus, onDisableML }) => {
     const { showMiniDialog } = useBaseContext();
 
-    const { phase, phaseFailed, nSyncedFiles, nTotalFiles } = mlStatus;
+    const { phase, phaseFailed, errorMessage, nSyncedFiles, nTotalFiles } =
+        mlStatus;
 
     let status: string;
     switch (phase) {
         case "scheduled":
-            status = t("indexing_status_scheduled");
+            status = phaseFailed ? t("error") : t("indexing_status_scheduled");
             break;
         case "fetching":
             status = t("indexing_status_fetching");
@@ -329,6 +330,18 @@ const ManageML: React.FC<ManageMLProps> = ({ mlStatus, onDisableML }) => {
                     </Typography>
                 }
             />
+            {errorMessage && (
+                <Typography
+                    variant="small"
+                    sx={{ color: "text.faint", px: 1, wordBreak: "break-word" }}
+                >
+                    {errorMessage}
+                    <br />
+                    {/* Diagnostic path; intentionally not localized. */}
+                    Disable and re-enable ML search to retry the model
+                    download.
+                </Typography>
+            )}
         </Stack>
     );
 };

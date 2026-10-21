@@ -70,6 +70,11 @@ interface IndexableItem {
 export class MLWorker {
     public state: WorkerState = "init";
     public clusteringProgress: ClusteringProgress | undefined;
+    /** Set when indexing is suspended because ML init failed (e.g. the
+     * model download could not complete); surfaced via MLStatus. */
+    public get mlInitError(): string | undefined {
+        return _blockingMLInitError?.message;
+    }
 
     private electron: ElectronMLWorker | undefined;
     private delegate: MLWorkerDelegate | undefined;
@@ -533,7 +538,12 @@ const isMLImageError = (e: unknown): e is Error =>
 
 const isMLDecodeError = (e: unknown) => isNamedError(e, "ml_decode");
 
-const isMLInitError = (e: unknown): e is Error => isNamedError(e, "ml_init");
+const isMLInitError = (e: unknown): e is Error =>
+    isNamedError(e, "ml_init") ||
+    // Asset (model) download failures cross the native boundary as plain
+    // errors whose message is prefixed with "Assets:"; treat them as init
+    // failures so the worker suspends instead of retry-storming the CDN.
+    (e instanceof Error && e.message.startsWith("Assets:"));
 
 // Native model sessions serialize anyway; keep only one inference outstanding.
 let _analyzeImageQueue: Promise<unknown> = Promise.resolve();

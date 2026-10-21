@@ -3,6 +3,7 @@ import { blobCache } from "ente-base/blob-cache";
 import { boxSeal, encryptBox, generateKey } from "ente-base/crypto";
 import { haveWindow } from "ente-base/env";
 import { authenticatedRequestHeaders, ensureOk } from "ente-base/http";
+import log from "ente-base/log";
 import { apiURL } from "ente-base/origins";
 import { groupFilesByCollectionID } from "ente-gallery/utils/file";
 import {
@@ -202,13 +203,25 @@ const getCollections = async (
     ensureOk(res);
     const { collections } = CollectionsResponse.parse(await res.json());
     return Promise.all(
-        collections.map(async (c) => ({
-            id: c.id,
-            updationTime: c.updationTime,
-            collection: c.isDeleted
-                ? undefined
-                : await decryptRemoteKeyAndCollection(c),
-        })),
+        collections.map(async (c) => {
+            if (c.isDeleted) return { id: c.id, updationTime: c.updationTime };
+            try {
+                return {
+                    id: c.id,
+                    updationTime: c.updationTime,
+                    collection: await decryptRemoteKeyAndCollection(c),
+                };
+            } catch (e) {
+                // A collection we cannot decrypt (e.g. left over from a
+                // previous vault on this backend) must not poison the whole
+                // pull: quarantine it by treating it as deleted locally.
+                log.error(
+                    `Quarantining collection ${c.id}: key decryption failed`,
+                    e,
+                );
+                return { id: c.id, updationTime: c.updationTime };
+            }
+        }),
     );
 };
 

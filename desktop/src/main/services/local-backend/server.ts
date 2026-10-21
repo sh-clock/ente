@@ -36,6 +36,10 @@ export interface LocalBackend {
      * `X-Auth-Token` header.
      */
     setExpectedToken: (token: string) => void;
+    /** Forget the vault token (logout); reopens the API + stops signing. */
+    clearExpectedToken: () => void;
+    /** Persist the store state without stopping the server. */
+    flush: () => void;
 }
 
 const localUser = { id: 1, email: "local@vault", role: "owner" };
@@ -46,11 +50,21 @@ const startLocalBackend = (opts: LocalBackendOptions): Promise<LocalBackend> =>
     new Promise((resolve, reject) => {
         const log = opts.log ?? console.log;
         const store = new LocalVaultStore(opts.dataDir);
+        // Garbage-collect soft-deleted rows and unreferenced blobs left over
+        // from previous sessions (permanent deletes, 60d-old tombstones).
+        try {
+            store.sweepExpiredTombstones();
+        } catch (e) {
+            log("[local-backend] tombstone sweep failed", e);
+        }
         const tries = opts.portTries ?? 10;
         // The renderer registers the vault token over IPC once the vault is
         // ready; until then (and in the standalone dev server) the server
         // runs open, so the boot-time origin discovery cannot 401.
-        const authState = { expectedToken: undefined as string | undefined };
+        const authState: AuthState = {
+            expectedToken: undefined,
+            presignSecret: undefined,
+        };
 
         const attempt = (offset: number) => {
             if (offset >= tries) {
@@ -95,7 +109,16 @@ const startLocalBackend = (opts: LocalBackendOptions): Promise<LocalBackend> =>
                     close,
                     setExpectedToken: (token: string) => {
                         authState.expectedToken = token;
+                        // Blob write URLs are HMAC-signed with a secret
+                        // derived from the token, so unauthenticated local
+                        // processes cannot PUT/overwrite blobs at will.
+                        authState.presignSecret = derivePresignSecret(token);
                     },
+                    clearExpectedToken: () => {
+                        authState.expectedToken = undefined;
+                        authState.presignSecret = undefined;
+                    },
+                    flush: () => store.flush(),
                 });
             });
         };
@@ -106,6 +129,66 @@ const startLocalBackend = (opts: LocalBackendOptions): Promise<LocalBackend> =>
 export default startLocalBackend;
 
 // --------------------------------------------------------------------- utils
+
+interface AuthState {
+    expectedToken: string | undefined;
+    /** HMAC secret for signing blob write URLs (set with the token). */
+    presignSecret: Buffer | undefined;
+}
+
+const presignTTLSeconds = 24 * 60 * 60; // 24h; generous for multipart sets
+
+const derivePresignSecret = (token: string) =>
+    crypto.createHash("sha256").update(`photos-presign:${token}`).digest();
+
+/**
+ * Mint a blob write URL. When a vault token is registered the URL carries
+ * an expiry + HMAC signature that the blob write routes verify; without a
+ * token (boot window / standalone dev server) URLs stay unsigned, matching
+ * the open-server behaviour of that phase.
+ */
+const signedBlobWriteURL = (
+    origin: string,
+    key: string,
+    secret: Buffer | undefined,
+    part?: number,
+) => {
+    const base = `${origin}/blobs/${key}`;
+    const partQuery = part ? `part=${part}` : "";
+    if (!secret) return partQuery ? `${base}?${partQuery}` : base;
+    const expires = Math.floor(Date.now() / 1000) + presignTTLSeconds;
+    const mac = crypto
+        .createHmac("sha256", secret)
+        .update(`${base}?part=${part ?? 0}:${expires}`)
+        .digest("hex");
+    const sep = partQuery ? `${partQuery}&` : "";
+    return `${base}?${sep}X-Expires=${expires}&X-Signature=${mac}`;
+};
+
+/** Verify the signature+expiry of a blob write URL (see signedBlobWriteURL). */
+const verifyPresignedWrite = (
+    urlString: string,
+    secret: Buffer | undefined,
+): boolean => {
+    if (!secret) return true; // No token registered: open-server phase.
+    let u: URL;
+    try {
+        u = new URL(urlString);
+    } catch {
+        return false;
+    }
+    const expires = Number(u.searchParams.get("X-Expires"));
+    const signature = u.searchParams.get("X-Signature");
+    if (!Number.isFinite(expires) || !signature) return false;
+    if (Date.now() / 1000 > expires) return false;
+    const part = Number(u.searchParams.get("part") ?? 0) || 0;
+    const mac = crypto
+        .createHmac("sha256", secret)
+        .update(`${u.origin}${u.pathname}?part=${part}:${expires}`)
+        .digest("hex");
+    if (mac.length != signature.length) return false;
+    return crypto.timingSafeEqual(Buffer.from(mac), Buffer.from(signature));
+};
 
 const corsHeaders = (): Record<string, string> => ({
     "Access-Control-Allow-Origin": "*",
@@ -196,7 +279,7 @@ const handle = async (
     res: ServerResponse,
     port: number,
     log: (...args: unknown[]) => void,
-    authState: { expectedToken: string | undefined },
+    authState: AuthState,
 ) => {
     const method = req.method ?? "GET";
     const url = new URL(req.url ?? "/", `http://127.0.0.1:${port}`);
@@ -236,6 +319,10 @@ const handle = async (
             sendJSON(res, 400, { error: "missing UPLOAD-URL" });
             return;
         }
+        if (!verifyPresignedWrite(uploadURL, authState.presignSecret)) {
+            sendJSON(res, 403, { error: "forbidden" });
+            return;
+        }
         const body = await readBody(req);
         const key = objectKeyFromURL(uploadURL);
         store.writeBlob(key, body);
@@ -248,6 +335,10 @@ const handle = async (
         const uploadURL = req.headers["upload-url"];
         if (typeof uploadURL !== "string") {
             sendJSON(res, 400, { error: "missing UPLOAD-URL" });
+            return;
+        }
+        if (!verifyPresignedWrite(uploadURL, authState.presignSecret)) {
+            sendJSON(res, 403, { error: "forbidden" });
             return;
         }
         const body = await readBody(req);
@@ -270,6 +361,10 @@ const handle = async (
             sendJSON(res, 400, { error: "missing UPLOAD-URL" });
             return;
         }
+        if (!verifyPresignedWrite(uploadURL, authState.presignSecret)) {
+            sendJSON(res, 403, { error: "forbidden" });
+            return;
+        }
         const body = await readBody(req);
         completeFromXML(store, uploadURL, body);
         sendJSON(res, 200, {});
@@ -277,6 +372,15 @@ const handle = async (
     }
 
     if (method === "PUT" && pathname.startsWith("/blobs/")) {
+        if (
+            !verifyPresignedWrite(
+                url.toString(),
+                authState.presignSecret,
+            )
+        ) {
+            sendJSON(res, 403, { error: "forbidden" });
+            return;
+        }
         const key = decodeURIComponent(pathname.slice("/blobs/".length));
         const part = numericParam(url, "part");
         const body = await readBody(req);
@@ -294,6 +398,15 @@ const handle = async (
 
     if (method === "POST" && pathname.startsWith("/blobs/")) {
         // Multipart completion, direct (non-proxied) path.
+        if (
+            !verifyPresignedWrite(
+                url.toString(),
+                authState.presignSecret,
+            )
+        ) {
+            sendJSON(res, 403, { error: "forbidden" });
+            return;
+        }
         const key = decodeURIComponent(pathname.slice("/blobs/".length));
         const body = await readBody(req);
         completeFromXML(store, `${origin}/blobs/${key}`, body);
@@ -552,12 +665,17 @@ const handle = async (
             collection.isDeleted = true;
             collection.updationTime = updationTime;
             // Rows in this collection die with it; the client prunes them.
+            // Permanent delete: rows + (refcounted) blobs are removed too.
+            const fileIDs = store.files
+                .filter((f) => f.collectionID === collection.id)
+                .map((f) => f.id);
             for (const file of store.files) {
                 if (file.collectionID === collection.id && !file.isDeleted) {
                     file.isDeleted = true;
                     file.updationTime = updationTime;
                 }
             }
+            store.purgeFiles(fileIDs);
             store.markDirty();
             sendJSON(res, 200, {});
             return;
@@ -759,7 +877,14 @@ const handle = async (
         const count = Math.min(50, Math.max(1, numericParam(url, "count") ?? 1));
         const urls = Array.from({ length: count }, () => {
             const objectKey = store.newObjectKey();
-            return { objectKey, url: `${origin}/blobs/${objectKey}` };
+            return {
+                objectKey,
+                url: signedBlobWriteURL(
+                    origin,
+                    objectKey,
+                    authState.presignSecret,
+                ),
+            };
         });
         sendJSON(res, 200, { urls });
         return;
@@ -770,7 +895,11 @@ const handle = async (
         const objectKey = store.newObjectKey();
         sendJSON(res, 200, {
             objectKey,
-            url: `${origin}/blobs/${objectKey}`,
+            url: signedBlobWriteURL(
+                origin,
+                objectKey,
+                authState.presignSecret,
+            ),
         });
         return;
     }
@@ -783,9 +912,19 @@ const handle = async (
                 objectKey,
                 partURLs: Array.from(
                     { length: count },
-                    (_, i) => `${origin}/blobs/${objectKey}?part=${i + 1}`,
+                    (_, i) =>
+                        signedBlobWriteURL(
+                            origin,
+                            objectKey,
+                            authState.presignSecret,
+                            i + 1,
+                        ),
                 ),
-                completeURL: `${origin}/blobs/${objectKey}`,
+                completeURL: signedBlobWriteURL(
+                    origin,
+                    objectKey,
+                    authState.presignSecret,
+                ),
             },
         });
         return;
@@ -803,9 +942,19 @@ const handle = async (
             objectKey,
             partURLs: Array.from(
                 { length: Math.max(1, count) },
-                (_, i) => `${origin}/blobs/${objectKey}?part=${i + 1}`,
+                (_, i) =>
+                    signedBlobWriteURL(
+                        origin,
+                        objectKey,
+                        authState.presignSecret,
+                        i + 1,
+                    ),
             ),
-            completeURL: `${origin}/blobs/${objectKey}`,
+            completeURL: signedBlobWriteURL(
+                origin,
+                objectKey,
+                authState.presignSecret,
+            ),
         });
         return;
     }
@@ -894,14 +1043,28 @@ const handle = async (
                 objectID: objectKey,
                 partURLs: Array.from(
                     { length: count },
-                    (_, i) => `${origin}/blobs/${objectKey}?part=${i + 1}`,
+                    (_, i) =>
+                        signedBlobWriteURL(
+                            origin,
+                            objectKey,
+                            authState.presignSecret,
+                            i + 1,
+                        ),
                 ),
-                completeURL: `${origin}/blobs/${objectKey}`,
+                completeURL: signedBlobWriteURL(
+                    origin,
+                    objectKey,
+                    authState.presignSecret,
+                ),
             });
         } else {
             sendJSON(res, 200, {
                 objectID: objectKey,
-                url: `${origin}/blobs/${objectKey}`,
+                url: signedBlobWriteURL(
+                    origin,
+                    objectKey,
+                    authState.presignSecret,
+                ),
             });
         }
         return;
@@ -921,9 +1084,19 @@ const handle = async (
             objectID: objectKey,
             partURLs: Array.from(
                 { length: Math.max(1, count) },
-                (_, i) => `${origin}/blobs/${objectKey}?part=${i + 1}`,
+                (_, i) =>
+                    signedBlobWriteURL(
+                        origin,
+                        objectKey,
+                        authState.presignSecret,
+                        i + 1,
+                    ),
             ),
-            completeURL: `${origin}/blobs/${objectKey}`,
+            completeURL: signedBlobWriteURL(
+                origin,
+                objectKey,
+                authState.presignSecret,
+            ),
         });
         return;
     }
@@ -934,7 +1107,11 @@ const handle = async (
         sendJSON(res, 200, {
             objectKey,
             objectID: objectKey,
-            url: `${origin}/blobs/${objectKey}`,
+            url: signedBlobWriteURL(
+                origin,
+                objectKey,
+                authState.presignSecret,
+            ),
         });
         return;
     }
@@ -1175,10 +1352,12 @@ const deleteTrashItems = (
     store: LocalVaultStore,
     predicate: (t: { isDeleted: boolean; file: { id: number } }) => boolean,
 ) => {
+    const purgedIDs: number[] = [];
     for (const item of store.trash) {
         if (predicate(item) && !item.isDeleted) {
             item.isDeleted = true;
             item.updatedAt = store.nowMicros();
+            purgedIDs.push(item.file.id);
             const file = store.files.find((f) => f.id === item.file.id);
             if (file && !file.isDeleted) {
                 file.isDeleted = true;
@@ -1186,7 +1365,8 @@ const deleteTrashItems = (
             }
         }
     }
-    store.markDirty();
+    // Permanent delete: remove the rows and any now-unreferenced blobs.
+    store.purgeFiles(purgedIDs);
 };
 
 const serveBlob = (

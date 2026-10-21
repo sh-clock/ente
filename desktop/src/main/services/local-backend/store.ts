@@ -226,6 +226,156 @@ export class LocalVaultStore {
         this.markDirty();
     }
 
+    /**
+     * Permanently remove the given files: their file rows, file-data rows
+     * (including vid_preview), video-data rows, collection tombstones, and
+     * any blobs that are no longer referenced by any surviving row (rows in
+     * other collections can share objectKeys with the ones being removed).
+     *
+     * Trash items for the purged files are marked deleted (rather than
+     * removed) so that trash diffs still inform clients.
+     */
+    purgeFiles(fileIDs: number[]) {
+        const ids = new Set(fileIDs);
+        if (ids.size == 0) return;
+        const now = this.nowMicros();
+
+        const candidateKeys = new Set<string>();
+        // File rows (file + thumbnail blobs).
+        this.state.files = this.state.files.filter((f) => {
+            if (!ids.has(f.id)) return true;
+            candidateKeys.add(f.file.objectKey);
+            candidateKeys.add(f.thumbnail.objectKey);
+            return false;
+        });
+        // Video data rows (segment blobs).
+        for (const [k, vd] of Object.entries(this.state.videoData)) {
+            if (ids.has(vd.fileID)) {
+                candidateKeys.add(vd.objectID);
+                delete this.state.videoData[k];
+            }
+        }
+        // File-data rows (ML index data, vid_preview playlists, ...).
+        for (const [k, fd] of Object.entries(this.state.fileData)) {
+            if (ids.has(fd.fileID)) delete this.state.fileData[k];
+        }
+        // Collection tombstones pointing at the purged files.
+        for (const cid of Object.keys(this.state.collectionTombstones)) {
+            this.state.collectionTombstones[cid] =
+                this.state.collectionTombstones[cid]!.filter(
+                    (t) => !ids.has(t.fileID),
+                );
+        }
+        // Mark matching trash items as deleted (keep them as diff markers).
+        for (const t of this.state.trash) {
+            if (!t.isDeleted && ids.has(t.file.id)) {
+                t.isDeleted = true;
+                t.updatedAt = now;
+            }
+        }
+
+        this.deleteUnreferencedBlobs(candidateKeys);
+        this.markDirty();
+    }
+
+    /** Delete blobs whose objectKeys no surviving row references. */
+    private deleteUnreferencedBlobs(candidateKeys: Set<string>) {
+        if (candidateKeys.size == 0) return;
+        const referenced = new Set<string>();
+        for (const f of this.state.files) {
+            referenced.add(f.file.objectKey);
+            referenced.add(f.thumbnail.objectKey);
+        }
+        for (const vd of Object.values(this.state.videoData))
+            referenced.add(vd.objectID);
+        for (const key of candidateKeys) {
+            if (referenced.has(key)) continue;
+            this.deleteBlob(key);
+        }
+    }
+
+    /** Best-effort blob removal (missing files are fine). */
+    deleteBlob(objectKey: string) {
+        try {
+            fs.rmSync(this.blobPath(objectKey), { force: true });
+            // Any abandoned multipart parts for this key go with it.
+            const partPrefix = `${this.blobPath(objectKey)}.part`;
+            for (const entry of fs.readdirSync(this.blobsDir)) {
+                if (`${this.blobsDir}/${entry}`.startsWith(partPrefix)) {
+                    try {
+                        fs.rmSync(path.join(this.blobsDir, entry), {
+                            force: true,
+                        });
+                    } catch {
+                        // Best effort.
+                    }
+                }
+            }
+        } catch {
+            // Best effort.
+        }
+    }
+
+    /**
+     * Garbage-collect soft-deleted rows older than the retention window:
+     * deleted trash markers, deleted collections, stale collection
+     * tombstones, and file rows that are deleted without any live trash
+     * item (e.g. removed from their only collection and never restored).
+     * Blob refcounting keeps shared objects alive across collections.
+     */
+    sweepExpiredTombstones(retentionDays = 60) {
+        const cutoff = this.nowMicros() - retentionDays * 24 * 60 * 60 * 1e6;
+        let swept = false;
+
+        // File rows deleted with no live trash item.
+        const liveTrashFileIDs = new Set(
+            this.state.trash.filter((t) => !t.isDeleted).map((t) => t.file.id),
+        );
+        const purgeIDs = this.state.files
+            .filter(
+                (f) =>
+                    f.isDeleted &&
+                    f.updationTime < cutoff &&
+                    !liveTrashFileIDs.has(f.id),
+            )
+            .map((f) => f.id);
+        if (purgeIDs.length > 0) {
+            this.purgeFiles(purgeIDs);
+            swept = true;
+        }
+
+        // Deleted trash markers.
+        const trashBefore = this.state.trash.length;
+        this.state.trash = this.state.trash.filter(
+            (t) => !(t.isDeleted && t.updatedAt < cutoff),
+        );
+        if (this.state.trash.length != trashBefore) swept = true;
+
+        // Deleted collections (their files were purged at delete time).
+        const collectionsBefore = this.state.collections.length;
+        this.state.collections = this.state.collections.filter(
+            (c) => !(c.isDeleted && (c.updationTime ?? 0) < cutoff),
+        );
+        if (this.state.collections.length != collectionsBefore) swept = true;
+
+        // Stale per-collection tombstones.
+        for (const cid of Object.keys(this.state.collectionTombstones)) {
+            const before = this.state.collectionTombstones[cid]!.length;
+            this.state.collectionTombstones[cid] =
+                this.state.collectionTombstones[cid]!.filter(
+                    (t) => t.updationTime >= cutoff,
+                );
+            if (this.state.collectionTombstones[cid]!.length != before)
+                swept = true;
+        }
+        for (const cid of Object.keys(this.state.collectionTombstones)) {
+            if (this.state.collectionTombstones[cid]!.length == 0)
+                delete this.state.collectionTombstones[cid];
+        }
+
+        if (swept) this.markDirty();
+    }
+
     markDirty() {
         this.dirty = true;
         if (this.flushTimer) return;

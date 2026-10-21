@@ -213,6 +213,7 @@ export type MLStatus =
     | {
           phase: "scheduled" | "indexing" | "fetching" | "clustering" | "done";
           phaseFailed?: boolean;
+          errorMessage?: string;
           nSyncedFiles: number;
           nTotalFiles: number;
       };
@@ -261,11 +262,18 @@ const getMLStatus = async (): Promise<MLStatus> => {
     const { indexedCount, indexableCount, failedCount } =
         await savedIndexCounts();
 
+    // A blocking init error (e.g. the model download failed) suspends the
+    // worker; surface it instead of an eternal "Scheduled".
+    const mlInitError = await w.mlInitError;
+
     // Live uploads lack file-status rows, so worker state wins over counts.
     let phase: MLStatus["phase"];
     let phaseFailed = false;
     const state = await w.state;
-    if (state == "indexing" || state == "fetching") {
+    if (mlInitError) {
+        phase = "scheduled";
+        phaseFailed = true;
+    } else if (state == "indexing" || state == "fetching") {
         phase = state;
     } else if (state == "init" || indexableCount > 0) {
         phase = "scheduled";
@@ -277,6 +285,7 @@ const getMLStatus = async (): Promise<MLStatus> => {
     return {
         phase,
         phaseFailed,
+        errorMessage: mlInitError,
         nSyncedFiles: indexedCount,
         nTotalFiles: indexableCount + indexedCount,
     };

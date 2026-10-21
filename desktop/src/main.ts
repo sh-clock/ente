@@ -25,6 +25,7 @@ import { shouldHideDockIcon } from "./main/services/store";
 import { createWatcher } from "./main/services/watch";
 import {
     startLocalBackendIfNeeded,
+    flushLocalBackend,
 } from "./main/services/local-backend";
 import { userPreferences } from "./main/stores/user-preferences";
 import { registerStreamProtocol } from "./main/stream";
@@ -103,6 +104,13 @@ const main = () => {
 
     app.on("before-quit", () => {
         if (mainWindow) saveWindowBounds(mainWindow);
+        // Persist the local vault store (uploads within the 300ms debounce
+        // window would otherwise be lost as orphaned blobs).
+        try {
+            flushLocalBackend();
+        } catch (e) {
+            log.error("Failed to flush local backend on quit", e);
+        }
         allowWindowClose();
     });
 };
@@ -184,9 +192,18 @@ const createMainWindow = () => {
 
     if (isDev) window.webContents.openDevTools();
 
+    let renderCrashTimes: number[] = [];
     window.webContents.on("render-process-gone", (_, details) => {
         log.error(`render-process-gone: ${details.reason}`);
-        window.webContents.reload();
+        // Reload with a backoff: after 5 crashes within a minute, stop
+        // auto-reloading (crash loop) and leave recovery to the user.
+        const now = Date.now();
+        renderCrashTimes = [
+            ...renderCrashTimes.filter((t) => now - t < 60_000),
+            now,
+        ];
+        if (renderCrashTimes.length < 5) window.webContents.reload();
+        else log.error("Render process crashed 5x in 60s; not reloading");
     });
 
     window.webContents.on("unresponsive", () => {
@@ -308,17 +325,32 @@ const setupTrayItem = (mainWindow: BrowserWindow) => {
 
 main();
 
+// Mirrors desktop/out/_headers (kept in sync manually). The renderer talks
+// to loopback origins and loads OSM tiles; everything else is locked down.
+// Applied via onHeadersReceived because the custom photos:// protocol
+// serving path does not read _headers.
+const rendererCSP =
+    "default-src 'self'; " +
+    "img-src 'self' blob: data: stream: https://*.openstreetmap.org http://127.0.0.1:*; " +
+    "media-src 'self' blob: data: stream: http://127.0.0.1:*; " +
+    "style-src 'self' 'unsafe-inline'; " +
+    "font-src 'self'; script-src 'self' 'unsafe-eval' blob:; manifest-src 'self'; " +
+    "child-src 'self' blob:; object-src 'none'; worker-src 'self' blob:; " +
+    "connect-src 'self' data: blob: stream: https://*.openstreetmap.org http://127.0.0.1:*; " +
+    "base-uri 'self'; form-action 'none';";
+
 const allowAllCORSOrigins = (webContents: WebContents) =>
     webContents.session.webRequest.onHeadersReceived(
         ({ responseHeaders }, callback) => {
             const headers: NonNullable<typeof responseHeaders> = {};
 
             headers["Access-Control-Allow-Origin"] = ["*"];
+            headers["Content-Security-Policy"] = [rendererCSP];
             for (const [key, value] of Object.entries(responseHeaders ?? {}))
                 if (key.toLowerCase() == "access-control-allow-origin") {
                     headers["Access-Control-Allow-Origin"] =
                         value[0] == "null" ? ["*"] : value;
-                } else {
+                } else if (key.toLowerCase() != "content-security-policy") {
                     headers[key] = value;
                 }
 

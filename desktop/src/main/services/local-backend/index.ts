@@ -32,3 +32,10 @@ export const localBackendOrigin = () => backend?.origin;
 /** Register the vault token with the running backend (see LocalBackend). */
 export const setLocalBackendExpectedToken = (token: string) =>
     backend?.setExpectedToken(token);
+
+/** Forget the vault token (logout); reopens the API + stops presigning. */
+export const clearLocalBackendExpectedToken = () =>
+    backend?.clearExpectedToken();
+
+/** Persist the local backend store state (best effort; used at shutdown). */
+export const flushLocalBackend = () => backend?.flush();

@@ -1,4 +1,8 @@
 import type { FSWatcher } from "chokidar";
+import {
+    clearLocalBackendExpectedToken,
+    flushLocalBackend,
+} from "./local-backend";
 import log from "../log";
 import { clearPendingVideoResults } from "../stream";
 import { clearStores } from "./store";
@@ -30,6 +34,14 @@ export const logout = (watcher: FSWatcher) => {
         clearOpenZipCache();
     } catch (e) {
         ignoreError("zip cache", e);
+    }
+    try {
+        // Drop the vault token so the loopback API stops authenticating the
+        // previous session, and persist the store state to disk.
+        clearLocalBackendExpectedToken();
+        flushLocalBackend();
+    } catch (e) {
+        ignoreError("local backend", e);
     }
     try {
         terminateUtilityProcesses();
