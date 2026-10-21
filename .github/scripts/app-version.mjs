@@ -10,13 +10,11 @@ const [app, command, ...args] = process.argv.slice(2);
 
 const scripts = {
     photos: ["flutter-version.mjs", "photos"],
-    locker: ["flutter-version.mjs", "locker"],
     "photos-desktop": ["photos-desktop-version.mjs"],
 };
 
 const versionFiles = {
     photos: ["mobile/apps/photos/pubspec.yaml"],
-    locker: ["mobile/apps/locker/pubspec.yaml"],
     "photos-desktop": ["desktop/package.json"],
 };
 
