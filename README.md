@@ -9,14 +9,16 @@ telemetry.
 > the Encrypted Clock Ecosystem wire protocol (v4.1, the "era B uploader"
 > role). See [docs/PROTOCOL-INTEGRATION.md](docs/PROTOCOL-INTEGRATION.md)
 > for the full integration map — crypto primitives, endpoint mapping,
-> upload commit order, and the must-build checklist.
+> upload commit order, and the must-build checklist — and
+> [docs/PROTOCOL-v4.2-PROPOSAL.md](docs/PROTOCOL-v4.2-PROPOSAL.md)
+> for the proposed protocol changes that let the fork plug in unchanged
+> (4 MiB frames, hdr object, integration profiles).
 
 ## What's inside
 
 | Path | What it is |
 | --- | --- |
 | `mobile/apps/photos` | Flutter app (Android) |
-| `mobile/apps/locker` | Flutter app (Android) — document locker |
 | `web/apps/photos` | Photos UI (Next.js). Also the desktop renderer. |
 | `desktop/` | Electron desktop shell (Windows, Linux) |
 | `rust/` | Rust core: ML (ONNX), metadata, vector DB, crypto bindings (frb / napi / wasm) |

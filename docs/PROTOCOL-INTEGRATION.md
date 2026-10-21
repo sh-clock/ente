@@ -2,7 +2,48 @@
 
 Definitive integration map for swapping the fork's loopback museum backend for the
 clock-protocol server (spec: `protocol-v4.1.txt`, referenced below as "§").
-All file paths/line numbers verified on branch `surgery/05-deep-fix` @ `0cc189da6b`.
+All file paths/line numbers verified on branch `surgery/05-deep-fix` @ `0cc189da6b`;
+**refreshed @ `4decf4e107`** (post whole-repo audit batch 13 — see the
+"Refresh 2026-10-21" block below for the corrections and
+`docs/PROTOCOL-v4.2-PROPOSAL.md` for the protocol-side changes that follow
+from this map).
+
+---
+
+## Refresh 2026-10-21 (post batch-13 audit; supersedes stale line refs below)
+
+The audits (13-a..13-g) re-verified every crypto row of §2 byte-exact and found
+the architecture claims unchanged. Material corrections to the tables below:
+
+1. **Sizes drifted** (both files grew, all offsets shifted): `server.ts` is
+   ~1,470 lines (was 1,126); `store.ts` ~530 (was 322). Line citations in
+   §1/§3/§4 are pre-growth; use route names, not line numbers, until re-stamped.
+2. **§4 route map was missing live rows** (now in the table, not previously
+   mapped): `GET /collections/{id}` (live via `trash.ts:70`), `POST
+   /users/logout` (fire-and-forget), the v3 download/thumbnail call sites in
+   `packages/base/file-download.ts`, and the `PUT /files/video-data` +
+   preview-upload-url HLS family. Dead rows confirmed dead: sharing ×6,
+   `user.ts` ×6, billing ×6, public/cast/file-link — zero callers.
+3. **`user-details`**: 8 -> 6 calls; the route is now 100% dead in local mode.
+4. **§5 erratum**: the multipart threshold is **> 16 MiB** (> 4 chunks), not
+   "< 20 MiB"; the proxy-vs-multipart decision is `upload-service.ts` chunk
+   count, parts are 5×4 MiB.
+5. **New security layer since 0cc189da6b** (must appear in any bridge spec):
+   all blob-write URLs are **HMAC-presigned** (sha256-derived secret, 24 h
+   expiry, timing-safe compare) — 12 mint sites / 7 transport routes sign,
+   5 write routes verify; `/trash` routes now distinguish `isRestored` rows
+   and honor the `lastUpdatedAt` cutoff; `POST /files` synthesizes
+   `info.fileSize`; every file-row mutation (copy, magic-metadata) bumps the
+   owning collection's `updationTime`; `/files/trash` accepts the client's
+   `{items:[{fileID,collectionID}]}` shape; `/blobs/{key}` validates 32-hex
+   keys; vault state.json is fsync'd with a `.bak` generation and refuses
+   silent resets; `nowMicros` is seeded across restarts.
+6. **Bridge laws**: the full 28-law inventory lives in audit `13-c` (M3);
+   the condensed 11 that bind the protocol side are codified in
+   `PROTOCOL-v4.2-PROPOSAL.md` §23.3.
+7. **Mobile** is a third client candidate (audit `13-e` M4): seams ready
+   (dart-define/runtime `setEndpoint`, X-Auth-Token, cleartext loopback
+   permitted, on-device NaCl); a mobile bridge needs the same §23 profile.
 
 ---
 
